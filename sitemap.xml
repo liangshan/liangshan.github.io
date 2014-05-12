@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
+    <url>
+        <loc>
+            http://liangshan.github.io/blog/2014/05/12/shi-yong-octopress-zai-github-pages-shang-kuai-su-da-jian-zi-ding-yi-yu-ming-blog/
+        </loc>
+        <lastmod>2014-05-12T14:57:22+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://liangshan.github.io/blog/archives/</loc>
+        <lastmod>2014-05-12T14:57:22+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://liangshan.github.io/</loc>
+        <lastmod>2014-05-12T14:57:22+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://liangshan.github.io/robots.txt</loc>
+        <lastmod>2014-05-12T13:41:11+08:00</lastmod>
+    </url>
+</urlset>
