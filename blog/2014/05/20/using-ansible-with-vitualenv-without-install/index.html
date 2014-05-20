@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Liangshan's Blog</title>
+  <title>Using Ansible With Vitualenv Without Install - Liangshan's Blog</title>
   <meta name="author" content="Liangshan">
 
   
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://liangshan.github.io">
+  <link rel="canonical" href="http://liangshan.github.io/blog/2014/05/20/using-ansible-with-vitualenv-without-install">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Liangshan's Blog" type="application/atom+xml">
@@ -75,15 +75,12 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/05/20/using-ansible-with-vitualenv-without-install/">Using Ansible With Vitualenv Without Install</a></h1>
+      <h1 class="entry-title">Using Ansible With Vitualenv Without Install</h1>
     
     
       <p class="meta">
@@ -106,7 +103,7 @@
   </header>
 
 
-  <div class="entry-content"><p><a href="http://www.ansible.com/home">Ansible</a> 是一个自动化配置管理工具 (Automate configure management)。用 python 编写，所以安装方式一般有以下几种：</p>
+<div class="entry-content"><p><a href="http://www.ansible.com/home">Ansible</a> 是一个自动化配置管理工具 (Automate configure management)。用 python 编写，所以安装方式一般有以下几种：</p>
 
 <p><strong> <code>pip</code> 安装 </strong></p>
 
@@ -197,22 +194,16 @@ $ ln -s $HOME/bin/_ansible_wrapper $HOME/bin/ansible-galaxy
 </ol>
 
 </div>
-  
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/05/12/shi-yong-octopress-zai-github-pages-shang-kuai-su-da-jian-zi-ding-yi-yu-ming-blog/">使用 Octopress 在 GitHub Pages 上快速搭建自定义域名Blog</a></h1>
-    
-    
-      <p class="meta">
-        
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Liangshan</span></span>
+
+      
 
 
 
@@ -224,97 +215,44 @@ $ ln -s $HOME/bin/_ansible_wrapper $HOME/bin/ansible-galaxy
   
 
 
-<time datetime="2014-05-12T14:17:19+08:00" pubdate data-updated="true">May 12<span>th</span>, 2014</time>
-        
-      </p>
+<time datetime="2014-05-20T14:45:59+08:00" pubdate data-updated="true">May 20<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ansible/'>ansible</a>, <a class='category' href='/blog/categories/vitualenv/'>vitualenv</a>
+  
+</span>
+
+
+    </p>
     
-  </header>
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://liangshan.github.io/blog/2014/05/20/using-ansible-with-vitualenv-without-install/" data-via="" data-counturl="http://liangshan.github.io/blog/2014/05/20/using-ansible-with-vitualenv-without-install/" >Tweet</a>
+  
+  
+  
+</div>
 
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/05/12/shi-yong-octopress-zai-github-pages-shang-kuai-su-da-jian-zi-ding-yi-yu-ming-blog/" title="Previous Post: 使用 Octopress 在 GitHub Pages 上快速搭建自定义域名Blog">&laquo; 使用 Octopress 在 GitHub Pages 上快速搭建自定义域名Blog</a>
+      
+      
+    </p>
+  </footer>
+</article>
 
-  <div class="entry-content"><p>一直没有搭博客，因为一直感觉自己不是一个标准的技术人，主要是不够狂热。但受身边人熏陶，偶尔还是想写点东西。
-尤其是看中 <code>liangshan.me</code> 这个域名，买下之后觉得闲着也是浪费，所以有了利用 GitHub Pages 来搭一下的想法。</p>
-
-<h2>预备</h2>
-
-<ul>
-<li>你需要具备一些 <code>Git</code> 的常识</li>
-<li>你需要一张 Visa 卡或是支付宝账号</li>
-<li>如果有 Ruby 经验，将会帮你更好的理解这个系统</li>
-</ul>
-
-
-<h2>Quick Start</h2>
-
-<p>整体来说，整个部署过程分3大步</p>
-
-<ol>
-<li>购买域名</li>
-<li>配置解析</li>
-<li>部署至 GitHub Pages</li>
-<li>评论插件</li>
-</ol>
-
-
-<h3>购买域名</h3>
-
-<p>这里选用 <a href="http://www.godaddy.com">Godaddy</a>， 理由很简单，就是他支持支付宝。购买和支付流程很顺畅，应该不会有什么障碍。</p>
-
-<h3>配置解析</h3>
-
-<p>为了防止 Godaddy 自己的 DNS 解析被墙[1]，所以选用了国内的 <a href="https://www.dnspod.cn">DNSPod</a> 来解析域名，免费服务够用，还有手机二次验证。</p>
-
-<ol>
-<li>在 Godaddy 上设置 NameServer 到 DNSPod 提供的地址</li>
-<li>如果是顶级域名，需要在 DNSPod 上设置一个 A 记录到 Github Pages 的 IP 地址，这个地址可能会变化，可以查看<a href="https://help.github.com/articles/my-custom-domain-isn-t-working">这里</a>获取最新的地址</li>
-<li>如果是子域名，可以设置 CNAME</li>
-</ol>
-
-
-<p>关于 DNS 的设置，更详细的可以看 <a href="https://help.github.com/articles/setting-up-a-custom-domain-with-github-pages#step-1-add-a-cname-file-to-your-repository">GitHub Pages 的说明文档</a></p>
-
-<h3>部署至 GitHub Pages</h3>
-
-<p>关于 GitHub Pages 的技术细节，看[2]可能会有收获，一句话来概括就是<strong>使用动态语言来编辑纯文本文件，生成静态 HTML 代码，然后部署在 GitHub 上。</strong></p>
-
-<p>这种方式很巧妙，我之前也一直在用<a href="https://github.com/liangshan/markdown2deckjs">类似的做法</a>管理我的 Slides。</p>
-
-<p>这里并没有直接使用 Jekyll，而是使用基于他的 <a href="http://octopress.org/docs/setup/">Octopress</a>。遵循页面的 <code>Next Steps</code> 应该可以很快搭好环境。</p>
-
-<p>并且 Octopress 做好了和 GitHub Pages 对接的<a href="http://octopress.org/docs/deploying/github/">脚手架</a>。</p>
-
-<p>这里主要记录一些踩到的坑：</p>
-
-<ol>
-<li>使用 Homebrew 安装 rbenv, 再用 rbenv 安装 ruby, 提醒最新的 MacOS 安装的 Xcode 并没有 GCC，需要手动安装 GCC</li>
-<li><code>~/.rbenv/shims</code> 目录需要添加至 PATH，Homebrew 安装过程中好像并没有做这一步，并且 Octopress 关于这部分的文档可能过时了，文档中使用的 <code>~/.rbenv/bin</code></li>
-</ol>
-
-
-<h3>评论插件</h3>
-
-<p>由于是纯静态页面，所以要增加评论的动态功能 需要借助一些第三方前端工具。比如 <a href="http://disqus.com">Disqus</a>，配置非常简单 更多参考[3]。</p>
-
-<h2>参考资料</h2>
-
-<ol>
-<li><a href="http://beiyuu.com/github-pages/">使用Github Pages建独立博客</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2012/08/blogging_with_jekyll.html">搭建一个免费的，无限流量的Blog&mdash;&mdash;github Pages和Jekyll入门</a></li>
-<li><a href="http://seagg.github.io/blog/2012/09/03/config-comment-on-octopress/">给octopress添加Disqus评论功能</a></li>
-</ol>
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
-  
-  
 
-
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
-</div>
 <aside class="sidebar">
   
     <section>
@@ -335,7 +273,7 @@ $ ln -s $HOME/bin/_ansible_wrapper $HOME/bin/ansible-galaxy
 <section>
   <h1>GitHub Repos</h1>
   <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
+    <li class="loading">Status updating...</li>
   </ul>
   
   <a href="https://github.com/liangshan">@liangshan</a> on GitHub
@@ -368,6 +306,7 @@ $ ln -s $HOME/bin/_ansible_wrapper $HOME/bin/ansible-galaxy
   
 </aside>
 
+
     </div>
   </div>
   <footer role="contentinfo"><p>
@@ -382,7 +321,10 @@ $ ln -s $HOME/bin/_ansible_wrapper $HOME/bin/ansible-galaxy
       var disqus_shortname = 'liangshan';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://liangshan.github.io/blog/2014/05/20/using-ansible-with-vitualenv-without-install/';
+        var disqus_url = 'http://liangshan.github.io/blog/2014/05/20/using-ansible-with-vitualenv-without-install/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
