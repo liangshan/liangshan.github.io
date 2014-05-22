@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Ansible | Liangshan's Blog]]></title>
-  <link href="http://liangshan.me/blog/categories/ansible/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Vagrant | Liangshan's Blog]]></title>
+  <link href="http://liangshan.me/blog/categories/vagrant/atom.xml" rel="self"/>
   <link href="http://liangshan.me/"/>
   <updated>2014-05-22T17:56:12+08:00</updated>
   <id>http://liangshan.me/</id>
@@ -132,102 +132,6 @@ cp .Vagrantfile ../Vagrantfile
 </code></p>
 
 <p>完成了这些步骤，就可以直接在源代码仓库使用 vagrant 的命令来安装、更新虚拟机。但又可以将这些脚本与源代码隔离开来。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[使用 Virtualenv 绿色安装 Ansible]]></title>
-    <link href="http://liangshan.me/blog/2014/05/20/using-ansible-with-virtualenv-without-install/"/>
-    <updated>2014-05-20T14:45:59+08:00</updated>
-    <id>http://liangshan.me/blog/2014/05/20/using-ansible-with-virtualenv-without-install</id>
-    <content type="html"><![CDATA[<p><a href="http://www.ansible.com/home">Ansible</a> 是一个自动化配置管理工具 (Automate configure management)。用 python 编写，所以安装方式一般有以下几种：</p>
-
-<p><strong> <code>pip</code> 安装 </strong></p>
-
-<pre><code>$ pip install ansible
-</code></pre>
-
-<p><strong> MacOS 用户可以选择使用 <code>homebrew</code> 安装 </strong></p>
-
-<pre><code>$ brew install ansible
-</code></pre>
-
-<p>但这两种方法都不可避免将「污染」系统的 python 环境。所以本文主要介绍如何绿色安装 Ansible。</p>
-
-<!-- more -->
-
-
-<h3>安装 Virtualenv</h3>
-
-<p>不污染系统的关键在于虚拟化 python 的环境，所以需要准备 virtualenv。</p>
-
-<p>这里偷懒选择使用 pip 安装，如果连 virtualenv 也不想装在系统级别也是可以的，就不在这里介绍了。</p>
-
-<pre><code>$ pip install virtualenv
-</code></pre>
-
-<h3>下载 ansible</h3>
-
-<pre><code>$ git clone git@github.com:ansible/ansible.git
-$ cd ansible
-</code></pre>
-
-<h3>安装</h3>
-
-<pre><code>$ virtualenv .virtualenv
-$ .virtualenv/bin/python setup.py develop
-</code></pre>
-
-<h3>A little trick</h3>
-
-<p>这个时候使用 virtualenv 激活当前目录的 python 环境，其实 <code>bin/ansible</code> 就已经可以工作了。</p>
-
-<p>但我们还希望将 ansible 命令加在系统的 PATH 里，这就需要一些小技巧。简单来说需要自己准备一个脚本，脚本的内容如下:</p>
-
-<p>```bash
-$ touch ~/bin/<em>ansible_wrapper
-$ vim ~/bin/</em>ansible_wrapper</p>
-
-<h1>!/bin/bash</h1>
-
-<p>source &ldquo;$HOME/apps/ansible/hacking/env-setup&rdquo; -q
-if [ -f &ldquo;$ANSIBLE_HOME/.virtualenv/bin/activate&rdquo; ] ; then</p>
-
-<pre><code>source "$ANSIBLE_HOME/.virtualenv/bin/activate"
-</code></pre>
-
-<p>fi
-PYENV_VERSION=2.7.6 exec &ldquo;$ANSIBLE_HOME/bin/${0##/*/}&rdquo; $@
-```</p>
-
-<p><code>$HOME/apps/ansible/hacking/env-setup</code> 是 ansible 为 hacker 准备的一个脚本，设置一些环境变量。其中 <code>$HOME/apps/ansible</code> 是 ansible 的根目录。</p>
-
-<p><code>${0##/*/}</code> 比较有趣，作用是正则匹配 <code>/*/</code> 然后把匹配到的部分从第 0 个参数（即命令本身）中删除。关于 bash 参数，更详细可以看[1]。</p>
-
-<p><code>$@</code> 则比较常见，是 bash 拿到的除命令名之外的所有参数。</p>
-
-<p>其实这个脚本就是一个 wrapper，作用如下：</p>
-
-<ol>
-<li>设置相关环境变量</li>
-<li>激活 ansible 下的 python 环境</li>
-<li>将收到的所有命令都转发给 <code>$ANSIBLE_HOME/bin</code> 下的相同命令执行</li>
-</ol>
-
-
-<p>假设 <code>$HOME/bin</code> 在 PATH 中，设置几个软链就全部搞定了。</p>
-
-<pre><code>$ ln -s $HOME/bin/_ansible_wrapper $HOME/bin/ansible
-$ ln -s $HOME/bin/_ansible_wrapper $HOME/bin/ansible-playbook
-$ ln -s $HOME/bin/_ansible_wrapper $HOME/bin/ansible-galaxy
-</code></pre>
-
-<h3>参考资料</h3>
-
-<ol>
-<li><a href="http://www.ibm.com/developerworks/opensource/library/l-bash-parameters/index.html">Linux tip: Bash parameters and parameter expansions</a></li>
-</ol>
-
 ]]></content>
   </entry>
   
