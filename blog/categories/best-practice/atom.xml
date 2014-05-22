@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Liangshan's Blog]]></title>
-  <link href="http://liangshan.me/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Best Practice | Liangshan's Blog]]></title>
+  <link href="http://liangshan.me/blog/categories/best-practice/atom.xml" rel="self"/>
   <link href="http://liangshan.me/"/>
   <updated>2014-05-22T16:48:53+08:00</updated>
   <id>http://liangshan.me/</id>
@@ -22,7 +22,7 @@
 
 <hr />
 
-<p><img class="right" src="http://0.gravatar.com/avatar/7cdf5b1c46308979e3bf81390b0c8639"></p>
+<p><img class="right <a" src="href="http://0.gravatar.com/avatar/7cdf5b1c46308979e3bf81390b0c8639">http://0.gravatar.com/avatar/7cdf5b1c46308979e3bf81390b0c8639</a>"></p>
 
 <p>中文翻译：<a href="https://github.com/liangshan/">梁山</a><br/>
 英文原文：<a href="http://www.12factor.net/">Adam Wiggins</a></p>
@@ -85,7 +85,7 @@
 
 <p><strong><em>显式声明依赖关系(<em>dependency</em>)</em></strong></p>
 
-<p>大多数编程语言都会提供一个打包系统，用来为各个类库提供打包服务，就像Perl的<a href="http://www.cpan.org/">CPAN</a>或是Ruby的<a href="http://rubygems.org/">Rubygems</a>。通过打包系统安装的类库可以是系统级的（称之为&#8221;site packages&#8221;），或仅供某个应用程序使用，部署在相应的目录中（称之为&#8221;vendoring&#8221;或&#8221;bunding&#8221;）。</p>
+<p>大多数编程语言都会提供一个打包系统，用来为各个类库提供打包服务，就像Perl的<a href="http://www.cpan.org/">CPAN</a>或是Ruby的<a href="http://rubygems.org/">Rubygems</a>。通过打包系统安装的类库可以是系统级的（称之为"site packages"），或仅供某个应用程序使用，部署在相应的目录中（称之为"vendoring"或"bunding"）。</p>
 
 <p><strong>12-Factor规则下的应用程序不会隐式依赖系统级的类库。</strong> 它一定通过 <em>依赖清单</em> ，确切地声明所有依赖项。此外，在运行过程中通过 <em>依赖隔离</em> 工具来确保程序不会调用系统中存在但清单中未声明的依赖项。这一做法会统一应用到生产和开发环境。</p>
 
@@ -112,7 +112,7 @@
 
 <p>判断一个应用是否正确地将配置排除在代码之外，一个简单的方法是看该应用的基准代码是否可以立刻开源，而不用担心会暴露任何敏感的信息。</p>
 
-<p>需要指出的是，这里定义的&#8221;配置&#8221;并<strong>不</strong>包括应用的内部配置，比如Rails的<code>config/routes.rb</code>，或是使用<a href="http://www.springsource.org/">Spring</a>时<a href="http://static.springsource.org/spring/docs/2.5.x/reference/beans.html">代码模块间的依赖注入关系</a>。这类配置在不同部署间不存在差异，所以应该写入代码。</p>
+<p>需要指出的是，这里定义的"配置"并<strong>不</strong>包括应用的内部配置，比如Rails的<code>config/routes.rb</code>，或是使用<a href="http://www.springsource.org/">Spring</a>时<a href="http://static.springsource.org/spring/docs/2.5.x/reference/beans.html">代码模块间的依赖注入关系</a>。这类配置在不同部署间不存在差异，所以应该写入代码。</p>
 
 <p>另外一个解决方法是使用配置文件，但不把它们纳入版本控制系统，就像Rails的<code>config/database.yml</code> 。这相对于在代码中使用常量已经是长足进步，但仍然有缺点：总是会不小心将配置文件签入了代码库；配置文件的可能会分散在不同的目录，并有着不同的格式，这让找出一个地方来统一管理所有配置变的不太现实。更糟的是，这些格式通常是语言或框架特定的。</p>
 
@@ -348,211 +348,6 @@
 <p>所有进程类型应该使用同样的<a href="#dependencies">依赖隔离</a>技术。例如，如果Ruby的web进程使用了命令<code>bundle exec thin start</code>，那么数据库移植应使用<code>bundle exec rake db:migrate</code>。同样的，如果一个Python程序使用了Virtualenv，则需要在运行Tornado Web服务器和任何<code>manage.py</code>管理进程时引入‵bin/python‵ 。</p>
 
 <p>12-factor尤其青睐那些提供了REPL shell的语言，因为那会让运行一次性脚本变得简单。在本地部署中，开发人员直接在命令行使用shell命令调用一次性管理进程。在线上部署中，开发人员依旧可以使用ssh或是运行环境提供的其他机制来运行这样的进程。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[安居客导师指南]]></title>
-    <link href="http://liangshan.me/blog/2014/05/22/how-to-teach-people-at-anjuke/"/>
-    <updated>2014-05-22T11:23:34+08:00</updated>
-    <id>http://liangshan.me/blog/2014/05/22/how-to-teach-people-at-anjuke</id>
-    <content type="html"><![CDATA[<p>安居客近年来非常重视校招，尤其是研发方向。实际操作下来，感觉校招还是不错的选择，这次我主要站在公司的角度来说。</p>
-
-<!-- more -->
-
-
-<p>公司应该是看中应届毕业生便宜、够用、潜力。这里要说一个现象，大多数很优秀的应届生都选择去了大公司，类似 BAT，薪水高、品牌响这倒也无可厚非。所以这里讨论的是我接触到的学生们，并非是说公司的招到的学生不好，只是学生之间是有差距的这也是事实。</p>
-
-<p>当然招校招生也存在几个风险，其中最大的风险无非就是学生也只是把公司当跳板。对于这个我的观点比较简单，说明公司的吸引力不够，这个不怪学生。
-对此安居客的对策是为学生安排专人辅导，我们内部称为「导师」，或者是 buddy。这里导师的作用除了辅导之外，其实很大程度上是为了留住学生，所以导师的选择和导师的付出其实和最后学生的发展有着比较密切的关系。</p>
-
-<p>我有幸参与了安居客的几届学生培养，作为导师代表给所有导师做了一次分享。这里贴上 slides:</p>
-
-<script async class="speakerdeck-embed" data-id="1b324900a388013120061af8c79ec55f" data-ratio="1.33333333333333" src="//speakerdeck.com/assets/embed.js"></script>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[使用 Virtualenv 绿色安装 Ansible]]></title>
-    <link href="http://liangshan.me/blog/2014/05/20/using-ansible-with-virtualenv-without-install/"/>
-    <updated>2014-05-20T14:45:59+08:00</updated>
-    <id>http://liangshan.me/blog/2014/05/20/using-ansible-with-virtualenv-without-install</id>
-    <content type="html"><![CDATA[<p><a href="http://www.ansible.com/home">Ansible</a> 是一个自动化配置管理工具 (Automate configure management)。用 python 编写，所以安装方式一般有以下几种：</p>
-
-<p><strong> <code>pip</code> 安装 </strong></p>
-
-<pre><code>$ pip install ansible
-</code></pre>
-
-<p><strong> MacOS 用户可以选择使用 <code>homebrew</code> 安装 </strong></p>
-
-<pre><code>$ brew install ansible
-</code></pre>
-
-<p>但这两种方法都不可避免将「污染」系统的 python 环境。所以本文主要介绍如何绿色安装 Ansible。</p>
-
-<!-- more -->
-
-
-<h3>安装 Virtualenv</h3>
-
-<p>不污染系统的关键在于虚拟化 python 的环境，所以需要准备 virtualenv。</p>
-
-<p>这里偷懒选择使用 pip 安装，如果连 virtualenv 也不想装在系统级别也是可以的，就不在这里介绍了。</p>
-
-<pre><code>$ pip install virtualenv
-</code></pre>
-
-<h3>下载 ansible</h3>
-
-<pre><code>$ git clone git@github.com:ansible/ansible.git
-$ cd ansible
-</code></pre>
-
-<h3>安装</h3>
-
-<pre><code>$ virtualenv .virtualenv
-$ .virtualenv/bin/python setup.py develop
-</code></pre>
-
-<h3>A little trick</h3>
-
-<p>这个时候使用 virtualenv 激活当前目录的 python 环境，其实 <code>bin/ansible</code> 就已经可以工作了。</p>
-
-<p>但我们还希望将 ansible 命令加在系统的 PATH 里，这就需要一些小技巧。简单来说需要自己准备一个脚本，脚本的内容如下:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>touch ~/bin/_ansible_wrapper
-</span><span class='line'><span class="nv">$ </span>vim ~/bin/_ansible_wrapper
-</span><span class='line'>
-</span><span class='line'><span class="c">#!/bin/bash</span>
-</span><span class='line'><span class="nb">source</span> <span class="s2">&quot;$HOME/apps/ansible/hacking/env-setup&quot;</span> -q
-</span><span class='line'><span class="k">if</span> <span class="o">[</span> -f <span class="s2">&quot;$ANSIBLE_HOME/.virtualenv/bin/activate&quot;</span> <span class="o">]</span> ; <span class="k">then</span>
-</span><span class='line'><span class="k">    </span><span class="nb">source</span> <span class="s2">&quot;$ANSIBLE_HOME/.virtualenv/bin/activate&quot;</span>
-</span><span class='line'><span class="k">fi</span>
-</span><span class='line'><span class="nv">PYENV_VERSION</span><span class="o">=</span>2.7.6 <span class="nb">exec</span> <span class="s2">&quot;$ANSIBLE_HOME/bin/${0##/*/}&quot;</span> <span class="nv">$@</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>$HOME/apps/ansible/hacking/env-setup</code> 是 ansible 为 hacker 准备的一个脚本，设置一些环境变量。其中 <code>$HOME/apps/ansible</code> 是 ansible 的根目录。</p>
-
-<p><code>${0##/*/}</code> 比较有趣，作用是正则匹配 <code>/*/</code> 然后把匹配到的部分从第 0 个参数（即命令本身）中删除。关于 bash 参数，更详细可以看[1]。</p>
-
-<p><code>$@</code> 则比较常见，是 bash 拿到的除命令名之外的所有参数。</p>
-
-<p>其实这个脚本就是一个 wrapper，作用如下：</p>
-
-<ol>
-<li>设置相关环境变量</li>
-<li>激活 ansible 下的 python 环境</li>
-<li>将收到的所有命令都转发给 <code>$ANSIBLE_HOME/bin</code> 下的相同命令执行</li>
-</ol>
-
-
-<p>假设 <code>$HOME/bin</code> 在 PATH 中，设置几个软链就全部搞定了。</p>
-
-<pre><code>$ ln -s $HOME/bin/_ansible_wrapper $HOME/bin/ansible
-$ ln -s $HOME/bin/_ansible_wrapper $HOME/bin/ansible-playbook
-$ ln -s $HOME/bin/_ansible_wrapper $HOME/bin/ansible-galaxy
-</code></pre>
-
-<h3>参考资料</h3>
-
-<ol>
-<li><a href="http://www.ibm.com/developerworks/opensource/library/l-bash-parameters/index.html">Linux tip: Bash parameters and parameter expansions</a></li>
-</ol>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[使用 Octopress 在 GitHub Pages 上快速搭建自定义域名Blog]]></title>
-    <link href="http://liangshan.me/blog/2014/05/12/build-custom-domain-blog-with-octopress-and-github-pages/"/>
-    <updated>2014-05-12T14:17:19+08:00</updated>
-    <id>http://liangshan.me/blog/2014/05/12/build-custom-domain-blog-with-octopress-and-github-pages</id>
-    <content type="html"><![CDATA[<p>一直没有搭博客，因为一直感觉自己不是一个标准的技术人，主要是不够狂热。但受身边人熏陶，偶尔还是想写点东西。
-尤其是看中 <code>liangshan.me</code> 这个域名，买下之后觉得闲着也是浪费，所以有了利用 GitHub Pages 来搭一下的想法。</p>
-
-<h2>预备</h2>
-
-<ul>
-<li>你需要具备一些 <code>Git</code> 的常识</li>
-<li>你需要一张 Visa 卡或是支付宝账号</li>
-<li>如果有 Ruby 经验，将会帮你更好的理解这个系统</li>
-</ul>
-
-
-<h2>Quick Start</h2>
-
-<p>整体来说，整个部署过程分3大步</p>
-
-<ol>
-<li>购买域名</li>
-<li>配置解析</li>
-<li>部署至 GitHub Pages</li>
-<li>评论插件</li>
-</ol>
-
-
-<!-- more -->
-
-
-<h3>购买域名</h3>
-
-<p>这里选用 <a href="http://www.godaddy.com">Godaddy</a>， 理由很简单，就是他支持支付宝。购买和支付流程很顺畅，应该不会有什么障碍。</p>
-
-<h3>配置解析</h3>
-
-<p>为了防止 Godaddy 自己的 DNS 解析被墙[1]，所以选用了国内的 <a href="https://www.dnspod.cn">DNSPod</a> 来解析域名，免费服务够用，还有手机二次验证。</p>
-
-<ol>
-<li>在 Godaddy 上设置 NameServer 到 DNSPod 提供的地址</li>
-<li>如果是顶级域名，需要在 DNSPod 上设置一个 A 记录到 Github Pages 的 IP 地址，这个地址可能会变化，可以查看<a href="https://help.github.com/articles/my-custom-domain-isn-t-working">这里</a>获取最新的地址</li>
-<li>如果是子域名，可以设置 CNAME</li>
-</ol>
-
-
-<p>关于 DNS 的设置，更详细的可以看 <a href="https://help.github.com/articles/setting-up-a-custom-domain-with-github-pages#step-1-add-a-cname-file-to-your-repository">GitHub Pages 的说明文档</a></p>
-
-<h3>部署至 GitHub Pages</h3>
-
-<p>关于 GitHub Pages 的技术细节，看[2]可能会有收获，一句话来概括就是<strong>使用动态语言来编辑纯文本文件，生成静态 HTML 代码，然后部署在 GitHub 上。</strong></p>
-
-<p>这种方式很巧妙，我之前也一直在用<a href="https://github.com/liangshan/markdown2deckjs">类似的做法</a>管理我的 Slides。</p>
-
-<p>这里并没有直接使用 Jekyll，而是使用基于他的 <a href="http://octopress.org/docs/setup/">Octopress</a>。遵循页面的 <code>Next Steps</code> 应该可以很快搭好环境。</p>
-
-<p>并且 Octopress 做好了和 GitHub Pages 对接的<a href="http://octopress.org/docs/deploying/github/">脚手架</a>。</p>
-
-<p>这里主要记录一些踩到的坑：</p>
-
-<ol>
-<li>使用 Homebrew 安装 rbenv, 再用 rbenv 安装 ruby, 提醒最新的 MacOS 安装的 Xcode 并没有 GCC，需要手动安装 GCC</li>
-<li><code>~/.rbenv/shims</code> 目录需要添加至 PATH，Homebrew 安装过程中好像并没有做这一步，并且 Octopress 关于这部分的文档可能过时了，文档中使用的 <code>~/.rbenv/bin</code></li>
-</ol>
-
-
-<h3>评论插件</h3>
-
-<p>由于是纯静态页面，所以要增加评论的动态功能 需要借助一些第三方前端工具。比如 <a href="http://disqus.com">Disqus</a>，配置非常简单 更多参考[3]。</p>
-
-<h2>参考资料</h2>
-
-<ol>
-<li><a href="http://beiyuu.com/github-pages/">使用Github Pages建独立博客</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2012/08/blogging_with_jekyll.html">搭建一个免费的，无限流量的Blog&mdash;&mdash;github Pages和Jekyll入门</a></li>
-<li><a href="http://seagg.github.io/blog/2012/09/03/config-comment-on-octopress/">给octopress添加Disqus评论功能</a></li>
-</ol>
-
 ]]></content>
   </entry>
   
