@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Best Practice | Liangshan's Blog]]></title>
   <link href="http://liangshan.me/blog/categories/best-practice/atom.xml" rel="self"/>
   <link href="http://liangshan.me/"/>
-  <updated>2014-05-22T17:56:12+08:00</updated>
+  <updated>2014-05-22T18:06:03+08:00</updated>
   <id>http://liangshan.me/</id>
   <author>
     <name><![CDATA[Liangshan]]></name>
@@ -22,7 +22,7 @@
 
 <hr />
 
-<p><img class="right <a" src="href="http://0.gravatar.com/avatar/7cdf5b1c46308979e3bf81390b0c8639">http://0.gravatar.com/avatar/7cdf5b1c46308979e3bf81390b0c8639</a>"></p>
+<p>{%img right <a href="http://0.gravatar.com/avatar/7cdf5b1c46308979e3bf81390b0c8639">http://0.gravatar.com/avatar/7cdf5b1c46308979e3bf81390b0c8639</a> %}</p>
 
 <p>中文翻译：<a href="https://github.com/liangshan/">梁山</a><br/>
 英文原文：<a href="http://www.12factor.net/">Adam Wiggins</a></p>

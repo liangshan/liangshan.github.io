@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Vagrant | Liangshan's Blog]]></title>
   <link href="http://liangshan.me/blog/categories/vagrant/atom.xml" rel="self"/>
   <link href="http://liangshan.me/"/>
-  <updated>2014-05-22T17:56:12+08:00</updated>
+  <updated>2014-05-22T18:06:03+08:00</updated>
   <id>http://liangshan.me/</id>
   <author>
     <name><![CDATA[Liangshan]]></name>
@@ -38,10 +38,10 @@
 而开发环境，生产环境的部署则交给 ansible 来完成。那么我们的项目目录看起来是这样:</p>
 
 <p><code>
- .                # root  
- |-- .provioning/ # ansible 脚本目录
- |-- src/         # 源代码目录
- |-- Vagrantfile  # vagrant 启动脚本
+ .                  # root  
+ |-- .provisioning/ # ansible 脚本目录
+ |-- src/           # 源代码目录
+ |-- Vagrantfile    # vagrant 启动脚本
 </code></p>
 
 <p>这样有一个好处，虚拟机启动之后，源代码对应 <code>/vagrant</code> 这个共享目录，修改源代码会同时在虚拟机内生效。
@@ -108,7 +108,7 @@ end
 
 <p><code>text
 .vagrant/
-.provioning/
+.provisioning/
 Vagrantfile
 </code></p>
 
