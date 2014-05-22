@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "使用 vitualenv 绿色安装 ansible"
+title: "使用 virtualenv 绿色安装 ansible"
 date: 2014-05-20 14:45:59 +0800
 comments: true
 categories: [ansible, virtualenv]
