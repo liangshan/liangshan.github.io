@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Using Ansible With Vitualenv Without Install - Liangshan's Blog</title>
+  <title>使用 Vitualenv 绿色安装 Ansible - Liangshan's Blog</title>
   <meta name="author" content="Liangshan">
 
   
-  <meta name="description" content="Ansible 是一个自动化配置管理工具 (Automate configure management)。用 python 编写，所以安装方式一般有以下几种： pip 安装 $ pip install ansible MacOS 用户可以选择使用 homebrew 安装 $ brew &hellip;">
-  
+  <meta name="description" content="How to use ansible with virtualenv without install.">
+  <meta name="keywords" content="ansible,virtualenv,without install">
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://liangshan.github.io/blog/2014/05/20/using-ansible-with-vitualenv-without-install">
+  <link rel="canonical" href="http://liangshan.github.io/blog/2014/05/20/using-ansible-with-virtualenv-without-install">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Liangshan's Blog" type="application/atom+xml">
@@ -80,7 +80,7 @@
   
   <header>
     
-      <h1 class="entry-title">Using Ansible With Vitualenv Without Install</h1>
+      <h1 class="entry-title">使用 Vitualenv 绿色安装 Ansible</h1>
     
     
       <p class="meta">
@@ -116,6 +116,9 @@
 </code></pre>
 
 <p>但这两种方法都不可避免将「污染」系统的 python 环境。所以本文主要介绍如何绿色安装 Ansible。</p>
+
+<!-- more -->
+
 
 <h3>安装 Virtualenv</h3>
 
@@ -220,7 +223,7 @@ $ ln -s $HOME/bin/_ansible_wrapper $HOME/bin/ansible-galaxy
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/ansible/'>ansible</a>, <a class='category' href='/blog/categories/vitualenv/'>vitualenv</a>
+    <a class='category' href='/blog/categories/ansible/'>ansible</a>, <a class='category' href='/blog/categories/virtualenv/'>virtualenv</a>
   
 </span>
 
@@ -229,7 +232,7 @@ $ ln -s $HOME/bin/_ansible_wrapper $HOME/bin/ansible-galaxy
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://liangshan.github.io/blog/2014/05/20/using-ansible-with-vitualenv-without-install/" data-via="LisumL" data-counturl="http://liangshan.github.io/blog/2014/05/20/using-ansible-with-vitualenv-without-install/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://liangshan.github.io/blog/2014/05/20/using-ansible-with-virtualenv-without-install/" data-via="LisumL" data-counturl="http://liangshan.github.io/blog/2014/05/20/using-ansible-with-virtualenv-without-install/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -240,8 +243,10 @@ $ ln -s $HOME/bin/_ansible_wrapper $HOME/bin/ansible-galaxy
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/05/12/shi-yong-octopress-zai-github-pages-shang-kuai-su-da-jian-zi-ding-yi-yu-ming-blog/" title="Previous Post: 使用 Octopress 在 GitHub Pages 上快速搭建自定义域名Blog">&laquo; 使用 Octopress 在 GitHub Pages 上快速搭建自定义域名Blog</a>
+        <a class="basic-alignment left" href="/blog/2014/05/12/build-custom-domain-blog-with-octopress-and-github-pages/" title="Previous Post: 使用 Octopress 在 GitHub Pages 上快速搭建自定义域名Blog">&laquo; 使用 Octopress 在 GitHub Pages 上快速搭建自定义域名Blog</a>
       
+      
+        <a class="basic-alignment right" href="/blog/2014/05/22/how-to-teach-people-at-anjuke/" title="Next Post: 安居客导师指南">安居客导师指南 &raquo;</a>
       
     </p>
   </footer>
@@ -262,11 +267,15 @@ $ ln -s $HOME/bin/_ansible_wrapper $HOME/bin/ansible-galaxy
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/05/20/using-ansible-with-vitualenv-without-install/">Using Ansible With Vitualenv Without Install</a>
+        <a href="/blog/2014/05/22/how-to-teach-people-at-anjuke/">安居客导师指南</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2014/05/12/shi-yong-octopress-zai-github-pages-shang-kuai-su-da-jian-zi-ding-yi-yu-ming-blog/">使用 Octopress 在 GitHub Pages 上快速搭建自定义域名Blog</a>
+        <a href="/blog/2014/05/20/using-ansible-with-virtualenv-without-install/">使用 Vitualenv 绿色安装 Ansible</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/05/12/build-custom-domain-blog-with-octopress-and-github-pages/">使用 Octopress 在 GitHub Pages 上快速搭建自定义域名Blog</a>
       </li>
     
   </ul>
@@ -302,7 +311,6 @@ $ ln -s $HOME/bin/_ansible_wrapper $HOME/bin/ansible-galaxy
 </section>
 
 
-
 <section class="googleplus">
   <h1>
     <a href="https://plus.google.com/112113128668997126531?rel=author">
@@ -333,8 +341,8 @@ $ ln -s $HOME/bin/_ansible_wrapper $HOME/bin/ansible-galaxy
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://liangshan.github.io/blog/2014/05/20/using-ansible-with-vitualenv-without-install/';
-        var disqus_url = 'http://liangshan.github.io/blog/2014/05/20/using-ansible-with-vitualenv-without-install/';
+        var disqus_identifier = 'http://liangshan.github.io/blog/2014/05/20/using-ansible-with-virtualenv-without-install/';
+        var disqus_url = 'http://liangshan.github.io/blog/2014/05/20/using-ansible-with-virtualenv-without-install/';
         var disqus_script = 'embed.js';
       
     (function () {

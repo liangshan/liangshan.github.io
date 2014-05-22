@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ansible | Liangshan's Blog]]></title>
   <link href="http://liangshan.github.io/blog/categories/ansible/atom.xml" rel="self"/>
   <link href="http://liangshan.github.io/"/>
-  <updated>2014-05-22T11:08:31+08:00</updated>
+  <updated>2014-05-22T14:06:52+08:00</updated>
   <id>http://liangshan.github.io/</id>
   <author>
     <name><![CDATA[Liangshan]]></name>
@@ -14,10 +14,10 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Using Ansible With Vitualenv Without Install]]></title>
-    <link href="http://liangshan.github.io/blog/2014/05/20/using-ansible-with-vitualenv-without-install/"/>
+    <title type="html"><![CDATA[使用 Vitualenv 绿色安装 Ansible]]></title>
+    <link href="http://liangshan.github.io/blog/2014/05/20/using-ansible-with-virtualenv-without-install/"/>
     <updated>2014-05-20T14:45:59+08:00</updated>
-    <id>http://liangshan.github.io/blog/2014/05/20/using-ansible-with-vitualenv-without-install</id>
+    <id>http://liangshan.github.io/blog/2014/05/20/using-ansible-with-virtualenv-without-install</id>
     <content type="html"><![CDATA[<p><a href="http://www.ansible.com/home">Ansible</a> 是一个自动化配置管理工具 (Automate configure management)。用 python 编写，所以安装方式一般有以下几种：</p>
 
 <p><strong> <code>pip</code> 安装 </strong></p>
@@ -31,6 +31,9 @@
 </code></pre>
 
 <p>但这两种方法都不可避免将「污染」系统的 python 环境。所以本文主要介绍如何绿色安装 Ansible。</p>
+
+<!-- more -->
+
 
 <h3>安装 Virtualenv</h3>
 
