@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Ansible | Liangshan's Blog]]></title>
-  <link href="http://liangshan.github.io/blog/categories/ansible/atom.xml" rel="self"/>
-  <link href="http://liangshan.github.io/"/>
-  <updated>2014-05-22T14:24:11+08:00</updated>
-  <id>http://liangshan.github.io/</id>
+  <link href="http://liangshan.me/blog/categories/ansible/atom.xml" rel="self"/>
+  <link href="http://liangshan.me/"/>
+  <updated>2014-05-22T15:30:10+08:00</updated>
+  <id>http://liangshan.me/</id>
   <author>
     <name><![CDATA[Liangshan]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[使用 Virtualenv 绿色安装 Ansible]]></title>
-    <link href="http://liangshan.github.io/blog/2014/05/20/using-ansible-with-virtualenv-without-install/"/>
+    <link href="http://liangshan.me/blog/2014/05/20/using-ansible-with-virtualenv-without-install/"/>
     <updated>2014-05-20T14:45:59+08:00</updated>
-    <id>http://liangshan.github.io/blog/2014/05/20/using-ansible-with-virtualenv-without-install</id>
+    <id>http://liangshan.me/blog/2014/05/20/using-ansible-with-virtualenv-without-install</id>
     <content type="html"><![CDATA[<p><a href="http://www.ansible.com/home">Ansible</a> 是一个自动化配置管理工具 (Automate configure management)。用 python 编写，所以安装方式一般有以下几种：</p>
 
 <p><strong> <code>pip</code> 安装 </strong></p>

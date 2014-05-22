@@ -2,30 +2,30 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>
-            http://liangshan.github.io/blog/2014/05/12/build-custom-domain-blog-with-octopress-and-github-pages/
+            http://liangshan.me/blog/2014/05/12/build-custom-domain-blog-with-octopress-and-github-pages/
         </loc>
         <lastmod>2014-05-22T13:42:59+08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://liangshan.github.io/blog/2014/05/20/using-ansible-with-virtualenv-without-install/
+            http://liangshan.me/blog/2014/05/20/using-ansible-with-virtualenv-without-install/
         </loc>
         <lastmod>2014-05-22T14:22:04+08:00</lastmod>
     </url>
     <url>
-        <loc>http://liangshan.github.io/blog/2014/05/22/how-to-teach-people-at-anjuke/</loc>
+        <loc>http://liangshan.me/blog/2014/05/22/how-to-teach-people-at-anjuke/</loc>
         <lastmod>2014-05-22T14:13:20+08:00</lastmod>
     </url>
     <url>
-        <loc>http://liangshan.github.io/blog/archives/</loc>
+        <loc>http://liangshan.me/blog/archives/</loc>
         <lastmod>2014-05-22T14:22:04+08:00</lastmod>
     </url>
     <url>
-        <loc>http://liangshan.github.io/</loc>
+        <loc>http://liangshan.me/</loc>
         <lastmod>2014-05-22T14:22:04+08:00</lastmod>
     </url>
     <url>
-        <loc>http://liangshan.github.io/robots.txt</loc>
+        <loc>http://liangshan.me/robots.txt</loc>
         <lastmod>2014-05-12T13:41:11+08:00</lastmod>
     </url>
 </urlset>

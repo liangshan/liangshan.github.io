@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Anjuke | Liangshan's Blog]]></title>
-  <link href="http://liangshan.github.io/blog/categories/anjuke/atom.xml" rel="self"/>
-  <link href="http://liangshan.github.io/"/>
-  <updated>2014-05-22T14:24:11+08:00</updated>
-  <id>http://liangshan.github.io/</id>
+  <link href="http://liangshan.me/blog/categories/anjuke/atom.xml" rel="self"/>
+  <link href="http://liangshan.me/"/>
+  <updated>2014-05-22T15:30:10+08:00</updated>
+  <id>http://liangshan.me/</id>
   <author>
     <name><![CDATA[Liangshan]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[安居客导师指南]]></title>
-    <link href="http://liangshan.github.io/blog/2014/05/22/how-to-teach-people-at-anjuke/"/>
+    <link href="http://liangshan.me/blog/2014/05/22/how-to-teach-people-at-anjuke/"/>
     <updated>2014-05-22T11:23:34+08:00</updated>
-    <id>http://liangshan.github.io/blog/2014/05/22/how-to-teach-people-at-anjuke</id>
+    <id>http://liangshan.me/blog/2014/05/22/how-to-teach-people-at-anjuke</id>
     <content type="html"><![CDATA[<p>安居客近年来非常重视校招，尤其是研发方向。实际操作下来，感觉校招还是不错的选择，这次我主要站在公司的角度来说。</p>
 
 <!-- more -->
