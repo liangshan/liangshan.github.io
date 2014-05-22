@@ -22,10 +22,10 @@ description: How to isolate ansible code and source code when using vagrant for 
 而开发环境，生产环境的部署则交给 ansible 来完成。那么我们的项目目录看起来是这样:
 
 ```
- .                # root  
- |-- .provioning/ # ansible 脚本目录
- |-- src/         # 源代码目录
- |-- Vagrantfile  # vagrant 启动脚本
+ .                  # root  
+ |-- .provisioning/ # ansible 脚本目录
+ |-- src/           # 源代码目录
+ |-- Vagrantfile    # vagrant 启动脚本
 ```
 
 这样有一个好处，虚拟机启动之后，源代码对应 `/vagrant` 这个共享目录，修改源代码会同时在虚拟机内生效。
@@ -86,7 +86,7 @@ end
 
 ```text
 .vagrant/
-.provioning/
+.provisioning/
 Vagrantfile
 ```
 
