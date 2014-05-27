@@ -4,7 +4,7 @@
   <title><![CDATA[Liangshan's Blog]]></title>
   <link href="http://liangshan.me/atom.xml" rel="self"/>
   <link href="http://liangshan.me/"/>
-  <updated>2014-05-22T18:06:55+08:00</updated>
+  <updated>2014-05-27T17:58:42+08:00</updated>
   <id>http://liangshan.me/</id>
   <author>
     <name><![CDATA[Liangshan]]></name>
@@ -12,6 +12,47 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[我为什么如此反感在公司放广播]]></title>
+    <link href="http://liangshan.me/blog/2014/05/27/why-i-hate-broadcasting-at-company/"/>
+    <updated>2014-05-27T17:27:33+08:00</updated>
+    <id>http://liangshan.me/blog/2014/05/27/why-i-hate-broadcasting-at-company</id>
+    <content type="html"><![CDATA[<p>最近公司决定在早中晚全公司范围内播放广播。早晚内容是「广告」和「司歌」，中午是罗振宇的「罗辑思维」片段。</p>
+
+<p>对此我在微信上表达了强烈的愤怒，措辞很激进。坦白来讲，我倒是希望有人传话给决策者，让他们知道我的愤怒，不是我不想混了，因为我相信我有足够的理由和众多的支持者，只是大家都不敢出声罢了。</p>
+
+<!-- more -->
+
+
+<p>其实我的理由很简单：</p>
+
+<ol>
+<li>作为一个 TIAN CHAO 屁民，难道受强迫还少么？大家应该对强制性措施有一种「天然的抵触」</li>
+<li>作为一个工程师，更不应该容忍一切封闭的、无法控制、强制性的事情。</li>
+<li>甚至我觉得可以上升到人权角度。</li>
+</ol>
+
+
+<p>在 <a href="http://translations.readthedocs.org/en/latest/hacker_howto.html#id9">How to be a hacker</a> 中有详细的描述了黑客应具备的几种态度，其中一条是「崇尚自由」:</p>
+
+<blockquote><p>黑客们是天生的反权威主义者。任何能向你发号施令的人都可以让你停止解决令你着迷的问题，同时，按照权威主义者的一般思路，他通常会给出一些极端愚昧的理由。因此，不论何处，任何权威主义的做法，只要它影响到了你和其他的黑客，你就要和它斗到底。</p>
+
+<p>（这并非向所有权威挑战。儿童需要监护，罪犯要被看管起来。如果服从命令得到某种东西比起用其他方式得到它更节约时间，黑客可以同意接受某种形式的权威。但这是一个有限度的，斟酌过的的交易；那种权威主义者想要的个人服从是不在考虑范围内的。）</p>
+
+<p>权威主义者喜欢审查和保密。他们不信任自愿的合作和信息的共享——他们只喜欢由他们控制的所谓“合作”。因此，作为一个黑客，你应该对审查、保密，以及使用武力或欺骗去压迫有行为能力的人们的做法有一种本能的敌意。同时你要有为此信念付出的意愿。</p></blockquote>
+
+<p>我既然提出了问题，自然会奉上解决方案。</p>
+
+<p>一样作为互联网公司，看看别人的做法: <a href="https://github.com/play/play">GitHub/Play</a>，我并没有贬低任何人的意思，不过有双眼睛就能分辨哪种方案更好。是强制性播放，还是随意性收听。</p>
+
+<blockquote><p>Play is an employee-powered iTunes-based client-driven distributed music server for your office. Also it can prepare your taxes.</p>
+
+<p><img src="https://camo.githubusercontent.com/7eae837ee32161f7a22ba0f064f0e976f10ea2de/687474703a2f2f636c2e6c792f316c336f3070304b334f3172304332553361335a2f706c61792e706e67" alt="" /></p></blockquote>
+
+<p>这事说大不大，不过真的非常令人沮丧。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Isolate Ansible Code and Source Code]]></title>
