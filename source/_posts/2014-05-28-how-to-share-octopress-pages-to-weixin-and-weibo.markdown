@@ -5,6 +5,7 @@ date: 2014-05-28 12:54:14 +0800
 comments: true
 categories: [meta]
 keywords: "微信,微博,octopress,分享"
+description: 将 octopress 的文章分享至微信和微博分享的详细做法。
 ---
 
 昨天想把自己的文章分享到微信，没有仔细思考选了一种很土的办法。就是直接在微信的内容里输入地址，容易出错不说，效率也很低下。
