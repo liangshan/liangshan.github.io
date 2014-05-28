@@ -100,3 +100,7 @@ google_analytics_tracking_url: liangshan.me
 
 # Facebook Like
 facebook_like: false
+
+# Weixin
+jiathis_user: 1376902770881935
+weixin_share: true
