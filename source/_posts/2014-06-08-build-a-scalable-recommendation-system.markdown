@@ -5,7 +5,7 @@ date: 2014-06-08 20:06:19 +0800
 comments: true
 categories: ['recommendation']
 keywords: "推荐,平台,可扩展,recommendation,scalable"
-description: how to build a scalable recommendation system.
+description: 如何构建一个可扩展的推荐系统
 ---
 
 从接触推荐系统以来，断断续续的已经有一年半的时间了。
