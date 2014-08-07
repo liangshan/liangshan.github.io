@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>我为什么如此反感在公司放广播 - Liangshan's Blog</title>
+  <title>在 Gentoo 上安装 Awesome - Liangshan's Blog</title>
   <meta name="author" content="Liangshan">
 
   
-  <meta name="description" content="Why I hate broadcasting at company so much.">
-  
+  <meta name="description" content="使用 SystemRescueCD 快速的安装 gentoo，然后安装 awesome 桌面环境。">
+  <meta name="keywords" content="linux, gentoo, x11, awesome, SystemRescueCD">
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://liangshan.me/blog/2014/05/27/why-i-hate-broadcasting-at-company">
+  <link rel="canonical" href="http://liangshan.me/blog/2014/08/07/install-awesome-on-gentoo">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Liangshan's Blog" type="application/atom+xml">
@@ -80,7 +80,7 @@
   
   <header>
     
-      <h1 class="entry-title">我为什么如此反感在公司放广播</h1>
+      <h1 class="entry-title">在 Gentoo 上安装 Awesome</h1>
     
     
       <p class="meta">
@@ -96,46 +96,51 @@
   
 
 
-<time datetime="2014-05-27T17:27:33+08:00" pubdate data-updated="true">May 27<span>th</span>, 2014</time>
+<time datetime="2014-08-07T14:06:30+08:00" pubdate data-updated="true">Aug 7<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>最近公司决定在早中晚全公司范围内播放广播。早晚内容是「广告」和「司歌」，中午是罗振宇的「罗辑思维」片段。</p>
-
-<p>对此我在微信上表达了强烈的愤怒，措辞很激进。坦白来讲，我倒是希望有人传话给决策者，让他们知道我的愤怒，不是我不想混了，因为我相信我有足够的理由和众多的支持者，只是大家都不敢出声罢了。</p>
+<div class="entry-content"><p>都装 gentoo 了，趁热装桌面环境吧。linux 的视窗系统称为 X Window System。
+在开源世界里，通常是协议先行，各自实现。同样 X 只是协议，在各种实现中以 X.Org 最受欢迎，当时使用的协议为 X11，所以后来 X 也被人们称为 X11。</p>
 
 <!-- more -->
 
 
-<p>其实我的理由很简单：</p>
+<p>X 分为 server 和 client, 但这里的 server 和 client 和我直觉上的理解有点相反。比如接收用户行为的反而是 server。另外一大特色就是 client 之间是不知道对方存在的，比如桌面上运行了 terminal 和 chrome，它们之间的位置关系互相是不清楚的。所以需要一个软件来管理 client 的位置、大小、外观，同时提供类似于桌面的环境，这个软件就叫 X window manager，我们这里选择的是 awesome。X 具体的协议要去翻协议或者看 wiki 可以了解大概。</p>
+
+<p>安装也分为 server 和 window manager 来进行。gentoo 安装每个软件基本上都会有一个 wiki 页面，照着手册来就可以了，所以建议照着 gentoo 的 wiki 来安装软件，而不是软件本身的手册。下面只讲手册上没说的内容，也就是我踩到的坑。</p>
+
+<p>先讲 X server，第一次使用的驱动是开源版本 nouveau，也是手册上推荐的版本。但 awesome 装好之后无法启动。重新改了 make.conf 把显卡模块改为 nvidia 重装 server 就成功了。不知道是某款型号的个体问题还是普遍问题，仅供参考吧。</p>
+
+<p>再说 awesome，首先要装较新版本的 awesome，这时候安装使用下面的命令：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ ACCEPT_KEYWORDS</span><span class="o">=</span><span class="s2">&quot;~*&quot;</span> emerge x11-wm/awesome
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>装完之后运行 <code>startx</code> 应该有一个朴素的桌面启动了，这时候我们要花很多时间来美化它。</p>
+
+<p>我是说在没有社区的情况下:D</p>
+
+<p>github 上搜索 awesome themes，结果一大把了，早有人帮大家归纳了很多漂亮的皮肤，即使没有一个喜欢的，参考配置文件总是不错的。</p>
+
+<p>我使用的叫做 [awesome-copycats][1]，除此之外还有中文字体，输入法，终端配置等等要折腾。我把用到的配置文件都放进 [github][2] 上，省的再次折腾。这里只是需要几个备注：</p>
 
 <ol>
-<li>作为一个 TIAN CHAO 屁民，难道受强迫还少么？大家应该对强制性措施有一种「天然的抵触」</li>
-<li>作为一个工程师，更不应该容忍一切封闭的、无法控制、强制性的事情。</li>
-<li>甚至我觉得可以上升到人权角度。</li>
+<li>这个皮肤的网络控件需要先安装 <code>iproute</code></li>
+<li>编译终端需要 <code>USE=xft</code> 才能使用 X Font Server 的字体</li>
 </ol>
 
 
-<p>在 <a href="http://translations.readthedocs.org/en/latest/hacker_howto.html#id9">How to be a hacker</a> 中有详细的描述了黑客应具备的几种态度，其中一条是「崇尚自由」:</p>
+<p>最后安装一下最新版的 firefox（仍然使用 <code>ACCEPT_KEYWORDS="~*"</code> 确保新版），需要提到的是 perl 的 <code>XML-Parser</code> 模块过期了，可能要先升级一下，否则编译过程会报错。</p>
 
-<blockquote><p>黑客们是天生的反权威主义者。任何能向你发号施令的人都可以让你停止解决令你着迷的问题，同时，按照权威主义者的一般思路，他通常会给出一些极端愚昧的理由。因此，不论何处，任何权威主义的做法，只要它影响到了你和其他的黑客，你就要和它斗到底。</p>
+<p>上个图吧（为什么有种女人写美容攻略的感觉？），其实我最早就是想弄个 awesome，没想到整了这么多。</p>
 
-<p>（这并非向所有权威挑战。儿童需要监护，罪犯要被看管起来。如果服从命令得到某种东西比起用其他方式得到它更节约时间，黑客可以同意接受某种形式的权威。但这是一个有限度的，斟酌过的的交易；那种权威主义者想要的个人服从是不在考虑范围内的。）</p>
-
-<p>权威主义者喜欢审查和保密。他们不信任自愿的合作和信息的共享——他们只喜欢由他们控制的所谓“合作”。因此，作为一个黑客，你应该对审查、保密，以及使用武力或欺骗去压迫有行为能力的人们的做法有一种本能的敌意。同时你要有为此信念付出的意愿。</p></blockquote>
-
-<p>我既然提出了问题，自然会奉上解决方案。</p>
-
-<p>一样作为互联网公司，看看别人的做法: <a href="https://github.com/play/play">GitHub/Play</a>，我并没有贬低任何人的意思，不过有双眼睛就能分辨哪种方案更好。是强制性播放，还是随意性收听。</p>
-
-<blockquote><p>Play is an employee-powered iTunes-based client-driven distributed music server for your office. Also it can prepare your taxes.</p>
-
-<p><img src="https://camo.githubusercontent.com/7eae837ee32161f7a22ba0f064f0e976f10ea2de/687474703a2f2f636c2e6c792f316c336f3070304b334f3172304332553361335a2f706c61792e706e67" alt="" /></p></blockquote>
-
-<p>这事说大不大，不过真的非常令人沮丧。</p>
+<p><img src="/images/custom/awesome.png" /></p>
 </div>
 
 
@@ -158,12 +163,12 @@
   
 
 
-<time datetime="2014-05-27T17:27:33+08:00" pubdate data-updated="true">May 27<span>th</span>, 2014</time>
+<time datetime="2014-08-07T14:06:30+08:00" pubdate data-updated="true">Aug 7<span>th</span>, 2014</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/anjuke/'>anjuke</a>
+    <a class='category' href='/blog/categories/linux/'>linux</a>
   
 </span>
 
@@ -178,7 +183,7 @@
   </div>
   
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://liangshan.me/blog/2014/05/27/why-i-hate-broadcasting-at-company/" data-via="LisumL" data-counturl="http://liangshan.me/blog/2014/05/27/why-i-hate-broadcasting-at-company/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://liangshan.me/blog/2014/08/07/install-awesome-on-gentoo/" data-via="LisumL" data-counturl="http://liangshan.me/blog/2014/08/07/install-awesome-on-gentoo/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -189,10 +194,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/05/22/isolate-ansible-code-and-source-code/" title="Previous Post: isolate ansible code and source code">&laquo; isolate ansible code and source code</a>
+        <a class="basic-alignment left" href="/blog/2014/08/06/install-gentoo-from-systemrescuecd/" title="Previous Post: 使用 SystemRescueCD 安装 gentoo">&laquo; 使用 SystemRescueCD 安装 gentoo</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/05/28/how-to-share-octopress-pages-to-weixin-and-weibo/" title="Next Post: 如何将 octopress 的文章分享至微信和微博">如何将 octopress 的文章分享至微信和微博 &raquo;</a>
       
     </p>
   </footer>
@@ -295,8 +298,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://liangshan.me/blog/2014/05/27/why-i-hate-broadcasting-at-company/';
-        var disqus_url = 'http://liangshan.me/blog/2014/05/27/why-i-hate-broadcasting-at-company/';
+        var disqus_identifier = 'http://liangshan.me/blog/2014/08/07/install-awesome-on-gentoo/';
+        var disqus_url = 'http://liangshan.me/blog/2014/08/07/install-awesome-on-gentoo/';
         var disqus_script = 'embed.js';
       
     (function () {

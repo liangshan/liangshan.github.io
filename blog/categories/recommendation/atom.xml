@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Recommendation | Liangshan's Blog]]></title>
   <link href="http://liangshan.me/blog/categories/recommendation/atom.xml" rel="self"/>
   <link href="http://liangshan.me/"/>
-  <updated>2014-08-07T14:02:25+08:00</updated>
+  <updated>2014-08-07T16:57:33+08:00</updated>
   <id>http://liangshan.me/</id>
   <author>
     <name><![CDATA[Liangshan]]></name>
@@ -131,7 +131,7 @@
 
 <p>设想中的架构应该类似于这样:</p>
 
-<p><img src="/images/rec-arch.png" /></p>
+<p><img src="/images/custom/rec-arch.png" /></p>
 
 <h3>Platform</h3>
 
