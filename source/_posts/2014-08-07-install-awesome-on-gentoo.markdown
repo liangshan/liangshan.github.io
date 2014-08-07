@@ -38,6 +38,8 @@ github 上搜索 awesome themes，结果一大把了，早有人帮大家归纳�
 
 最后安装一下最新版的 firefox（仍然使用 `ACCEPT_KEYWORDS="~*"` 确保新版），需要提到的是 perl 的 `XML-Parser` 模块过期了，可能要先升级一下，否则编译过程会报错。
 
+要注意整个过程都没有安装 DM(display manager)，还是手动的 `startx` 来启动，以后遇到问题再装吧。
+
 上个图吧（为什么有种女人写美容攻略的感觉？），其实我最早就是想弄个 awesome，没想到整了这么多。
 
 <img src="{{ root_url }}/images/custom/awesome.png" />
