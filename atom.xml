@@ -4,7 +4,7 @@
   <title><![CDATA[Liangshan's Blog]]></title>
   <link href="http://liangshan.me/atom.xml" rel="self"/>
   <link href="http://liangshan.me/"/>
-  <updated>2014-08-07T17:09:13+08:00</updated>
+  <updated>2014-08-07T18:11:53+08:00</updated>
   <id>http://liangshan.me/</id>
   <author>
     <name><![CDATA[Liangshan]]></name>
@@ -43,7 +43,7 @@
 
 <p>github 上搜索 awesome themes，结果一大把了，早有人帮大家归纳了很多漂亮的皮肤，即使没有一个喜欢的，参考配置文件总是不错的。</p>
 
-<p>我使用的叫做 [awesome-copycats][1]，除此之外还有中文字体，输入法，终端配置等等要折腾。我把用到的配置文件都放进 [github][2] 上，省的再次折腾。这里只是需要几个备注：</p>
+<p>我使用的叫做 <a href="https://github.com/copycat-killer/awesome-copycats">awesome-copycats</a>，除此之外还有中文字体，输入法，终端配置等等要折腾。我把用到的配置文件都放进 <a href="https://github.com/liangshan/liangshan.gentoo">github</a> 上，省的再次折腾。这里只是需要几个备注：</p>
 
 <ol>
 <li>这个皮肤的网络控件需要先安装 <code>iproute</code></li>
