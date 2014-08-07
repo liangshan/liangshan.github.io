@@ -102,7 +102,7 @@ Oryx 具有以下特点：
 
 设想中的架构应该类似于这样:
 
-<img src="{{ root_url }}/images/rec-arch.png" />
+<img src="{{ root_url }}/images/custom/rec-arch.png" />
 
 ### Platform
 
