@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux | Liangshan's Blog]]></title>
   <link href="http://liangshan.me/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://liangshan.me/"/>
-  <updated>2014-08-07T16:57:33+08:00</updated>
+  <updated>2014-08-07T17:09:13+08:00</updated>
   <id>http://liangshan.me/</id>
   <author>
     <name><![CDATA[Liangshan]]></name>
@@ -51,6 +51,8 @@ $ ACCEPT_KEYWORDS="~*" emerge x11-wm/awesome
 
 
 <p>最后安装一下最新版的 firefox（仍然使用 <code>ACCEPT_KEYWORDS="~*"</code> 确保新版），需要提到的是 perl 的 <code>XML-Parser</code> 模块过期了，可能要先升级一下，否则编译过程会报错。</p>
+
+<p>要注意整个过程都没有安装 DM(display manager)，还是手动的 <code>startx</code> 来启动，以后遇到问题再装吧。</p>
 
 <p>上个图吧（为什么有种女人写美容攻略的感觉？），其实我最早就是想弄个 awesome，没想到整了这么多。</p>
 
