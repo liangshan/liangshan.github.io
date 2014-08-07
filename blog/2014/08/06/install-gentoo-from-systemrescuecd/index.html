@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>使用 Systemreccd 安装 Gentoo - Liangshan's Blog</title>
+  <title>使用 SystemRescueCd 安装 Gentoo - Liangshan's Blog</title>
   <meta name="author" content="Liangshan">
 
   
-  <meta name="description" content="使用 systemreccd 快速的安装 gentoo，然后安装 awesome 桌面环境。">
-  <meta name="keywords" content="linux, gentoo, x11, awesome, systemreccd">
+  <meta name="description" content="使用 SystemRescueCd 快速的安装 gentoo，然后安装 awesome 桌面环境。">
+  <meta name="keywords" content="linux, gentoo, x11, awesome, SystemRescueCd">
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://liangshan.me/blog/2014/08/06/install-gentoo-from-systemreccd">
+  <link rel="canonical" href="http://liangshan.me/blog/2014/08/06/install-gentoo-from-systemrescuecd">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Liangshan's Blog" type="application/atom+xml">
@@ -80,7 +80,7 @@
   
   <header>
     
-      <h1 class="entry-title">使用 Systemreccd 安装 Gentoo</h1>
+      <h1 class="entry-title">使用 SystemRescueCd 安装 Gentoo</h1>
     
     
       <p class="meta">
@@ -120,13 +120,23 @@
 <!-- more -->
 
 
+<p>在开始之前，先说一下各个工具的版本。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>SystemRescueCd == 4.3.0
+</span><span class='line'>kernel == linux-3.14.14-gentoo
+</span><span class='line'>gentoo == Gentoo Base System release 2.2</span></code></pre></td></tr></table></div></figure>
+
+
 <p>原本我只是打算照着 gentoo 的手册从头看到尾，但第一章我就晕了，至少给了 3 种安装方式。选哪个好呢？经同事介绍：都不好。
-有网络的条件下，最好是使用 systemreccd 来安装。一开始我不太理解，装完之后我同意这种看法。</p>
+有网络的条件下，最好是使用 SystemRescueCd 来安装。一开始我不太理解，装完之后我同意这种看法。</p>
 
-<p>先讲 systemreccd，这是一种特殊的 Live CD，内置了一个基于 Gentoo 内核的小型系统，以及一些很棒的工具。就像名字所指，主要用来恢复系统。
-而这些「很棒的工具」就是 systemreccd 来安装 gentoo 的最大优势。比如自带了 dhcp 客户端，很舒服的 bash 环境，elinks 在终端浏览网页等等。</p>
+<p>先讲 SystemRescueCd，这是一种特殊的 Live CD，内置了一个基于 Gentoo 内核的小型系统，以及一些很棒的工具。就像名字所指，主要用来恢复系统。
+而这些「很棒的工具」就是 SystemRescueCd 来安装 gentoo 的最大优势。比如自带了 dhcp 客户端，很舒服的 bash 环境，elinks 在终端浏览网页等等。</p>
 
-<p>简单来说，使用 systemreccd 来安装 gentoo，可以直接跳到 gentoo 手册的第 4 章。而把 systemreccd 装进 U 盘，只要参考 <a href="http://www.sysresccd.org/Sysresccd-manual-en_How_to_install_SystemRescueCd_on_an_USB-stick">wiki</a> 就可以了，分分钟就能搞定。</p>
+<p>简单来说，使用 SystemRescueCd 来安装 gentoo，可以直接跳到 gentoo 手册的第 4 章。而把 SystemRescueCd 装进 U 盘，只要参考 <a href="http://www.sysresccd.org/Sysresccd-manual-en_How_to_install_SystemRescueCd_on_an_USB-stick">wiki</a> 就可以了，分分钟就能搞定。</p>
 
 <p>制作完成之后，插上 U 盘，从 U 盘启动，进入 systemrescd。然后我们跳到 <a href="https://www.gentoo.org/doc/en/handbook/handbook-amd64.xml?part=1&amp;chap=4">gentoo handbook 第 4 章</a>。第一，不要看中文版，已经不维护了，全部过时；第二，选好 CPU 架构，这篇是针对 amd64 或者叫 x86_64（这名字无力吐槽）。</p>
 
@@ -134,7 +144,7 @@
 
 <p>第 4 章的几个关键字：MBR， GPT， UEFI， BIOS boot partision。简单的把这些关键字串一下：上一代的计算机启动方式是 BIOS + MBR(Master Boot Record)，但两者有很多限制，也确实太过古老了。比如 MBR 使用 512 bytes 记录主分区信息，所以主分区数量受限制，虽然可以使用扩展分区和逻辑分区来弥补，但不够 native；以及 MBR 没有备份等问题。GPT 就是 MBR 的升级版，而 UEFI 就是针对 BIOS 的改进。而 BIOS boot 分区 主要是为了 GRUB2 准备的，也就是说如果使用 GRUB2 来选择操作系统，最好是有一个。需要特别说明的是，UEFI 需要主板支持，如果没有的话 BIOS + GPT 在大多数情况下可以的，除了要安装 windows（只认 UEFI + GPT 组合）。</p>
 
-<p>给硬盘分好区并 mount 之后，就可以进入第 5 章。这里主要是准备整个安装过程会用到的一些工具，比如 stage3 安装包。名字很有趣，台阶。要知道除了 stage3 之外还有 stage2 和 stage1 可以选择。大概意思是你要从第几层开始工作，基本上越底层自己要做的工作就越多。新手就用 stage3 可以了，想要挑战的可以试试 stage2 和 stage1，这让我想起了 Diablo 3 的地狱和炼狱模式。这里需要注意的是，新的 systemreccd 带的是 elinks，而不是手册上的 links，但用法基本是一样的。</p>
+<p>给硬盘分好区并 mount 之后，就可以进入第 5 章。这里主要是准备整个安装过程会用到的一些工具，比如 stage3 安装包。名字很有趣，台阶。要知道除了 stage3 之外还有 stage2 和 stage1 可以选择。大概意思是你要从第几层开始工作，基本上越底层自己要做的工作就越多。新手就用 stage3 可以了，想要挑战的可以试试 stage2 和 stage1，这让我想起了 Diablo 3 的地狱和炼狱模式。这里需要注意的是，新的 SystemRescueCd 带的是 elinks，而不是手册上的 links，但用法基本是一样的。</p>
 
 <p>第 6 章是装内核之前的准备，唯一要注意的是在选择 profile 的时候，因为是要装桌面环境，但我又不想用 GNOME 和 KDE，所以选择 desktop 选项就好了。</p>
 
@@ -187,7 +197,7 @@
   </div>
   
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://liangshan.me/blog/2014/08/06/install-gentoo-from-systemreccd/" data-via="LisumL" data-counturl="http://liangshan.me/blog/2014/08/06/install-gentoo-from-systemreccd/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://liangshan.me/blog/2014/08/06/install-gentoo-from-systemrescuecd/" data-via="LisumL" data-counturl="http://liangshan.me/blog/2014/08/06/install-gentoo-from-systemrescuecd/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -220,7 +230,7 @@
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/08/06/install-gentoo-from-systemreccd/">使用 Systemreccd 安装 Gentoo</a>
+        <a href="/blog/2014/08/06/install-gentoo-from-systemrescuecd/">使用 SystemRescueCd 安装 Gentoo</a>
       </li>
     
       <li class="post">
@@ -302,8 +312,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://liangshan.me/blog/2014/08/06/install-gentoo-from-systemreccd/';
-        var disqus_url = 'http://liangshan.me/blog/2014/08/06/install-gentoo-from-systemreccd/';
+        var disqus_identifier = 'http://liangshan.me/blog/2014/08/06/install-gentoo-from-systemrescuecd/';
+        var disqus_url = 'http://liangshan.me/blog/2014/08/06/install-gentoo-from-systemrescuecd/';
         var disqus_script = 'embed.js';
       
     (function () {
