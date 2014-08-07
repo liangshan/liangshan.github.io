@@ -43,3 +43,7 @@ github 上搜索 awesome themes，结果一大把了，早有人帮大家归纳�
 上个图吧（为什么有种女人写美容攻略的感觉？），其实我最早就是想弄个 awesome，没想到整了这么多。
 
 <img src="{{ root_url }}/images/custom/awesome.png" />
+
+
+[1]: https://github.com/copycat-killer/awesome-copycats
+[2]: https://github.com/liangshan/liangshan.gentoo
