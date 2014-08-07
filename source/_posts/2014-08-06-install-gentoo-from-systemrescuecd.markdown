@@ -1,11 +1,11 @@
 ---
 layout: post
-title: "使用 systemreccd 安装 gentoo"
+title: "使用 SystemRescueCd 安装 gentoo"
 date: 2014-08-06 17:50:10 +0800
 comments: true
 categories: ['linux']
-keywords: "linux, gentoo, x11, awesome, systemreccd"
-description: 使用 systemreccd 快速的安装 gentoo，然后安装 awesome 桌面环境。
+keywords: "linux, gentoo, x11, awesome, SystemRescueCd"
+description: 使用 SystemRescueCd 快速的安装 gentoo，然后安装 awesome 桌面环境。
 ---
 
 在使用 Ubuntu 有 3 年之后，第一次有了换个发行版的想法。
@@ -20,14 +20,21 @@ description: 使用 systemreccd 快速的安装 gentoo，然后安装 awesome �
 其实大多数时候我不是一个爱折腾的人，所以这次抓住了一闪而过想折腾的机会，第一天下午就开始动手了。第一个动作就是买一个 U 盘，是的，要准备一个 U 盘。
 
 <!-- more -->
+在开始之前，先说一下各个工具的版本。
+
+```
+SystemRescueCd == 4.3.0
+kernel == linux-3.14.14-gentoo
+gentoo == Gentoo Base System release 2.2
+```
 
 原本我只是打算照着 gentoo 的手册从头看到尾，但第一章我就晕了，至少给了 3 种安装方式。选哪个好呢？经同事介绍：都不好。
-有网络的条件下，最好是使用 systemreccd 来安装。一开始我不太理解，装完之后我同意这种看法。
+有网络的条件下，最好是使用 SystemRescueCd 来安装。一开始我不太理解，装完之后我同意这种看法。
 
-先讲 systemreccd，这是一种特殊的 Live CD，内置了一个基于 Gentoo 内核的小型系统，以及一些很棒的工具。就像名字所指，主要用来恢复系统。
-而这些「很棒的工具」就是 systemreccd 来安装 gentoo 的最大优势。比如自带了 dhcp 客户端，很舒服的 bash 环境，elinks 在终端浏览网页等等。
+先讲 SystemRescueCd，这是一种特殊的 Live CD，内置了一个基于 Gentoo 内核的小型系统，以及一些很棒的工具。就像名字所指，主要用来恢复系统。
+而这些「很棒的工具」就是 SystemRescueCd 来安装 gentoo 的最大优势。比如自带了 dhcp 客户端，很舒服的 bash 环境，elinks 在终端浏览网页等等。
 
-简单来说，使用 systemreccd 来安装 gentoo，可以直接跳到 gentoo 手册的第 4 章。而把 systemreccd 装进 U 盘，只要参考 [wiki][1] 就可以了，分分钟就能搞定。
+简单来说，使用 SystemRescueCd 来安装 gentoo，可以直接跳到 gentoo 手册的第 4 章。而把 SystemRescueCd 装进 U 盘，只要参考 [wiki][1] 就可以了，分分钟就能搞定。
 
 [1]: http://www.sysresccd.org/Sysresccd-manual-en_How_to_install_SystemRescueCd_on_an_USB-stick
 
@@ -39,7 +46,7 @@ gentoo 手册不只是告诉你步骤，还试图向你解释每一步的原因�
 
 第 4 章的几个关键字：MBR， GPT， UEFI， BIOS boot partision。简单的把这些关键字串一下：上一代的计算机启动方式是 BIOS + MBR(Master Boot Record)，但两者有很多限制，也确实太过古老了。比如 MBR 使用 512 bytes 记录主分区信息，所以主分区数量受限制，虽然可以使用扩展分区和逻辑分区来弥补，但不够 native；以及 MBR 没有备份等问题。GPT 就是 MBR 的升级版，而 UEFI 就是针对 BIOS 的改进。而 BIOS boot 分区 主要是为了 GRUB2 准备的，也就是说如果使用 GRUB2 来选择操作系统，最好是有一个。需要特别说明的是，UEFI 需要主板支持，如果没有的话 BIOS + GPT 在大多数情况下可以的，除了要安装 windows（只认 UEFI + GPT 组合）。
 
-给硬盘分好区并 mount 之后，就可以进入第 5 章。这里主要是准备整个安装过程会用到的一些工具，比如 stage3 安装包。名字很有趣，台阶。要知道除了 stage3 之外还有 stage2 和 stage1 可以选择。大概意思是你要从第几层开始工作，基本上越底层自己要做的工作就越多。新手就用 stage3 可以了，想要挑战的可以试试 stage2 和 stage1，这让我想起了 Diablo 3 的地狱和炼狱模式。这里需要注意的是，新的 systemreccd 带的是 elinks，而不是手册上的 links，但用法基本是一样的。
+给硬盘分好区并 mount 之后，就可以进入第 5 章。这里主要是准备整个安装过程会用到的一些工具，比如 stage3 安装包。名字很有趣，台阶。要知道除了 stage3 之外还有 stage2 和 stage1 可以选择。大概意思是你要从第几层开始工作，基本上越底层自己要做的工作就越多。新手就用 stage3 可以了，想要挑战的可以试试 stage2 和 stage1，这让我想起了 Diablo 3 的地狱和炼狱模式。这里需要注意的是，新的 SystemRescueCd 带的是 elinks，而不是手册上的 links，但用法基本是一样的。
 
 第 6 章是装内核之前的准备，唯一要注意的是在选择 profile 的时候，因为是要装桌面环境，但我又不想用 GNOME 和 KDE，所以选择 desktop 选项就好了。
 
