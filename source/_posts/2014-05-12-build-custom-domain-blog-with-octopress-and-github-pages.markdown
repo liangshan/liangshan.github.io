@@ -38,6 +38,8 @@ description: How to build custom domain blog with octopress and GitHub Pages
 
 关于 DNS 的设置，更详细的可以看 [GitHub Pages 的说明文档](https://help.github.com/articles/setting-up-a-custom-domain-with-github-pages#step-1-add-a-cname-file-to-your-repository)
 
+_更新: DNSPod 不支持 alias，所以无法享受 github 的 DNS 缓存_
+
 ### 部署至 GitHub Pages
 关于 GitHub Pages 的技术细节，看[2]可能会有收获，一句话来概括就是**使用动态语言来编辑纯文本文件，生成静态 HTML 代码，然后部署在 GitHub 上。**
 
