@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Meta | Liangshan's Blog]]></title>
   <link href="http://liangshan.me/blog/categories/meta/atom.xml" rel="self"/>
   <link href="http://liangshan.me/"/>
-  <updated>2014-08-10T20:33:42+08:00</updated>
+  <updated>2014-09-05T18:08:12+08:00</updated>
   <id>http://liangshan.me/</id>
   <author>
     <name><![CDATA[Liangshan]]></name>
@@ -152,6 +152,8 @@ $ vi source/_includes/jiathis_share.html
 
 
 <p>关于 DNS 的设置，更详细的可以看 <a href="https://help.github.com/articles/setting-up-a-custom-domain-with-github-pages#step-1-add-a-cname-file-to-your-repository">GitHub Pages 的说明文档</a></p>
+
+<p><em>更新: DNSPod 不支持 alias，所以无法享受 github 的 DNS 缓存</em></p>
 
 <h3>部署至 GitHub Pages</h3>
 
