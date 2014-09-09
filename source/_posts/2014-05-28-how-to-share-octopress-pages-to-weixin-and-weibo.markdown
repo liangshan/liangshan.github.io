@@ -44,6 +44,7 @@ jiathis 给的代码带一个「+」号还有分享数字，样式很不河蟹�
 另外 jiathis 还会默认开启 site tracker 功能，我觉得这个有点多余，这部分代码我也都删掉了。
 
 {% raw %}
+
 ```html+jinja source/_include/post/sharing
   <!-- 添加到相应的位置，twitter google+ 前后皆可 -->
   {% if site.jiathis_share %}
@@ -70,12 +71,15 @@ $ vi source/_includes/jiathis_share.html
 ```
 
 ```html+jinja 该文件的内容
+
 {% if site.jiathis_share %}
 <div style="display:none">
 <script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid={{ site.jiathis_user }}" charset="utf-8"></script>
 </div>
 {% endif %}
+
 ```
+
 {% endraw %}
 
 之后就可以在本地预览并部署了。

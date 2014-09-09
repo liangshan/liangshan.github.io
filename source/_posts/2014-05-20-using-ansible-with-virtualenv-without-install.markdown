@@ -12,12 +12,15 @@ description: How to use ansible with virtualenv without install.
 
 ** `pip` 安装 **
 
-    $ pip install ansible
+```
+$ pip install ansible
+```
 
 ** MacOS 用户可以选择使用 `homebrew` 安装 **
 
-
-    $ brew install ansible
+```
+$ brew install ansible
+```
 
 但这两种方法都不可避免将「污染」系统的 python 环境。所以本文主要介绍如何绿色安装 Ansible。
 
@@ -29,17 +32,21 @@ description: How to use ansible with virtualenv without install.
 
 这里偷懒选择使用 pip 安装，如果连 virtualenv 也不想装在系统级别也是可以的，就不在这里介绍了。
 
-    $ pip install virtualenv
-
+```
+$ pip install virtualenv
+```
 ### 下载 ansible
 
-    $ git clone git@github.com:ansible/ansible.git
-    $ cd ansible
-
+```
+$ git clone git@github.com:ansible/ansible.git
+$ cd ansible
+```
 ### 安装
 
-    $ virtualenv .virtualenv
-    $ .virtualenv/bin/python setup.py develop
+```
+$ virtualenv .virtualenv
+$ .virtualenv/bin/python setup.py develop
+```
 
 ### A little trick
 
@@ -74,10 +81,11 @@ PYENV_VERSION=2.7.6 exec "$ANSIBLE_HOME/bin/${0##/*/}" $@
 
 假设 `$HOME/bin` 在 PATH 中，设置几个软链就全部搞定了。
 
-    $ ln -s $HOME/bin/_ansible_wrapper $HOME/bin/ansible
-    $ ln -s $HOME/bin/_ansible_wrapper $HOME/bin/ansible-playbook
-    $ ln -s $HOME/bin/_ansible_wrapper $HOME/bin/ansible-galaxy
-
+```
+$ ln -s $HOME/bin/_ansible_wrapper $HOME/bin/ansible
+$ ln -s $HOME/bin/_ansible_wrapper $HOME/bin/ansible-playbook
+$ ln -s $HOME/bin/_ansible_wrapper $HOME/bin/ansible-galaxy
+```
 
 ### 参考资料
 
