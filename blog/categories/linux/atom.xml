@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux | Liangshan's Blog]]></title>
   <link href="http://liangshan.me/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://liangshan.me/"/>
-  <updated>2014-09-05T18:08:12+08:00</updated>
+  <updated>2014-09-09T19:30:56+08:00</updated>
   <id>http://liangshan.me/</id>
   <author>
     <name><![CDATA[Liangshan]]></name>
@@ -32,9 +32,8 @@
 
 <p>再说 awesome，首先要装较新版本的 awesome，这时候安装使用下面的命令：</p>
 
-<p><code>bash
-$ ACCEPT_KEYWORDS="~*" emerge x11-wm/awesome
-</code></p>
+<pre><code class="bash">$ ACCEPT_KEYWORDS="~*" emerge x11-wm/awesome
+</code></pre>
 
 <p>装完之后运行 <code>startx</code> 应该有一个朴素的桌面启动了，这时候我们要花很多时间来美化它。</p>
 
@@ -84,11 +83,10 @@ $ ACCEPT_KEYWORDS="~*" emerge x11-wm/awesome
 
 <p>在开始之前，先说一下各个工具的版本。</p>
 
-<p><code>
-SystemRescueCD == 4.3.0
+<pre><code>SystemRescueCD == 4.3.0
 kernel == linux-3.14.14-gentoo
 gentoo == Gentoo Base System release 2.2
-</code></p>
+</code></pre>
 
 <p>原本我只是打算照着 gentoo 的手册从头看到尾，但第一章我就晕了，至少给了 3 种安装方式。选哪个好呢？经同事介绍：都不好。
 有网络的条件下，最好是使用 SystemRescueCD 来安装。一开始我不太理解，装完之后我同意这种看法。</p>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Meta | Liangshan's Blog]]></title>
   <link href="http://liangshan.me/blog/categories/meta/atom.xml" rel="self"/>
   <link href="http://liangshan.me/"/>
-  <updated>2014-09-05T18:08:12+08:00</updated>
+  <updated>2014-09-09T19:30:56+08:00</updated>
   <id>http://liangshan.me/</id>
   <author>
     <name><![CDATA[Liangshan]]></name>
@@ -40,15 +40,12 @@
 
 <p>在 <code>__config.yml</code> 中添加 jiathis 的相关配置，<code>$uid</code> 替换为真正的 <code>userid</code>，<code>userid</code> 可以从 jiathis 的示例代码中获取。</p>
 
-<p>```yaml __config.yml</p>
+<pre><code class="yaml __config.yml">## 下面的内容添加至文件尾部
 
-<h2>下面的内容添加至文件尾部</h2>
-
-<h1>Jiathis</h1>
-
-<p>jiathis_user: $uid
+# Jiathis
+jiathis_user: $uid
 jiathis_share: true
-```</p>
+</code></pre>
 
 <h3>修改模板文件</h3>
 
@@ -56,21 +53,18 @@ jiathis_share: true
 jiathis 给的代码带一个「+」号还有分享数字，样式很不河蟹被我删掉了。
 另外 jiathis 还会默认开启 site tracker 功能，我觉得这个有点多余，这部分代码我也都删掉了。</p>
 
-<p>
-```html+jinja source/_include/post/sharing
-  <!-- 添加到相应的位置，twitter google+ 前后皆可 -->
-  {% if site.jiathis_share %}
-  <div class="jiathis_style_24x24" style="text-indent: 0px; margin: 0px; padding: 0px; border-style: none; float: none; line-height: normal; font-size: 1px; vertical-align: baseline; display: inline-block;  background: transparent;"></p>
+<p></p>
 
-<pre><code>&lt;a class="jiathis_button_weixin"&gt;&lt;/a&gt;
-&lt;a class="jiathis_button_tsina"&gt;&lt;/a&gt;
+<pre><code class="html+jinja source/_include/post/sharing">  &lt;!-- 添加到相应的位置，twitter google+ 前后皆可 --&gt;
+  {% if site.jiathis_share %}
+  &lt;div class="jiathis_style_24x24" style="text-indent: 0px; margin: 0px; padding: 0px; border-style: none; float: none; line-height: normal; font-size: 1px; vertical-align: baseline; display: inline-block;  background: transparent;"&gt;
+    &lt;a class="jiathis_button_weixin"&gt;&lt;/a&gt;
+    &lt;a class="jiathis_button_tsina"&gt;&lt;/a&gt;
+  &lt;/div&gt;
+  {% endif %}
 </code></pre>
 
-<p>  </div>
-  {% endif %}
-```</p>
-
-<p>```html+jinja source/_includes/after_footer.html</p>
+<p>&#8220;`html+jinja source/_includes/after_footer.html</p>
 
 <!-- 只加第 5 行 -->
 
@@ -81,24 +75,26 @@ jiathis 给的代码带一个「+」号还有分享数字，样式很不河蟹�
 {% include twitter_sharing.html %}
 {% include jiathis_share.html %}
 {% include custom/after_footer.html %}
-```</p>
+&#8220;`</p>
 
-<p><code>bash 添加一个文件
-$ touch source/_includes/jiathis_share.html
+<pre><code class="bash 添加一个文件">$ touch source/_includes/jiathis_share.html
 $ vi source/_includes/jiathis_share.html
-</code></p>
+</code></pre>
 
-<p>```html+jinja 该文件的内容
-{% if site.jiathis_share %}</p>
+<p>&#8220;`html+jinja 该文件的内容</p>
+
+<p>{% if site.jiathis_share %}</p>
 
 <div style="display:none">
 <script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid={{ site.jiathis_user }}" charset="utf-8"></script>
 </div>
 
 
-<p>{% endif %}
-```
-</p>
+<p>{% endif %}</p>
+
+<p>&#8220;`</p>
+
+<p></p>
 
 <p>之后就可以在本地预览并部署了。</p>
 ]]></content>
@@ -181,7 +177,7 @@ $ vi source/_includes/jiathis_share.html
 
 <ol>
 <li><a href="http://beiyuu.com/github-pages/">使用Github Pages建独立博客</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2012/08/blogging_with_jekyll.html">搭建一个免费的，无限流量的Blog&mdash;&mdash;github Pages和Jekyll入门</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2012/08/blogging_with_jekyll.html">搭建一个免费的，无限流量的Blog&mdash;-github Pages和Jekyll入门</a></li>
 <li><a href="http://seagg.github.io/blog/2012/09/03/config-comment-on-octopress/">给octopress添加Disqus评论功能</a></li>
 </ol>
 

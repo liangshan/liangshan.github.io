@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Virtualenv | Liangshan's Blog]]></title>
   <link href="http://liangshan.me/blog/categories/virtualenv/atom.xml" rel="self"/>
   <link href="http://liangshan.me/"/>
-  <updated>2014-09-05T18:08:12+08:00</updated>
+  <updated>2014-09-09T19:30:56+08:00</updated>
   <id>http://liangshan.me/</id>
   <author>
     <name><![CDATA[Liangshan]]></name>
@@ -62,21 +62,16 @@ $ .virtualenv/bin/python setup.py develop
 
 <p>但我们还希望将 ansible 命令加在系统的 PATH 里，这就需要一些小技巧。简单来说需要自己准备一个脚本，脚本的内容如下:</p>
 
-<p>```bash
-$ touch ~/bin/<em>ansible_wrapper
-$ vim ~/bin/</em>ansible_wrapper</p>
+<pre><code class="bash">$ touch ~/bin/_ansible_wrapper
+$ vim ~/bin/_ansible_wrapper
 
-<h1>!/bin/bash</h1>
-
-<p>source &ldquo;$HOME/apps/ansible/hacking/env-setup&rdquo; -q
-if [ -f &ldquo;$ANSIBLE_HOME/.virtualenv/bin/activate&rdquo; ] ; then</p>
-
-<pre><code>source "$ANSIBLE_HOME/.virtualenv/bin/activate"
+#!/bin/bash
+source "$HOME/apps/ansible/hacking/env-setup" -q
+if [ -f "$ANSIBLE_HOME/.virtualenv/bin/activate" ] ; then
+    source "$ANSIBLE_HOME/.virtualenv/bin/activate"
+fi
+PYENV_VERSION=2.7.6 exec "$ANSIBLE_HOME/bin/${0##/*/}" $@
 </code></pre>
-
-<p>fi
-PYENV_VERSION=2.7.6 exec &ldquo;$ANSIBLE_HOME/bin/${0##/*/}&rdquo; $@
-```</p>
 
 <p><code>$HOME/apps/ansible/hacking/env-setup</code> 是 ansible 为 hacker 准备的一个脚本，设置一些环境变量。其中 <code>$HOME/apps/ansible</code> 是 ansible 的根目录。</p>
 

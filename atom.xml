@@ -4,7 +4,7 @@
   <title><![CDATA[Liangshan's Blog]]></title>
   <link href="http://liangshan.me/atom.xml" rel="self"/>
   <link href="http://liangshan.me/"/>
-  <updated>2014-09-05T18:08:12+08:00</updated>
+  <updated>2014-09-09T19:30:56+08:00</updated>
   <id>http://liangshan.me/</id>
   <author>
     <name><![CDATA[Liangshan]]></name>
@@ -12,6 +12,35 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[换个姿势写博客]]></title>
+    <link href="http://liangshan.me/blog/2014/09/09/huan-ge-zi-shi-xie-bo-ke/"/>
+    <updated>2014-09-09T15:39:18+08:00</updated>
+    <id>http://liangshan.me/blog/2014/09/09/huan-ge-zi-shi-xie-bo-ke</id>
+    <content type="html"><![CDATA[<p>之前一直看 Hack News，最近开始看国内版本——Startup News。
+结果里面看到王垠的那篇征集女粉丝的博文，后来他删了又写了篇撤回征集女粉丝，现在第二篇也已经删掉了。</p>
+
+<p>以前读过别人分享他的一些文章，并没有读过他关于具体技术的见解。
+这次系统了浏览一遍现在能看到的博文，之所以说现在能看到的，是因为他会删除文章，并且不许评论，应该是一个完美主义者吧（其实删除会导致一些文章中的链接失效，也不算十分完美）。
+其中发现了一篇 <a href="http://www.yinwang.org/blog-cn/2014/04/24/sql-nosql/">SQL, NoSQL 以及数据库的实质</a>，读完之后的感觉是他看问题比我要深入很多。具体的细节我可能会单独写文章说明，不在这里展开。</p>
+
+<p>所有文章都看完之后，我根本不想去评价王垠这个人，只想说他的文章给我带来什么思考。</p>
+
+<p>能给人带来思考的文章都是好文章，他所写的每一篇都引起我思考。这只有一种可能就是他比我要厉害，主要是在思考问题的深度（无论对错）和在计算机科学学术方面。
+学术和知识上比我厉害，这个其实很难追得起来（人家毕竟上了十年博士对吧，除去清华的 4 年，也还有 6 年 :P）。
+但还好这个世界并不是谁学术能力强就一定取得更大成就。我稍微总结了一下，为什么他的文章能引发我思考。</p>
+
+<p>首先是不信权威。完全不信权威难免有些绝对，我想更合理的理解这句话应该是，在选择相信权威之前先经过自己思考。只有当自己彻底想明白之后再接受别人的说法，而不是某句话听起来很酷，转身就变成自己的口头禅。直觉上大家都会认为自己不这样，但仔细想想这种例子其实太多。RTFSC 就是我中枪的一条，因为这是 Linus 大神说的。在这一点上我同意王垠的观点。别人期待的是你的经验之谈，而你甩出一句 「Read The F***ing Source Code」来伤害对方真的很酷？</p>
+
+<p>其次是要努力看到本质。要看清技术的本质，需要很深的功力，这个也只能尽力而为了。但要时刻提醒自己，理解一个技术，需要从它要解决的问题根源开始思考，而不是看着手册学习手册。
+比如我其实从来没有思考过「到底为什么要有 SQL」这种问题，我是说为什么是通过 SQL 这种方式来跟数据文件交互？因为习惯了 SQL，最开始用 MongoDB 之类的 NoSQL 的时候反而会不习惯，其实仔细想想 MongoDB 的交互终端才比较符合作为一个程序的用法。</p>
+
+<p>从这一点上来说，这个博客虽然才写了几个月，但已经诞生了很多没有什么意义的文章。因为操作手册会过时，基本是没有意义的，但我应该不会删除它们。以这篇文章做分割线，看看以后会不会好一点。</p>
+
+<p>我本来以为至少要几年后才会回头鄙视自己，没想到这个日子这么快就来了。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[在 Gentoo 上安装 Awesome]]></title>
@@ -746,7 +775,7 @@ jiathis 给的代码带一个「+」号还有分享数字，样式很不河蟹�
 
 <p><strong>12-Factor规则下的应用程序不会隐式依赖系统级的类库。</strong> 它一定通过 <em>依赖清单</em> ，确切地声明所有依赖项。此外，在运行过程中通过 <em>依赖隔离</em> 工具来确保程序不会调用系统中存在但清单中未声明的依赖项。这一做法会统一应用到生产和开发环境。</p>
 
-<p>例如，Ruby的<a href="http://gembundler.com/">Gem Bundler</a>使用<code>Gemfile</code>作为依赖项声明清单，使用<code>bundle exec</code>来进行依赖隔离。Python中则可分别使用两种工具 &mdash; <a href="http://www.pip-installer.org/en/latest/">Pip</a>用作依赖声明，<a href="http://www.virtualenv.org/en/latest/">Virtualenv</a>用作依赖隔离。甚至C语言也有类似工具，<a href="http://www.gnu.org/s/autoconf/">Autoconf</a>用作依赖声明，静态链接库用作依赖隔离。无论用什么工具，依赖声明和依赖隔离必须一起使用，否则无法满足12-Factor规范。</p>
+<p>例如，Ruby的<a href="http://gembundler.com/">Gem Bundler</a>使用<code>Gemfile</code>作为依赖项声明清单，使用<code>bundle exec</code>来进行依赖隔离。Python中则可分别使用两种工具 &ndash; <a href="http://www.pip-installer.org/en/latest/">Pip</a>用作依赖声明，<a href="http://www.virtualenv.org/en/latest/">Virtualenv</a>用作依赖隔离。甚至C语言也有类似工具，<a href="http://www.gnu.org/s/autoconf/">Autoconf</a>用作依赖声明，静态链接库用作依赖隔离。无论用什么工具，依赖声明和依赖隔离必须一起使用，否则无法满足12-Factor规范。</p>
 
 <p>显式声明依赖的优点之一是为新进开发者简化了环境配置流程。新进开发者可以检出应用程序的基准代码，安装编程语言环境和它对应的依赖管理工具，只需通过一个 <em>构建命令</em> 来安装所有的依赖项，即可开始工作。例如，Ruby/Bundler下使用<code>bundle install</code>，而Clojure/<a href="https://github.com/technomancy/leiningen#readme">Leiningen</a>则是<code>lein deps</code>。</p>
 
@@ -793,7 +822,7 @@ jiathis 给的代码带一个「+」号还有分享数字，样式很不河蟹�
 
 <p><img src="https://github.com/anjuke/12factor/raw/zh_CN/public/images/attached-resources.png" alt="一种部署附加4个后端服务" /></p>
 
-<p>部署可以按需加载或卸载资源。例如，如果应用的数据库服务由于硬件问题出现异常，管理员可以从最近的备份中恢复一个数据库，卸载当前的数据库，然后加载新的数据库 &mdash; 整个过程都不需要修改代码。</p>
+<p>部署可以按需加载或卸载资源。例如，如果应用的数据库服务由于硬件问题出现异常，管理员可以从最近的备份中恢复一个数据库，卸载当前的数据库，然后加载新的数据库 &ndash; 整个过程都不需要修改代码。</p>
 
 <h2>V. 构建，发布，运行</h2>
 
@@ -1039,13 +1068,15 @@ jiathis 给的代码带一个「+」号还有分享数字，样式很不河蟹�
 
 <p><strong> <code>pip</code> 安装 </strong></p>
 
-<pre><code>$ pip install ansible
-</code></pre>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ pip install ansible</span></code></pre></td></tr></table></div></figure>
+
 
 <p><strong> MacOS 用户可以选择使用 <code>homebrew</code> 安装 </strong></p>
 
-<pre><code>$ brew install ansible
-</code></pre>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew install ansible</span></code></pre></td></tr></table></div></figure>
+
 
 <p>但这两种方法都不可避免将「污染」系统的 python 环境。所以本文主要介绍如何绿色安装 Ansible。</p>
 
@@ -1058,20 +1089,25 @@ jiathis 给的代码带一个「+」号还有分享数字，样式很不河蟹�
 
 <p>这里偷懒选择使用 pip 安装，如果连 virtualenv 也不想装在系统级别也是可以的，就不在这里介绍了。</p>
 
-<pre><code>$ pip install virtualenv
-</code></pre>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ pip install virtualenv</span></code></pre></td></tr></table></div></figure>
+
 
 <h3>下载 ansible</h3>
 
-<pre><code>$ git clone git@github.com:ansible/ansible.git
-$ cd ansible
-</code></pre>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git clone git@github.com:ansible/ansible.git
+</span><span class='line'>$ cd ansible</span></code></pre></td></tr></table></div></figure>
+
 
 <h3>安装</h3>
 
-<pre><code>$ virtualenv .virtualenv
-$ .virtualenv/bin/python setup.py develop
-</code></pre>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ virtualenv .virtualenv
+</span><span class='line'>$ .virtualenv/bin/python setup.py develop</span></code></pre></td></tr></table></div></figure>
+
 
 <h3>A little trick</h3>
 
@@ -1117,10 +1153,14 @@ $ .virtualenv/bin/python setup.py develop
 
 <p>假设 <code>$HOME/bin</code> 在 PATH 中，设置几个软链就全部搞定了。</p>
 
-<pre><code>$ ln -s $HOME/bin/_ansible_wrapper $HOME/bin/ansible
-$ ln -s $HOME/bin/_ansible_wrapper $HOME/bin/ansible-playbook
-$ ln -s $HOME/bin/_ansible_wrapper $HOME/bin/ansible-galaxy
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>ln -s <span class="nv">$HOME</span>/bin/_ansible_wrapper <span class="nv">$HOME</span>/bin/ansible
+</span><span class='line'><span class="nv">$ </span>ln -s <span class="nv">$HOME</span>/bin/_ansible_wrapper <span class="nv">$HOME</span>/bin/ansible-playbook
+</span><span class='line'><span class="nv">$ </span>ln -s <span class="nv">$HOME</span>/bin/_ansible_wrapper <span class="nv">$HOME</span>/bin/ansible-galaxy
+</span></code></pre></td></tr></table></div></figure>
+
 
 <h3>参考资料</h3>
 
@@ -1208,7 +1248,7 @@ $ ln -s $HOME/bin/_ansible_wrapper $HOME/bin/ansible-galaxy
 
 <ol>
 <li><a href="http://beiyuu.com/github-pages/">使用Github Pages建独立博客</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2012/08/blogging_with_jekyll.html">搭建一个免费的，无限流量的Blog&mdash;&mdash;github Pages和Jekyll入门</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2012/08/blogging_with_jekyll.html">搭建一个免费的，无限流量的Blog&mdash;-github Pages和Jekyll入门</a></li>
 <li><a href="http://seagg.github.io/blog/2012/09/03/config-comment-on-octopress/">给octopress添加Disqus评论功能</a></li>
 </ol>
 

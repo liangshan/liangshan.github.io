@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ansible | Liangshan's Blog]]></title>
   <link href="http://liangshan.me/blog/categories/ansible/atom.xml" rel="self"/>
   <link href="http://liangshan.me/"/>
-  <updated>2014-09-05T18:08:12+08:00</updated>
+  <updated>2014-09-09T19:30:56+08:00</updated>
   <id>http://liangshan.me/</id>
   <author>
     <name><![CDATA[Liangshan]]></name>
@@ -37,12 +37,11 @@
 <p>为了解决这些问题，我们将整个环境安装在虚拟机内，这在安居客被认为是一种最佳实践，成功的应用在很多系统的开发当中。
 而开发环境，生产环境的部署则交给 ansible 来完成。那么我们的项目目录看起来是这样:</p>
 
-<p><code>
- .                  # root  
+<pre><code> .                  # root  
  |-- .provisioning/ # ansible 脚本目录
  |-- src/           # 源代码目录
  |-- Vagrantfile    # vagrant 启动脚本
-</code></p>
+</code></pre>
 
 <p>这样有一个好处，虚拟机启动之后，源代码对应 <code>/vagrant</code> 这个共享目录，修改源代码会同时在虚拟机内生效。
 但这样 ansible 或是其他一些 CM(Configure Management) 工具的代码和源代码就会混在一个仓库内。</p>
@@ -56,40 +55,33 @@
 
 <h2>src-ansible</h2>
 
-<p><code>
- .
+<pre><code> .
  |-- host_vars/
  |-- roles/
  |-- playbook.xml
  |-- host.vagrant
  |-- .Vagrantfile
-</code></p>
+</code></pre>
 
 <p>其他都是常规的 ansible 脚本，唯独 <code>.Vagrantfile</code> 比较特殊。</p>
 
-<p>```ruby</p>
+<pre><code class="ruby"># -*- mode: ruby -*-
+# vi: set ft=ruby :
 
-<h1>&ndash;<em>&ndash; mode: ruby &ndash;</em>&ndash;</h1>
+Vagrant.configure("2") do |config|
+  config.vm.box = "trusty32"
+  config.vm.box_url = "http://vagrant.corp.anjuke.com/boxes/trusty32.box"
+  config.vm.network :private_network, ip: "192.168.222.22"
+  # config.vm.network "public_network"
 
-<h1>vi: set ft=ruby :</h1>
-
-<p>Vagrant.configure(&ldquo;2&rdquo;) do |config|
-  config.vm.box = &ldquo;trusty32&rdquo;
-  config.vm.box_url = &ldquo;<a href="http://vagrant.corp.anjuke.com/boxes/trusty32.box">http://vagrant.corp.anjuke.com/boxes/trusty32.box</a>&rdquo;
-  config.vm.network :private_network, ip: &ldquo;192.168.222.22&rdquo;
-  # config.vm.network &ldquo;public_network&rdquo;</p>
-
-<p>  config.vm.provision :ansible do |ansible|</p>
-
-<pre><code>ansible.playbook = '.provisioning/playbook.yml'
-ansible.inventory_path = '.provisioning/hosts.vagrant'
-ansible.host_key_checking = false
-ansible.verbose = 'vvvv'
-</code></pre>
-
-<p>  end
+  config.vm.provision :ansible do |ansible|
+    ansible.playbook = '.provisioning/playbook.yml'
+    ansible.inventory_path = '.provisioning/hosts.vagrant'
+    ansible.host_key_checking = false
+    ansible.verbose = 'vvvv'
+  end
 end
-```</p>
+</code></pre>
 
 <p>你会发现这里面用到的 <code>playbook</code> 和 <code>inventory</code> 路径都不存在，文件名也以 <code>.</code> 开头。其实这个文件就是给源代码仓库用的，而不能在这里直接使用。</p>
 
@@ -97,39 +89,35 @@ end
 
 <h2>src</h2>
 
-<p><code>text
- .
+<pre><code class="text"> .
  |-- src/
  |-- Makefile
  |-- .gitignore
-</code></p>
+</code></pre>
 
 <p><code>.gitgnore</code> 添加以下内容：</p>
 
-<p><code>text
-.vagrant/
+<pre><code class="text">.vagrant/
 .provisioning/
 Vagrantfile
-</code></p>
+</code></pre>
 
 <p><code>make</code> 其实就是执行一些 shell 命令，如果翻译成 shell 应该类似下面的脚本。</p>
 
-<p><code>bash
-mkdir .provisioning
+<pre><code class="bash">mkdir .provisioning
 cd .provisioning
 git init
 git remote add origin git@gitserver.com:username/src-ansible.git
 git pull origin master
 cp .Vagrantfile ../Vagrantfile
-</code></p>
+</code></pre>
 
 <p>于此对应，再写一个 <code>make</code> 的 <code>target</code> 用于更新 ansible 脚本。</p>
 
-<p><code>bash
-cd .provisioning
+<pre><code class="bash">cd .provisioning
 git pull origin master
 cp .Vagrantfile ../Vagrantfile
-</code></p>
+</code></pre>
 
 <p>完成了这些步骤，就可以直接在源代码仓库使用 vagrant 的命令来安装、更新虚拟机。但又可以将这些脚本与源代码隔离开来。</p>
 ]]></content>
@@ -184,21 +172,16 @@ $ .virtualenv/bin/python setup.py develop
 
 <p>但我们还希望将 ansible 命令加在系统的 PATH 里，这就需要一些小技巧。简单来说需要自己准备一个脚本，脚本的内容如下:</p>
 
-<p>```bash
-$ touch ~/bin/<em>ansible_wrapper
-$ vim ~/bin/</em>ansible_wrapper</p>
+<pre><code class="bash">$ touch ~/bin/_ansible_wrapper
+$ vim ~/bin/_ansible_wrapper
 
-<h1>!/bin/bash</h1>
-
-<p>source &ldquo;$HOME/apps/ansible/hacking/env-setup&rdquo; -q
-if [ -f &ldquo;$ANSIBLE_HOME/.virtualenv/bin/activate&rdquo; ] ; then</p>
-
-<pre><code>source "$ANSIBLE_HOME/.virtualenv/bin/activate"
+#!/bin/bash
+source "$HOME/apps/ansible/hacking/env-setup" -q
+if [ -f "$ANSIBLE_HOME/.virtualenv/bin/activate" ] ; then
+    source "$ANSIBLE_HOME/.virtualenv/bin/activate"
+fi
+PYENV_VERSION=2.7.6 exec "$ANSIBLE_HOME/bin/${0##/*/}" $@
 </code></pre>
-
-<p>fi
-PYENV_VERSION=2.7.6 exec &ldquo;$ANSIBLE_HOME/bin/${0##/*/}&rdquo; $@
-```</p>
 
 <p><code>$HOME/apps/ansible/hacking/env-setup</code> 是 ansible 为 hacker 准备的一个脚本，设置一些环境变量。其中 <code>$HOME/apps/ansible</code> 是 ansible 的根目录。</p>
 

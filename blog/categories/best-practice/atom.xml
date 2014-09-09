@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Best Practice | Liangshan's Blog]]></title>
   <link href="http://liangshan.me/blog/categories/best-practice/atom.xml" rel="self"/>
   <link href="http://liangshan.me/"/>
-  <updated>2014-09-05T18:08:12+08:00</updated>
+  <updated>2014-09-09T19:30:56+08:00</updated>
   <id>http://liangshan.me/</id>
   <author>
     <name><![CDATA[Liangshan]]></name>
@@ -22,7 +22,7 @@
 
 <hr />
 
-<p><img class="right <a" src="href="http://0.gravatar.com/avatar/7cdf5b1c46308979e3bf81390b0c8639">http://0.gravatar.com/avatar/7cdf5b1c46308979e3bf81390b0c8639</a>"></p>
+<p><img class="right <a" src="href="http://0.gravatar.com/avatar/7cdf5b1c46308979e3bf81390b0c8639">http://0.gravatar.com/avatar/7cdf5b1c46308979e3bf81390b0c8639</a>&#8221;></p>
 
 <p>中文翻译：<a href="https://github.com/liangshan/">梁山</a><br/>
 英文原文：<a href="http://www.12factor.net/">Adam Wiggins</a></p>
@@ -85,11 +85,11 @@
 
 <p><strong><em>显式声明依赖关系(<em>dependency</em>)</em></strong></p>
 
-<p>大多数编程语言都会提供一个打包系统，用来为各个类库提供打包服务，就像Perl的<a href="http://www.cpan.org/">CPAN</a>或是Ruby的<a href="http://rubygems.org/">Rubygems</a>。通过打包系统安装的类库可以是系统级的（称之为"site packages"），或仅供某个应用程序使用，部署在相应的目录中（称之为"vendoring"或"bunding"）。</p>
+<p>大多数编程语言都会提供一个打包系统，用来为各个类库提供打包服务，就像Perl的<a href="http://www.cpan.org/">CPAN</a>或是Ruby的<a href="http://rubygems.org/">Rubygems</a>。通过打包系统安装的类库可以是系统级的（称之为&#8221;site packages&#8221;），或仅供某个应用程序使用，部署在相应的目录中（称之为&#8221;vendoring&#8221;或&#8221;bunding&#8221;）。</p>
 
 <p><strong>12-Factor规则下的应用程序不会隐式依赖系统级的类库。</strong> 它一定通过 <em>依赖清单</em> ，确切地声明所有依赖项。此外，在运行过程中通过 <em>依赖隔离</em> 工具来确保程序不会调用系统中存在但清单中未声明的依赖项。这一做法会统一应用到生产和开发环境。</p>
 
-<p>例如，Ruby的<a href="http://gembundler.com/">Gem Bundler</a>使用<code>Gemfile</code>作为依赖项声明清单，使用<code>bundle exec</code>来进行依赖隔离。Python中则可分别使用两种工具 &mdash; <a href="http://www.pip-installer.org/en/latest/">Pip</a>用作依赖声明，<a href="http://www.virtualenv.org/en/latest/">Virtualenv</a>用作依赖隔离。甚至C语言也有类似工具，<a href="http://www.gnu.org/s/autoconf/">Autoconf</a>用作依赖声明，静态链接库用作依赖隔离。无论用什么工具，依赖声明和依赖隔离必须一起使用，否则无法满足12-Factor规范。</p>
+<p>例如，Ruby的<a href="http://gembundler.com/">Gem Bundler</a>使用<code>Gemfile</code>作为依赖项声明清单，使用<code>bundle exec</code>来进行依赖隔离。Python中则可分别使用两种工具 &ndash; <a href="http://www.pip-installer.org/en/latest/">Pip</a>用作依赖声明，<a href="http://www.virtualenv.org/en/latest/">Virtualenv</a>用作依赖隔离。甚至C语言也有类似工具，<a href="http://www.gnu.org/s/autoconf/">Autoconf</a>用作依赖声明，静态链接库用作依赖隔离。无论用什么工具，依赖声明和依赖隔离必须一起使用，否则无法满足12-Factor规范。</p>
 
 <p>显式声明依赖的优点之一是为新进开发者简化了环境配置流程。新进开发者可以检出应用程序的基准代码，安装编程语言环境和它对应的依赖管理工具，只需通过一个 <em>构建命令</em> 来安装所有的依赖项，即可开始工作。例如，Ruby/Bundler下使用<code>bundle install</code>，而Clojure/<a href="https://github.com/technomancy/leiningen#readme">Leiningen</a>则是<code>lein deps</code>。</p>
 
@@ -112,7 +112,7 @@
 
 <p>判断一个应用是否正确地将配置排除在代码之外，一个简单的方法是看该应用的基准代码是否可以立刻开源，而不用担心会暴露任何敏感的信息。</p>
 
-<p>需要指出的是，这里定义的"配置"并<strong>不</strong>包括应用的内部配置，比如Rails的<code>config/routes.rb</code>，或是使用<a href="http://www.springsource.org/">Spring</a>时<a href="http://static.springsource.org/spring/docs/2.5.x/reference/beans.html">代码模块间的依赖注入关系</a>。这类配置在不同部署间不存在差异，所以应该写入代码。</p>
+<p>需要指出的是，这里定义的&#8221;配置&#8221;并<strong>不</strong>包括应用的内部配置，比如Rails的<code>config/routes.rb</code>，或是使用<a href="http://www.springsource.org/">Spring</a>时<a href="http://static.springsource.org/spring/docs/2.5.x/reference/beans.html">代码模块间的依赖注入关系</a>。这类配置在不同部署间不存在差异，所以应该写入代码。</p>
 
 <p>另外一个解决方法是使用配置文件，但不把它们纳入版本控制系统，就像Rails的<code>config/database.yml</code> 。这相对于在代码中使用常量已经是长足进步，但仍然有缺点：总是会不小心将配置文件签入了代码库；配置文件的可能会分散在不同的目录，并有着不同的格式，这让找出一个地方来统一管理所有配置变的不太现实。更糟的是，这些格式通常是语言或框架特定的。</p>
 
@@ -136,7 +136,7 @@
 
 <p><img src="https://github.com/anjuke/12factor/raw/zh_CN/public/images/attached-resources.png" alt="一种部署附加4个后端服务" /></p>
 
-<p>部署可以按需加载或卸载资源。例如，如果应用的数据库服务由于硬件问题出现异常，管理员可以从最近的备份中恢复一个数据库，卸载当前的数据库，然后加载新的数据库 &mdash; 整个过程都不需要修改代码。</p>
+<p>部署可以按需加载或卸载资源。例如，如果应用的数据库服务由于硬件问题出现异常，管理员可以从最近的备份中恢复一个数据库，卸载当前的数据库，然后加载新的数据库 &ndash; 整个过程都不需要修改代码。</p>
 
 <h2>V. 构建，发布，运行</h2>
 
