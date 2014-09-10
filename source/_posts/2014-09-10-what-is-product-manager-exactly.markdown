@@ -1,8 +1,8 @@
 ---
 layout: post
-title: "what is product manager exactly"
+title: "到底什么是产品经理"
 date: 2014-09-10 16:36:28 +0800
 comments: true
 categories:
-published: false
+publish: false
 ---
