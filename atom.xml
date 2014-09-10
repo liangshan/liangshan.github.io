@@ -4,7 +4,7 @@
   <title><![CDATA[Liangshan]]></title>
   <link href="http://liangshan.me/atom.xml" rel="self"/>
   <link href="http://liangshan.me/"/>
-  <updated>2014-09-10T13:06:41+08:00</updated>
+  <updated>2014-09-10T21:13:35+08:00</updated>
   <id>http://liangshan.me/</id>
   <author>
     <name><![CDATA[Liangshan]]></name>
@@ -12,6 +12,15 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[到底什么是产品经理]]></title>
+    <link href="http://liangshan.me/blog/2014/09/10/what-is-product-manager-exactly/"/>
+    <updated>2014-09-10T16:36:28+08:00</updated>
+    <id>http://liangshan.me/blog/2014/09/10/what-is-product-manager-exactly</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[换个姿势写博客]]></title>
