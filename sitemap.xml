@@ -3,6 +3,14 @@
   
   
   <url>
+    <loc>http://liangshan.me/blog/2014/11/03/how-to-choose-rpc-framework/</loc>
+    
+    <lastmod>2014-11-03T15:16:21+08:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
     <loc>http://liangshan.me/blog/2014/09/10/what-is-product-manager-exactly/</loc>
     
     <lastmod>2014-09-10T14:13:28+08:00</lastmod>
@@ -109,14 +117,14 @@
   
   <url>
     <loc>http://liangshan.me/blog/archives/</loc>
-    <lastmod>2014-09-11T16:39:28+08:00</lastmod>
+    <lastmod>2014-11-03T16:48:16+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://liangshan.me/</loc>
-    <lastmod>2014-09-11T16:39:28+08:00</lastmod>
+    <lastmod>2014-11-03T16:48:16+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
