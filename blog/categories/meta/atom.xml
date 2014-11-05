@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Meta | Liangshan]]></title>
   <link href="http://liangshan.me/blog/categories/meta/atom.xml" rel="self"/>
   <link href="http://liangshan.me/"/>
-  <updated>2014-11-03T16:48:16+08:00</updated>
+  <updated>2014-11-05T16:42:28+08:00</updated>
   <id>http://liangshan.me/</id>
   <author>
     <name><![CDATA[Liangshan]]></name>
@@ -53,7 +53,7 @@ jiathis_share: true
 jiathis 给的代码带一个「+」号还有分享数字，样式很不河蟹被我删掉了。
 另外 jiathis 还会默认开启 site tracker 功能，我觉得这个有点多余，这部分代码我也都删掉了。</p>
 
-<p></p>
+<p>{% raw %}</p>
 
 <pre><code class="html+jinja source/_include/post/sharing">  &lt;!-- 添加到相应的位置，twitter google+ 前后皆可 --&gt;
   {% if site.jiathis_share %}
@@ -94,7 +94,7 @@ $ vi source/_includes/jiathis_share.html
 
 <p>&#8220;`</p>
 
-<p></p>
+<p>{% endraw %}</p>
 
 <p>之后就可以在本地预览并部署了。</p>
 ]]></content>
