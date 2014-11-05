@@ -7,3 +7,13 @@ span.date-suffix {
   top: -.4em;
   position: relative;
 }
+
+table {
+  border:2px solid;
+  margin-bottom: 10px;
+}
+
+tr,th,td {
+  border:1px solid; 
+  padding:5px;
+}
