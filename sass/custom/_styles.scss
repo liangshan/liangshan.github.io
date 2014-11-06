@@ -1,5 +1,13 @@
 // This File is imported last, and will override other styles in the cascade
 // Add styles here to make changes without digging in too much
+table {
+  border: 2px solid;
+  margin-bottom: 10px;
+}
+tr,th,td {
+  border: 1px solid; 
+  padding: 5px;
+}
 body > header {
   text-align: center;
 }
@@ -8,12 +16,3 @@ span.date-suffix {
   position: relative;
 }
 
-table {
-  border:2px solid;
-  margin-bottom: 10px;
-}
-
-tr,th,td {
-  border:1px solid; 
-  padding:5px;
-}
