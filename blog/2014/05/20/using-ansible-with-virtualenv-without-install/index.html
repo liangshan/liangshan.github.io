@@ -163,8 +163,8 @@
 </span><span class='line'>
 </span><span class='line'><span class="c">#!/bin/bash</span>
 </span><span class='line'><span class="nb">source</span> <span class="s2">&quot;$HOME/apps/ansible/hacking/env-setup&quot;</span> -q
-</span><span class='line'><span class="k">if</span> <span class="o">[</span> -f <span class="s2">&quot;$ANSIBLE_HOME/.virtualenv/bin/activate&quot;</span> <span class="o">]</span> ; <span class="k">then</span>
-</span><span class='line'><span class="k">    </span><span class="nb">source</span> <span class="s2">&quot;$ANSIBLE_HOME/.virtualenv/bin/activate&quot;</span>
+</span><span class='line'><span class="k">if</span> <span class="o">[</span> -f <span class="s2">&quot;$ANSIBLE_HOME/.virtualenv/bin/activate&quot;</span> <span class="o">]</span> <span class="p">;</span> <span class="k">then</span>
+</span><span class='line'>    <span class="nb">source</span> <span class="s2">&quot;$ANSIBLE_HOME/.virtualenv/bin/activate&quot;</span>
 </span><span class='line'><span class="k">fi</span>
 </span><span class='line'><span class="nv">PYENV_VERSION</span><span class="o">=</span>2.7.6 <span class="nb">exec</span> <span class="s2">&quot;$ANSIBLE_HOME/bin/${0##/*/}&quot;</span> <span class="nv">$@</span>
 </span></code></pre></td></tr></table></div></figure>
