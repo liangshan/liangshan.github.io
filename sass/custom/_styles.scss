@@ -8,6 +8,11 @@ tr,th,td {
   border: 1px solid; 
   padding: 5px;
 }
+div.highlight {
+  table,tr,th,td {
+    border: none;
+  } 
+}
 body > header {
   text-align: center;
 }
