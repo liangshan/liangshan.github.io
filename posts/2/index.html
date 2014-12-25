@@ -9,8 +9,8 @@
   <meta name="author" content="Liangshan">
 
   
-  <meta name="description" content="前些年翻译的 12-factor。一直放在公司内部的博客上，现在复制一份过来。 中文翻译：梁山
-英文原文：Adam Wiggins 翻译问题反馈 简介 如今，软件通常会作为一种服务来交付，它们被称为“互联网应用程序”（web apps），或“软件即服务”（SaaS）。这篇“互联网应用的十二要素” &hellip;">
+  <meta name="description" content="我们经常要开发一些「系统」，这些「系统」具备以下特点： 用到很多系统软件。比如 ngnix, compass, ruby, mongodb 等等；
+项目本身有很多组件组成。比如 web 程序，job 系统和对应的消息队列； 那么在开发这类系统时就会遇到一些问题： 开发环境和线上环境不等价。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,72 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/05/22/isolate-ansible-code-and-source-code/">Isolate Ansible Code and Source Code</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-05-22T16:56:16+08:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2014</span></span> <span class='time'>4:56 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>我们经常要开发一些「系统」，这些「系统」具备以下特点：</p>
+
+<ul>
+<li>用到很多系统软件。比如 ngnix, compass, ruby, mongodb 等等；</li>
+<li>项目本身有很多组件组成。比如 web 程序，job 系统和对应的消息队列；</li>
+</ul>
+
+
+<p>那么在开发这类系统时就会遇到一些问题：</p>
+
+<ul>
+<li>开发环境和线上环境不等价。平台可能不同，软件版本可能不同；</li>
+<li>开发环境配置复杂，任意环节出错就会影响整个系统的启动；</li>
+</ul>
+
+
+<p>为了解决这些问题，我们将整个环境安装在虚拟机内，这在安居客被认为是一种最佳实践，成功的应用在很多系统的开发当中。
+而开发环境，生产环境的部署则交给 ansible 来完成。那么我们的项目目录看起来是这样:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'> .                  # root  
+</span><span class='line'> |-- .provisioning/ # ansible 脚本目录
+</span><span class='line'> |-- src/           # 源代码目录
+</span><span class='line'> |-- Vagrantfile    # vagrant 启动脚本</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样有一个好处，虚拟机启动之后，源代码对应 <code>/vagrant</code> 这个共享目录，修改源代码会同时在虚拟机内生效。
+但这样 ansible 或是其他一些 CM(Configure Management) 工具的代码和源代码就会混在一个仓库内。</p>
+
+<p>本文就介绍一种简单的方法可以将 DevOps 的代码与源代码隔离，并达到相同的效果。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/05/22/isolate-ansible-code-and-source-code/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -304,6 +370,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/12/24/choosing-is-an-ability/">选择是一种能力</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/11/03/how-to-choose-rpc-framework/">How to Choose RPC Framework</a>
       </li>
     
@@ -317,10 +387,6 @@
     
       <li class="post">
         <a href="/blog/2014/08/07/install-awesome-on-gentoo/">在 Gentoo 上安装 Awesome</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/08/06/install-gentoo-from-systemrescuecd/">使用 SystemRescueCD 安装 Gentoo</a>
       </li>
     
   </ul>
