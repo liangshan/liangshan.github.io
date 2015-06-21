@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>极致的平衡 - Liangshan</title>
+  <title>深入实践 SOA 架构 - Liangshan</title>
   <meta name="author" content="Liangshan">
 
   
-  <meta name="description" content="我们经常说「要追求极致」，每每谈到这个话题，乔布斯就会成为永恒的范例：他是如何苛刻的追求极致的产品体验，以及如何受到养父关于「别人看不到的地方也要追求完美」的影响。 而实际生活中，我们又常常不得不平衡。平衡家庭与工作、工作中的效率与质量、管理中的育人与做事等等。在科学界，平衡更是无处不在， &hellip;">
-  
+  <meta name="description" content="Discuss the all the detail when you practice SOA architecture.">
+  <meta name="keywords" content="rpc, unittest">
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://liangshan.me/blog/2015/06/14/ji-zhi-de-ping-heng">
+  <link rel="canonical" href="http://liangshan.me/blog/2015/06/21/dive-into-soa-architecture">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Liangshan" type="application/atom+xml">
@@ -82,7 +82,7 @@
   
   <header>
     
-      <h1 class="entry-title">极致的平衡</h1>
+      <h1 class="entry-title">深入实践 SOA 架构</h1>
     
     
       <p class="meta">
@@ -91,26 +91,40 @@
 
 
 
-<time class='entry-date' datetime='2015-06-14T22:17:45+08:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>14</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>10:17 pm</span></time>
+<time class='entry-date' datetime='2015-06-21T22:16:05+08:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2015</span></span> <span class='time'>10:16 pm</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>我们经常说「要追求极致」，每每谈到这个话题，乔布斯就会成为永恒的范例：他是如何苛刻的追求极致的产品体验，以及如何受到养父关于「别人看不到的地方也要追求完美」的影响。</p>
+<div class="entry-content"><p>之前介绍了<a href="/blog/2014/11/03/how-to-choose-rpc-framework/">如何选择 RPC 框架</a>，选择 RPC 框架是实施 SOA 的重要一步，但也仅仅是第一步。今天来讨论具体实施 RPC 过程中，遇到的一些细节。</p>
 
-<p>而实际生活中，我们又常常不得不平衡。平衡家庭与工作、工作中的效率与质量、管理中的育人与做事等等。在科学界，平衡更是无处不在，正极与负极、正数与负数、作用力与反作用力等等，可以说我们的世界更倾向于建立在平衡之中。</p>
+<p>写下第一个真正的 RPC 服务，首先遇到的问题就是服务划分，或者叫服务的分层。当然最简单的就是不分层，把所有的接口都写在一起，即当服务启动的时候所有的接口都被载入内存从而被访问。现如今软件架构的趋势是使用分布式的独立的微型服务（Micro Service）搭积木，SOA 正是实现这一构想的途径之一，但如果不给服务做划分显然和初衷背道而驰。我们最终选定的划分方式是按照业务（Domain）首先划分出基础服务，我们称之为 LEVEL-1，跨基础服务的接口称之为 LEVEL-2，一些与商业无关的，更为通用的模块称之为 LEVEL-0。</p>
 
-<p>有一个问题一直在困扰我，到底应该追求「平衡」还是「极致」？或许一个显而易见的答案是「看情况」，那么到底什么情况下应该追求「平衡」，而什么情况下应该追求「极致」？</p>
+<p>这里以淘宝为例，列举几个服务分层的例子：</p>
 
-<p>最近好像突然想通了，不知道是不是看了权利的游戏跟着编剧一起打开了脑洞呢:D</p>
+<p>LEVEL-1：买家，卖家，账户，商品，交易</p>
 
-<p>问题的关键在于，我忽略了「平衡」也可以追求「极致」，那么最终来说还是应该追求「极致」了。</p>
+<p>LEVEL-2：用户购买一个商品，需要读取账户信息（余额、银行卡），需要读取商品信息（价格、运费），成功后产生一条交易记录。横跨了几乎所有 LEVEL-1 服务，显然是在 LEVEL-2 了。理论上讲 LEVEL-1 的服务各种组合都会产生一个 LEVEL-2 服务。但我的经验是，可以先把所有的 LEVEL-2 都写在一起，等到一些组合十分明确的时候再拆出去。</p>
 
-<p>比如烹饪一个菜肴，这时候其实你要追求的就是「极致的平衡」，各种食材的味道与口感完美融合，其中的任何一味差了一丝一毫便会影响口感，菜肴本身是平衡的，而你找到这个平衡的过程又是极致的。</p>
+<p>LEVEL-0：国际化和本地化的一些需求（地理位置，汇率，多语言），敏感词过滤等等，这些服务的特点是都被 LEVEL-1 依赖，又和核心商业逻辑关系不大。</p>
 
-<p>其实非常的简单，如果你抛开所谓极致和平衡的观点，重新审视疑惑，会问题的本质在于，你不是在纠结到底应该极致还是平衡，而是在纠结怎么才能把事做好。从这个角度出发，所有疑惑都会迎刃而解了，因为根本无所谓极致和平衡，这两者只是达到目的过程中，不同阶段需要的不同心态而已。这里需要注意的是，很多人对极致和平衡的理解都有偏差，极致绝不是极端，而平衡也绝不是妥协。</p>
+<p>同时围绕这 3 层服务，有一个原则：只能自上而下调用，不可自下而上掉用，同时不可同级应用之间调用。这里指的调用是 RPC，而不是代码上的依赖和调用。</p>
+
+<p>解决了服务划分的问题，在架构设计时同样应该考虑开发、测试、运维。先简单说开发和运维，使用 Ansible + Vagrant 可以保证开发环境的一致性，以及开发环境与生产环境的一致性。在开发环境配置阶段，会将 SOA 的客户端和服务端都部署在同一个虚拟环境里。同时在开发新项目的过程中，不可避免的需要更新数据库，我认为更新数据库的代码也应该是整个项目的一部分，即数据库的变更也应该体现在版本控制中，这个非常重要，这是最终上线前准备工作的重要一环。不同语言的 ORM 都提供了 Migration 工具，但由于 SOA 是跨平台跨语言的，所以我选择了将每一次 Migration 都转化为 SQL 文件，提交到 Ansible Playbook 的仓库，由 Ansible 在部署过程中自动生效。</p>
+
+<p>下面重点说说测试，我们没有专职的测试人员，使用 TDD + Code Review 的方式来保证软件交付的质量，基本上的要求是所有接口都应该是先写测试代码再写实现代码，Review 过程中至少 2 个 Reviewer 通过才可以合并。随着对 TDD 的理解不断加深，我目前所理解的测试代码大概分为两个层面：单元测试，集成测试。</p>
+
+<p>单元测试是指代码中原子性的方法。单元测试遇到其他系统依赖，比如发送邮件，往往需要 mock 这些方法，只是模拟这些方法在特定输入输出下的行为是否符合预期，并非真正的发出邮件。在我所设计的服务分层中，LEVEL-2 测试调用 LEVEL-1 也同样需要 mock，而不是真的启一个 LEVEL-1 的服务用来单元测试。这里需要特别指出的是，严格意义上来讲数据库也是外部依赖，但 <code>SQLite</code> 几乎都预装的前提下，我们可以模拟出一个比较真实的测试环境，所以一般来讲现在都可以真实的操作数据库而不是 mock 方法的返回值了。每次测试前创建数据表及测试数据，测试后再清除所有内容，这是单元测试的标准流程。</p>
+
+<p>集成测试是指将整个系统的各个组件真实的组建起来做统一的测试，还以发送邮件为例，集成测试就需要真正的触发发送邮件的动作。由于我们开发的是 Web 应用，所以我们选择使用 <a href="https://en.wikipedia.org/?title=Acceptance_testing">User Acceptance Testing</a> 来做集成测试。简答来说就是借助浏览器，或是可以执行 JavaScript，CSS 的服务端软件，来模拟用户行为，将网站所有功能点都使用一遍与预设的输出来对比。这里有几个问题要解决：
+第一，和单元测试一样，每次测试使用的数据要重置，要预留测试需要用到的测试数据。
+第二，与单元测试不同的是，测试数据不仅仅为特定的方法准备，而是需要完整的，足以支撑整个网站运行的数据。
+第三，由于 SOA 架构，客户端和服务端需要在测试期间连接同一个测试数据库。
+为了解决以上的问题，利用 Ansible 给每个开发环境的虚拟机都部署了一个专门用来做集成测试的数据库，以及集成测试专用的配置文件（主要是数据库连接）。另外给集成测试的命令加了一些 wrapper ：重置数据库、导入准备好的测试数据（为了保持数据之间的关联，我直接从线上 dump 下一小部分）、切换至测试专用配置文件（包括客户端和服务端）、执行集成测试、切换回正常配置文件。</p>
+
+<p>至此，在 SOA 实践中遇到的一些问题都得到了比较好的解决。</p>
 </div>
 
 
@@ -126,8 +140,14 @@
 
 
 
-<time class='entry-date' datetime='2015-06-14T22:17:45+08:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>14</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>10:17 pm</span></time>
+<time class='entry-date' datetime='2015-06-21T22:16:05+08:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2015</span></span> <span class='time'>10:16 pm</span></time>
       
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/rpc/'>rpc</a>
+  
+</span>
 
 
     </p>
@@ -140,7 +160,7 @@
   </div>
   
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://liangshan.me/blog/2015/06/14/ji-zhi-de-ping-heng/" data-via="LisumL" data-counturl="http://liangshan.me/blog/2015/06/14/ji-zhi-de-ping-heng/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://liangshan.me/blog/2015/06/21/dive-into-soa-architecture/" data-via="LisumL" data-counturl="http://liangshan.me/blog/2015/06/21/dive-into-soa-architecture/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -151,10 +171,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/12/24/choosing-is-an-ability/" title="Previous Post: 选择是一种能力">&laquo; 选择是一种能力</a>
+        <a class="basic-alignment left" href="/blog/2015/06/14/ji-zhi-de-ping-heng/" title="Previous Post: 极致的平衡">&laquo; 极致的平衡</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2015/06/21/dive-into-soa-architecture/" title="Next Post: 深入实践 SOA 架构">深入实践 SOA 架构 &raquo;</a>
       
     </p>
   </footer>
@@ -261,8 +279,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://liangshan.me/blog/2015/06/14/ji-zhi-de-ping-heng/';
-        var disqus_url = 'http://liangshan.me/blog/2015/06/14/ji-zhi-de-ping-heng/';
+        var disqus_identifier = 'http://liangshan.me/blog/2015/06/21/dive-into-soa-architecture/';
+        var disqus_url = 'http://liangshan.me/blog/2015/06/21/dive-into-soa-architecture/';
         var disqus_script = 'embed.js';
       
     (function () {
