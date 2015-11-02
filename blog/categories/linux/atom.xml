@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux | Liangshan]]></title>
   <link href="http://liangshan.me/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://liangshan.me/"/>
-  <updated>2015-06-22T00:49:39+08:00</updated>
+  <updated>2015-11-02T11:50:01+08:00</updated>
   <id>http://liangshan.me/</id>
   <author>
     <name><![CDATA[Liangshan]]></name>
@@ -32,7 +32,7 @@
 
 <p>再说 awesome，首先要装较新版本的 awesome，这时候安装使用下面的命令：</p>
 
-<pre><code class="bash">$ ACCEPT_KEYWORDS="~*" emerge x11-wm/awesome
+<pre><code>$ ACCEPT_KEYWORDS="~*" emerge x11-wm/awesome
 </code></pre>
 
 <p>装完之后运行 <code>startx</code> 应该有一个朴素的桌面启动了，这时候我们要花很多时间来美化它。</p>

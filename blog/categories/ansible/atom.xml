@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ansible | Liangshan]]></title>
   <link href="http://liangshan.me/blog/categories/ansible/atom.xml" rel="self"/>
   <link href="http://liangshan.me/"/>
-  <updated>2015-06-22T00:49:39+08:00</updated>
+  <updated>2015-11-02T11:50:01+08:00</updated>
   <id>http://liangshan.me/</id>
   <author>
     <name><![CDATA[Liangshan]]></name>
@@ -37,7 +37,7 @@
 <p>为了解决这些问题，我们将整个环境安装在虚拟机内，这在安居客被认为是一种最佳实践，成功的应用在很多系统的开发当中。
 而开发环境，生产环境的部署则交给 ansible 来完成。那么我们的项目目录看起来是这样:</p>
 
-<pre><code> .                  # root  
+<pre><code> .                  # root
  |-- .provisioning/ # ansible 脚本目录
  |-- src/           # 源代码目录
  |-- Vagrantfile    # vagrant 启动脚本
@@ -104,7 +104,7 @@ Vagrantfile
 
 <p><code>make</code> 其实就是执行一些 shell 命令，如果翻译成 shell 应该类似下面的脚本。</p>
 
-<pre><code class="bash">mkdir .provisioning
+<pre><code>mkdir .provisioning
 cd .provisioning
 git init
 git remote add origin git@gitserver.com:username/src-ansible.git
@@ -114,7 +114,7 @@ cp .Vagrantfile ../Vagrantfile
 
 <p>于此对应，再写一个 <code>make</code> 的 <code>target</code> 用于更新 ansible 脚本。</p>
 
-<pre><code class="bash">cd .provisioning
+<pre><code>cd .provisioning
 git pull origin master
 cp .Vagrantfile ../Vagrantfile
 </code></pre>
@@ -172,7 +172,7 @@ $ .virtualenv/bin/python setup.py develop
 
 <p>但我们还希望将 ansible 命令加在系统的 PATH 里，这就需要一些小技巧。简单来说需要自己准备一个脚本，脚本的内容如下:</p>
 
-<pre><code class="bash">$ touch ~/bin/_ansible_wrapper
+<pre><code>$ touch ~/bin/_ansible_wrapper
 $ vim ~/bin/_ansible_wrapper
 
 #!/bin/bash

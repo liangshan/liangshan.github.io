@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Virtualenv | Liangshan]]></title>
   <link href="http://liangshan.me/blog/categories/virtualenv/atom.xml" rel="self"/>
   <link href="http://liangshan.me/"/>
-  <updated>2015-06-22T00:49:39+08:00</updated>
+  <updated>2015-11-02T11:50:01+08:00</updated>
   <id>http://liangshan.me/</id>
   <author>
     <name><![CDATA[Liangshan]]></name>
@@ -62,7 +62,7 @@ $ .virtualenv/bin/python setup.py develop
 
 <p>但我们还希望将 ansible 命令加在系统的 PATH 里，这就需要一些小技巧。简单来说需要自己准备一个脚本，脚本的内容如下:</p>
 
-<pre><code class="bash">$ touch ~/bin/_ansible_wrapper
+<pre><code>$ touch ~/bin/_ansible_wrapper
 $ vim ~/bin/_ansible_wrapper
 
 #!/bin/bash

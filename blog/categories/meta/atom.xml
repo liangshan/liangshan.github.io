@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Meta | Liangshan]]></title>
   <link href="http://liangshan.me/blog/categories/meta/atom.xml" rel="self"/>
   <link href="http://liangshan.me/"/>
-  <updated>2015-06-22T00:49:39+08:00</updated>
+  <updated>2015-11-02T11:50:01+08:00</updated>
   <id>http://liangshan.me/</id>
   <author>
     <name><![CDATA[Liangshan]]></name>
@@ -40,7 +40,8 @@
 
 <p>在 <code>__config.yml</code> 中添加 jiathis 的相关配置，<code>$uid</code> 替换为真正的 <code>userid</code>，<code>userid</code> 可以从 jiathis 的示例代码中获取。</p>
 
-<pre><code class="yaml __config.yml">## 下面的内容添加至文件尾部
+<pre><code class="yaml">## __config.yml
+## 下面的内容添加至文件尾部
 
 # Jiathis
 jiathis_user: $uid
@@ -55,7 +56,8 @@ jiathis 给的代码带一个「+」号还有分享数字，样式很不河蟹�
 
 <p></p>
 
-<pre><code class="html+jinja source/_include/post/sharing">  &lt;!-- 添加到相应的位置，twitter google+ 前后皆可 --&gt;
+<pre><code class="html+jinja">  # source/_include/post/sharing
+  &lt;!-- 添加到相应的位置，twitter google+ 前后皆可 --&gt;
   {% if site.jiathis_share %}
   &lt;div class="jiathis_style_24x24" style="text-indent: 0px; margin: 0px; padding: 0px; border-style: none; float: none; line-height: normal; font-size: 1px; vertical-align: baseline; display: inline-block;  background: transparent;"&gt;
     &lt;a class="jiathis_button_weixin"&gt;&lt;/a&gt;
@@ -64,7 +66,9 @@ jiathis 给的代码带一个「+」号还有分享数字，样式很不河蟹�
   {% endif %}
 </code></pre>
 
-<p>&#8220;`html+jinja source/_includes/after_footer.html</p>
+<p>&#8220;`html+jinja</p>
+
+<h1>source/_includes/after_footer.html</h1>
 
 <!-- 只加第 5 行 -->
 
@@ -77,11 +81,14 @@ jiathis 给的代码带一个「+」号还有分享数字，样式很不河蟹�
 {% include custom/after_footer.html %}
 &#8220;`</p>
 
-<pre><code class="bash 添加一个文件">$ touch source/_includes/jiathis_share.html
+<pre><code># 添加一个文件
+$ touch source/_includes/jiathis_share.html
 $ vi source/_includes/jiathis_share.html
 </code></pre>
 
-<p>&#8220;`html+jinja 该文件的内容</p>
+<p>&#8220;`html+jinja</p>
+
+<h1>该文件的内容</h1>
 
 <p>{% if site.jiathis_share %}</p>
 

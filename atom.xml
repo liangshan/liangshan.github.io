@@ -4,7 +4,7 @@
   <title><![CDATA[Liangshan]]></title>
   <link href="http://liangshan.me/atom.xml" rel="self"/>
   <link href="http://liangshan.me/"/>
-  <updated>2015-06-22T00:49:39+08:00</updated>
+  <updated>2015-11-02T11:50:01+08:00</updated>
   <id>http://liangshan.me/</id>
   <author>
     <name><![CDATA[Liangshan]]></name>
@@ -275,9 +275,8 @@
 
 <p>再说 awesome，首先要装较新版本的 awesome，这时候安装使用下面的命令：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ ACCEPT_KEYWORDS</span><span class="o">=</span><span class="s2">&quot;~*&quot;</span> emerge x11-wm/awesome
-</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ ACCEPT_KEYWORDS="~*" emerge x11-wm/awesome</span></code></pre></td></tr></table></div></figure>
 
 
 <p>装完之后运行 <code>startx</code> 应该有一个朴素的桌面启动了，这时候我们要花很多时间来美化它。</p>
@@ -632,12 +631,14 @@
 
 <p>在 <code>__config.yml</code> 中添加 jiathis 的相关配置，<code>$uid</code> 替换为真正的 <code>userid</code>，<code>userid</code> 可以从 jiathis 的示例代码中获取。</p>
 
-<figure class='code'><figcaption><span>__config.yml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="c1">## 下面的内容添加至文件尾部</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="c1">## __config.yml</span>
+</span><span class='line'><span class="c1">## 下面的内容添加至文件尾部</span>
 </span><span class='line'>
 </span><span class='line'><span class="c1"># Jiathis</span>
 </span><span class='line'><span class="l-Scalar-Plain">jiathis_user</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">$uid</span>
@@ -651,14 +652,16 @@
 jiathis 给的代码带一个「+」号还有分享数字，样式很不河蟹被我删掉了。
 另外 jiathis 还会默认开启 site tracker 功能，我觉得这个有点多余，这部分代码我也都删掉了。</p>
 
-<figure class='code'><figcaption><span>source/_include/post/sharing</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='html+jinja'><span class='line'>  <span class="c">&lt;!-- 添加到相应的位置，twitter google+ 前后皆可 --&gt;</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='html+jinja'><span class='line'>  # source/_include/post/sharing
+</span><span class='line'>  <span class="c">&lt;!-- 添加到相应的位置，twitter google+ 前后皆可 --&gt;</span>
 </span><span class='line'>  <span class="cp">{%</span> <span class="k">if</span> <span class="nv">site.jiathis_share</span> <span class="cp">%}</span>
 </span><span class='line'>  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;jiathis_style_24x24&quot;</span> <span class="na">style=</span><span class="s">&quot;text-indent: 0px; margin: 0px; padding: 0px; border-style: none; float: none; line-height: normal; font-size: 1px; vertical-align: baseline; display: inline-block;  background: transparent;&quot;</span><span class="nt">&gt;</span>
 </span><span class='line'>    <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;jiathis_button_weixin&quot;</span><span class="nt">&gt;&lt;/a&gt;</span>
@@ -670,14 +673,16 @@ jiathis 给的代码带一个「+」号还有分享数字，样式很不河蟹�
 
 
 
-<figure class='code'><figcaption><span>source/_includes/after_footer.html</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='html+jinja'><span class='line'><span class="c">&lt;!-- 只加第 5 行 --&gt;</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='html+jinja'><span class='line'># source/_includes/after_footer.html
+</span><span class='line'><span class="c">&lt;!-- 只加第 5 行 --&gt;</span>
 </span><span class='line'><span class="cp">{%</span> <span class="k">include</span> <span class="nv">disqus.html</span> <span class="cp">%}</span>
 </span><span class='line'><span class="cp">{%</span> <span class="k">include</span> <span class="nv">facebook_like.html</span> <span class="cp">%}</span>
 </span><span class='line'><span class="cp">{%</span> <span class="k">include</span> <span class="nv">google_plus_one.html</span> <span class="cp">%}</span>
@@ -689,21 +694,27 @@ jiathis 给的代码带一个「+」号还有分享数字，样式很不河蟹�
 
 
 
-<figure class='code'><figcaption><span>添加一个文件</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>touch <span class="nb">source</span>/_includes/jiathis_share.html
-</span><span class='line'><span class="nv">$ </span>vi <span class="nb">source</span>/_includes/jiathis_share.html
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='html+jinja'><span class='line'># 添加一个文件
+</span><span class='line'>$ touch source/_includes/jiathis_share.html
+</span><span class='line'>$ vi source/_includes/jiathis_share.html
 </span></code></pre></td></tr></table></div></figure>
 
 
 
 
-<figure class='code'><figcaption><span>该文件的内容</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='html+jinja'><span class='line'><span class="cp">{%</span> <span class="k">if</span> <span class="nv">site.jiathis_share</span> <span class="cp">%}</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='html+jinja'><span class='line'># 该文件的内容
+</span><span class='line'>
+</span><span class='line'><span class="cp">{%</span> <span class="k">if</span> <span class="nv">site.jiathis_share</span> <span class="cp">%}</span>
 </span><span class='line'><span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&quot;display:none&quot;</span><span class="nt">&gt;</span>
 </span><span class='line'><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;http://v3.jiathis.com/code/jia.js?uid=</span><span class="cp">{{</span> <span class="nv">site.jiathis_user</span> <span class="cp">}}</span><span class="s">&quot;</span> <span class="na">charset=</span><span class="s">&quot;utf-8&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
 </span><span class='line'><span class="nt">&lt;/div&gt;</span>
@@ -784,7 +795,7 @@ jiathis 给的代码带一个「+」号还有分享数字，样式很不河蟹�
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'> .                  # root  
+</pre></td><td class='code'><pre><code class=''><span class='line'> .                  # root
 </span><span class='line'> |-- .provisioning/ # ansible 脚本目录
 </span><span class='line'> |-- src/           # 源代码目录
 </span><span class='line'> |-- Vagrantfile    # vagrant 启动脚本</span></code></pre></td></tr></table></div></figure>
@@ -889,8 +900,8 @@ jiathis 给的代码带一个「+」号还有分享数字，样式很不河蟹�
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>mkdir .provisioning
-</span><span class='line'><span class="nb">cd</span> .provisioning
+</pre></td><td class='code'><pre><code class='text'><span class='line'>mkdir .provisioning
+</span><span class='line'>cd .provisioning
 </span><span class='line'>git init
 </span><span class='line'>git remote add origin git@gitserver.com:username/src-ansible.git
 </span><span class='line'>git pull origin master
@@ -903,7 +914,7 @@ jiathis 给的代码带一个「+」号还有分享数字，样式很不河蟹�
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">cd</span> .provisioning
+</pre></td><td class='code'><pre><code class='text'><span class='line'>cd .provisioning
 </span><span class='line'>git pull origin master
 </span><span class='line'>cp .Vagrantfile ../Vagrantfile
 </span></code></pre></td></tr></table></div></figure>
@@ -1329,7 +1340,7 @@ jiathis 给的代码带一个「+」号还有分享数字，样式很不河蟹�
 
 <p>但我们还希望将 ansible 命令加在系统的 PATH 里，这就需要一些小技巧。简单来说需要自己准备一个脚本，脚本的内容如下:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -1338,16 +1349,15 @@ jiathis 给的代码带一个「+」号还有分享数字，样式很不河蟹�
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>touch ~/bin/_ansible_wrapper
-</span><span class='line'><span class="nv">$ </span>vim ~/bin/_ansible_wrapper
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ touch ~/bin/_ansible_wrapper
+</span><span class='line'>$ vim ~/bin/_ansible_wrapper
 </span><span class='line'>
-</span><span class='line'><span class="c">#!/bin/bash</span>
-</span><span class='line'><span class="nb">source</span> <span class="s2">&quot;$HOME/apps/ansible/hacking/env-setup&quot;</span> -q
-</span><span class='line'><span class="k">if</span> <span class="o">[</span> -f <span class="s2">&quot;$ANSIBLE_HOME/.virtualenv/bin/activate&quot;</span> <span class="o">]</span> <span class="p">;</span> <span class="k">then</span>
-</span><span class='line'>    <span class="nb">source</span> <span class="s2">&quot;$ANSIBLE_HOME/.virtualenv/bin/activate&quot;</span>
-</span><span class='line'><span class="k">fi</span>
-</span><span class='line'><span class="nv">PYENV_VERSION</span><span class="o">=</span>2.7.6 <span class="nb">exec</span> <span class="s2">&quot;$ANSIBLE_HOME/bin/${0##/*/}&quot;</span> <span class="nv">$@</span>
-</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>#!/bin/bash
+</span><span class='line'>source "$HOME/apps/ansible/hacking/env-setup" -q
+</span><span class='line'>if [ -f "$ANSIBLE_HOME/.virtualenv/bin/activate" ] ; then
+</span><span class='line'>    source "$ANSIBLE_HOME/.virtualenv/bin/activate"
+</span><span class='line'>fi
+</span><span class='line'>PYENV_VERSION=2.7.6 exec "$ANSIBLE_HOME/bin/${0##/*/}" $@</span></code></pre></td></tr></table></div></figure>
 
 
 <p><code>$HOME/apps/ansible/hacking/env-setup</code> 是 ansible 为 hacker 准备的一个脚本，设置一些环境变量。其中 <code>$HOME/apps/ansible</code> 是 ansible 的根目录。</p>
@@ -1367,13 +1377,12 @@ jiathis 给的代码带一个「+」号还有分享数字，样式很不河蟹�
 
 <p>假设 <code>$HOME/bin</code> 在 PATH 中，设置几个软链就全部搞定了。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>ln -s <span class="nv">$HOME</span>/bin/_ansible_wrapper <span class="nv">$HOME</span>/bin/ansible
-</span><span class='line'><span class="nv">$ </span>ln -s <span class="nv">$HOME</span>/bin/_ansible_wrapper <span class="nv">$HOME</span>/bin/ansible-playbook
-</span><span class='line'><span class="nv">$ </span>ln -s <span class="nv">$HOME</span>/bin/_ansible_wrapper <span class="nv">$HOME</span>/bin/ansible-galaxy
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ ln -s $HOME/bin/_ansible_wrapper $HOME/bin/ansible
+</span><span class='line'>$ ln -s $HOME/bin/_ansible_wrapper $HOME/bin/ansible-playbook
+</span><span class='line'>$ ln -s $HOME/bin/_ansible_wrapper $HOME/bin/ansible-galaxy</span></code></pre></td></tr></table></div></figure>
 
 
 <h3>参考资料</h3>
