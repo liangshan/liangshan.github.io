@@ -12,6 +12,8 @@ $ git checkout -B source origin/source
 $ gem install bundler
 $ rbenv rehash    # If you use rbenv, rehash to be able to run the bundle command
 $ bundle install
+
+$ rake setup_github_pages
 ```
 
 ## Contribute
