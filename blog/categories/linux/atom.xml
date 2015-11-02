@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Linux | Liangshan]]></title>
+  <link href="http://liangshan.me/blog/categories/linux/atom.xml" rel="self"/>
+  <link href="http://liangshan.me/"/>
+  <updated>2015-06-22T00:49:39+08:00</updated>
+  <id>http://liangshan.me/</id>
+  <author>
+    <name><![CDATA[Liangshan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[在 Gentoo 上安装 Awesome]]></title>
+    <link href="http://liangshan.me/blog/2014/08/07/install-awesome-on-gentoo/"/>
+    <updated>2014-08-07T14:06:30+08:00</updated>
+    <id>http://liangshan.me/blog/2014/08/07/install-awesome-on-gentoo</id>
+    <content type="html"><![CDATA[<p>都装 gentoo 了，趁热装桌面环境吧。linux 的视窗系统称为 X Window System。
+在开源世界里，通常是协议先行，各自实现。同样 X 只是协议，在各种实现中以 X.Org 最受欢迎，当时使用的协议为 X11，所以后来 X 也被人们称为 X11。</p>
+
+<!-- more -->
+
+
+<p>X 分为 server 和 client, 但这里的 server 和 client 和我直觉上的理解有点相反。比如接收用户行为的反而是 server。另外一大特色就是 client 之间是不知道对方存在的，比如桌面上运行了 terminal 和 chrome，它们之间的位置关系互相是不清楚的。所以需要一个软件来管理 client 的位置、大小、外观，同时提供类似于桌面的环境，这个软件就叫 X window manager，我们这里选择的是 awesome。X 具体的协议要去翻协议或者看 wiki 可以了解大概。</p>
+
+<p>安装也分为 server 和 window manager 来进行。gentoo 安装每个软件基本上都会有一个 wiki 页面，照着手册来就可以了，所以建议照着 gentoo 的 wiki 来安装软件，而不是软件本身的手册。下面只讲手册上没说的内容，也就是我踩到的坑。</p>
+
+<p>先讲 X server，第一次使用的驱动是开源版本 nouveau，也是手册上推荐的版本。但 awesome 装好之后无法启动。重新改了 make.conf 把显卡模块改为 nvidia 重装 server 就成功了。不知道是某款型号的个体问题还是普遍问题，仅供参考吧。</p>
+
+<p>再说 awesome，首先要装较新版本的 awesome，这时候安装使用下面的命令：</p>
+
+<pre><code class="bash">$ ACCEPT_KEYWORDS="~*" emerge x11-wm/awesome
+</code></pre>
+
+<p>装完之后运行 <code>startx</code> 应该有一个朴素的桌面启动了，这时候我们要花很多时间来美化它。</p>
+
+<p>我是说在没有社区的情况下:D</p>
+
+<p>github 上搜索 awesome themes，结果一大把了，早有人帮大家归纳了很多漂亮的皮肤，即使没有一个喜欢的，参考配置文件总是不错的。</p>
+
+<p>我使用的叫做 <a href="https://github.com/copycat-killer/awesome-copycats">awesome-copycats</a>，除此之外还有中文字体，输入法，终端配置等等要折腾。我把用到的配置文件都放进 <a href="https://github.com/liangshan/liangshan.gentoo">github</a> 上，省的再次折腾。这里只是需要几个备注：</p>
+
+<ol>
+<li>这个皮肤的网络控件需要先安装 <code>iproute</code></li>
+<li>编译终端需要 <code>USE=xft</code> 才能使用 X Font Server 的字体</li>
+</ol>
+
+
+<p>最后安装一下最新版的 firefox（仍然使用 <code>ACCEPT_KEYWORDS="~*"</code> 确保新版），需要提到的是 perl 的 <code>XML-Parser</code> 模块过期了，可能要先升级一下，否则编译过程会报错。</p>
+
+<p>要注意整个过程都没有安装 DM(display manager)，还是手动的 <code>startx</code> 来启动，以后遇到问题再装吧。</p>
+
+<p>上个图吧（为什么有种女人写美容攻略的感觉？），其实我最早就是想弄个 awesome，没想到整了这么多。</p>
+
+<p><img src="/images/custom/awesome.png" /></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[使用 SystemRescueCD 安装 Gentoo]]></title>
+    <link href="http://liangshan.me/blog/2014/08/06/install-gentoo-from-systemrescuecd/"/>
+    <updated>2014-08-06T17:50:10+08:00</updated>
+    <id>http://liangshan.me/blog/2014/08/06/install-gentoo-from-systemrescuecd</id>
+    <content type="html"><![CDATA[<p>在使用 Ubuntu 有 3 年之后，第一次有了换个发行版的想法。
+其实我觉得做任何事情都要循序渐进，在合适的时候做合适的事情才能事半功倍。</p>
+
+<p>3 年前选择从 Ubuntu 入手应该是不错的选择，现在想换一个更自由的发行版也是水到渠成。选来选去，选了 gentoo，主要是在浏览的过程中以下几点吸引了我:</p>
+
+<ol>
+<li>自由度高，一切从头开始</li>
+<li>升级频繁</li>
+<li>很先进的包管理工具</li>
+</ol>
+
+
+<p>其实大多数时候我不是一个爱折腾的人，所以这次抓住了一闪而过想折腾的机会，第一天下午就开始动手了。第一个动作就是买一个 U 盘，是的，要准备一个 U 盘。</p>
+
+<!-- more -->
+
+
+<p>在开始之前，先说一下各个工具的版本。</p>
+
+<pre><code>SystemRescueCD == 4.3.0
+kernel == linux-3.14.14-gentoo
+gentoo == Gentoo Base System release 2.2
+</code></pre>
+
+<p>原本我只是打算照着 gentoo 的手册从头看到尾，但第一章我就晕了，至少给了 3 种安装方式。选哪个好呢？经同事介绍：都不好。
+有网络的条件下，最好是使用 SystemRescueCD 来安装。一开始我不太理解，装完之后我同意这种看法。</p>
+
+<p>先讲 SystemRescueCD，这是一种特殊的 Live CD，内置了一个基于 Gentoo 内核的小型系统，以及一些很棒的工具。就像名字所指，主要用来恢复系统。
+而这些「很棒的工具」就是 SystemRescueCD 来安装 gentoo 的最大优势。比如自带了 dhcp 客户端，很舒服的 bash 环境，elinks 在终端浏览网页等等。</p>
+
+<p>简单来说，使用 SystemRescueCD 来安装 gentoo，可以直接跳到 gentoo 手册的第 4 章。而把 SystemRescueCD 装进 U 盘，只要参考 <a href="http://www.sysresccd.org/Sysresccd-manual-en_How_to_install_SystemRescueCD_on_an_USB-stick">wiki</a> 就可以了，分分钟就能搞定。</p>
+
+<p>制作完成之后，插上 U 盘，从 U 盘启动，进入 systemrescd。然后我们跳到 <a href="https://www.gentoo.org/doc/en/handbook/handbook-amd64.xml?part=1&amp;chap=4">gentoo handbook 第 4 章</a>。第一，不要看中文版，已经不维护了，全部过时；第二，选好 CPU 架构，这篇是针对 amd64 或者叫 x86_64（这名字无力吐槽）。</p>
+
+<p>gentoo 手册不只是告诉你步骤，还试图向你解释每一步的原因，当然可以选择略过。所以你也可以读完本文的一些解释，也可以略过:D</p>
+
+<p>第 4 章的几个关键字：MBR， GPT， UEFI， BIOS boot partision。简单的把这些关键字串一下：上一代的计算机启动方式是 BIOS + MBR(Master Boot Record)，但两者有很多限制，也确实太过古老了。比如 MBR 使用 512 bytes 记录主分区信息，所以主分区数量受限制，虽然可以使用扩展分区和逻辑分区来弥补，但不够 native；以及 MBR 没有备份等问题。GPT 就是 MBR 的升级版，而 UEFI 就是针对 BIOS 的改进。而 BIOS boot 分区 主要是为了 GRUB2 准备的，也就是说如果使用 GRUB2 来选择操作系统，最好是有一个。需要特别说明的是，UEFI 需要主板支持，如果没有的话 BIOS + GPT 在大多数情况下可以的，除了要安装 windows（只认 UEFI + GPT 组合）。</p>
+
+<p>给硬盘分好区并 mount 之后，就可以进入第 5 章。这里主要是准备整个安装过程会用到的一些工具，比如 stage3 安装包。名字很有趣，台阶。要知道除了 stage3 之外还有 stage2 和 stage1 可以选择。大概意思是你要从第几层开始工作，基本上越底层自己要做的工作就越多。新手就用 stage3 可以了，想要挑战的可以试试 stage2 和 stage1，这让我想起了 Diablo 3 的地狱和炼狱模式。这里需要注意的是，新的 SystemRescueCD 带的是 elinks，而不是手册上的 links，但用法基本是一样的。</p>
+
+<p>第 6 章是装内核之前的准备，唯一要注意的是在选择 profile 的时候，因为是要装桌面环境，但我又不想用 GNOME 和 KDE，所以选择 desktop 选项就好了。</p>
+
+<p>第 7 章安装内核，配置内核参数太过复杂，第一次安装基本就一路默认吧，或者直接使用 genkernel 让它自己来。这里 initramfs 最好装一下，虽然我还没有深入理解它的作用，但看介绍是需要的。</p>
+
+<p>第 8 章开始装一些必要的软件了，这里唯一的问题是网卡的名字和默认的不一致。原因在<a href="http://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/">这里</a>有详细解释，大概是说新版的 linux 设备管理器不再使用 <code>eth0</code> 这样的名字，而是给每个设备都按照固定规则分配一个固定的名字比如 <code>enp0s25</code>，所以网络配置需要拿到真实的名字之后重新配一下。</p>
+
+<p>除了手册上的软件之外，我这里再补充 2 个。<code>sudo</code> 居然也没有，这个挺让我惊讶的，另外一个就是 <code>git</code>。</p>
+
+<p>然后一路到底就可以啦，整个过程最需要的条件是内存和网络。而我选择了跳过最复杂的 USE 配置及内核参数配置，所以还算顺利。</p>
+
+<p>如果重启后无法进入系统，恭喜你获得了再来一次的机会。</p>
+]]></content>
+  </entry>
+  
+</feed>

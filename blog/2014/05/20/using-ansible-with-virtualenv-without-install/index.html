@@ -1,0 +1,407 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>使用 Virtualenv 绿色安装 Ansible - Liangshan</title>
+  <meta name="author" content="Liangshan">
+
+  
+  <meta name="description" content="How to use ansible with virtualenv without install.">
+  <meta name="keywords" content="ansible,virtualenv,without install">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://liangshan.me/blog/2014/05/20/using-ansible-with-virtualenv-without-install">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Liangshan" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script> 
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='//fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-50920618-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body    class="collapse-sidebar sidebar-footer" >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Liangshan</a></h1>
+  
+    <h2>Inner peace.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:liangshan.me" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a target="_blank" href="/about.html">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">使用 Virtualenv 绿色安装 Ansible</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-05-20T14:45:59+08:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>20</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>2:45 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><a href="http://www.ansible.com/home">Ansible</a> 是一个自动化配置管理工具 (Automate configure management)。用 python 编写，所以安装方式一般有以下几种：</p>
+
+<p><strong> <code>pip</code> 安装 </strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ pip install ansible</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong> MacOS 用户可以选择使用 <code>homebrew</code> 安装 </strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew install ansible</span></code></pre></td></tr></table></div></figure>
+
+
+<p>但这两种方法都不可避免将「污染」系统的 python 环境。所以本文主要介绍如何绿色安装 Ansible。</p>
+
+<!-- more -->
+
+
+<h3>安装 Virtualenv</h3>
+
+<p>不污染系统的关键在于虚拟化 python 的环境，所以需要准备 virtualenv。</p>
+
+<p>这里偷懒选择使用 pip 安装，如果连 virtualenv 也不想装在系统级别也是可以的，就不在这里介绍了。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ pip install virtualenv</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>下载 ansible</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git clone git@github.com:ansible/ansible.git
+</span><span class='line'>$ cd ansible</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>安装</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ virtualenv .virtualenv
+</span><span class='line'>$ .virtualenv/bin/python setup.py develop</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>A little trick</h3>
+
+<p>这个时候使用 virtualenv 激活当前目录的 python 环境，其实 <code>bin/ansible</code> 就已经可以工作了。</p>
+
+<p>但我们还希望将 ansible 命令加在系统的 PATH 里，这就需要一些小技巧。简单来说需要自己准备一个脚本，脚本的内容如下:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>touch ~/bin/_ansible_wrapper
+</span><span class='line'><span class="nv">$ </span>vim ~/bin/_ansible_wrapper
+</span><span class='line'>
+</span><span class='line'><span class="c">#!/bin/bash</span>
+</span><span class='line'><span class="nb">source</span> <span class="s2">&quot;$HOME/apps/ansible/hacking/env-setup&quot;</span> -q
+</span><span class='line'><span class="k">if</span> <span class="o">[</span> -f <span class="s2">&quot;$ANSIBLE_HOME/.virtualenv/bin/activate&quot;</span> <span class="o">]</span> <span class="p">;</span> <span class="k">then</span>
+</span><span class='line'>    <span class="nb">source</span> <span class="s2">&quot;$ANSIBLE_HOME/.virtualenv/bin/activate&quot;</span>
+</span><span class='line'><span class="k">fi</span>
+</span><span class='line'><span class="nv">PYENV_VERSION</span><span class="o">=</span>2.7.6 <span class="nb">exec</span> <span class="s2">&quot;$ANSIBLE_HOME/bin/${0##/*/}&quot;</span> <span class="nv">$@</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>$HOME/apps/ansible/hacking/env-setup</code> 是 ansible 为 hacker 准备的一个脚本，设置一些环境变量。其中 <code>$HOME/apps/ansible</code> 是 ansible 的根目录。</p>
+
+<p><code>${0##/*/}</code> 比较有趣，作用是正则匹配 <code>/*/</code> 然后把匹配到的部分从第 0 个参数（即命令本身）中删除。关于 bash 参数，更详细可以看[1]。</p>
+
+<p><code>$@</code> 则比较常见，是 bash 拿到的除命令名之外的所有参数。</p>
+
+<p>其实这个脚本就是一个 wrapper，作用如下：</p>
+
+<ol>
+<li>设置相关环境变量</li>
+<li>激活 ansible 下的 python 环境</li>
+<li>将收到的所有命令都转发给 <code>$ANSIBLE_HOME/bin</code> 下的相同命令执行</li>
+</ol>
+
+
+<p>假设 <code>$HOME/bin</code> 在 PATH 中，设置几个软链就全部搞定了。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>ln -s <span class="nv">$HOME</span>/bin/_ansible_wrapper <span class="nv">$HOME</span>/bin/ansible
+</span><span class='line'><span class="nv">$ </span>ln -s <span class="nv">$HOME</span>/bin/_ansible_wrapper <span class="nv">$HOME</span>/bin/ansible-playbook
+</span><span class='line'><span class="nv">$ </span>ln -s <span class="nv">$HOME</span>/bin/_ansible_wrapper <span class="nv">$HOME</span>/bin/ansible-galaxy
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>参考资料</h3>
+
+<ol>
+<li><a href="http://www.ibm.com/developerworks/opensource/library/l-bash-parameters/index.html">Linux tip: Bash parameters and parameter expansions</a></li>
+</ol>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Liangshan</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2014-05-20T14:45:59+08:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>20</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>2:45 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ansible/'>ansible</a>, <a class='category' href='/blog/categories/virtualenv/'>virtualenv</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <div class="jiathis_style_24x24" style="width: 100px; text-indent: 0px; margin: 0px; padding: 0px; border-style: none; float: none; line-height: normal; font-size: 1px; vertical-align: baseline; display: inline-block;  background: transparent;">
+    <a class="jiathis_button_weixin"></a>
+    <a class="jiathis_button_tsina"></a>
+  </div>
+  
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://liangshan.me/blog/2014/05/20/using-ansible-with-virtualenv-without-install/" data-via="LisumL" data-counturl="http://liangshan.me/blog/2014/05/20/using-ansible-with-virtualenv-without-install/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/05/12/build-custom-domain-blog-with-octopress-and-github-pages/" title="Previous Post: 使用 Octopress 在 GitHub Pages 上快速搭建自定义域名Blog">&laquo; 使用 Octopress 在 GitHub Pages 上快速搭建自定义域名Blog</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/05/22/how-to-teach-people-at-anjuke/" title="Next Post: 安居客导师指南">安居客导师指南 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/06/21/dive-into-soa-architecture/">深入实践 SOA 架构</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/06/14/ji-zhi-de-ping-heng/">极致的平衡</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/12/24/choosing-is-an-ability/">选择是一种能力</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/03/how-to-choose-rpc-framework/">How to Choose RPC Framework</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/10/what-is-product-manager-exactly/">到底什么是产品经理</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/liangshan">@liangshan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'liangshan',
+            count: 7,
+            skip_forks: false,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+<section>
+  <h1>Categories</h1>
+    <ul id="category-list"><li><a href='/blog/categories/anjuke'>anjuke (2)</a></li><li><a href='/blog/categories/ansible'>ansible (2)</a></li><li><a href='/blog/categories/best-practice'>best practice (1)</a></li><li><a href='/blog/categories/devops'>devops (1)</a></li><li><a href='/blog/categories/linux'>linux (2)</a></li><li><a href='/blog/categories/meta'>meta (2)</a></li><li><a href='/blog/categories/recommendation'>recommendation (1)</a></li><li><a href='/blog/categories/rpc'>rpc (2)</a></li><li><a href='/blog/categories/vagrant'>vagrant (1)</a></li><li><a href='/blog/categories/virtualenv'>virtualenv (1)</a></li></ul>
+</section>
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/112113128668997126531?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Liangshan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'liangshan';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://liangshan.me/blog/2014/05/20/using-ansible-with-virtualenv-without-install/';
+        var disqus_url = 'http://liangshan.me/blog/2014/05/20/using-ansible-with-virtualenv-without-install/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+<div style="display:none">
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1376902770881935" charset="utf-8"></script>
+</div>
+
+
+
+
+
+</body>
+</html>

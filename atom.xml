@@ -1,0 +1,1472 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Liangshan]]></title>
+  <link href="http://liangshan.me/atom.xml" rel="self"/>
+  <link href="http://liangshan.me/"/>
+  <updated>2015-06-22T00:49:39+08:00</updated>
+  <id>http://liangshan.me/</id>
+  <author>
+    <name><![CDATA[Liangshan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[深入实践 SOA 架构]]></title>
+    <link href="http://liangshan.me/blog/2015/06/21/dive-into-soa-architecture/"/>
+    <updated>2015-06-21T22:16:05+08:00</updated>
+    <id>http://liangshan.me/blog/2015/06/21/dive-into-soa-architecture</id>
+    <content type="html"><![CDATA[<p>之前介绍了<a href="http://liangshan.me/blog/2014/11/03/how-to-choose-rpc-framework/">如何选择 RPC 框架</a>，选择 RPC 框架是实施 SOA 的重要一步，但也仅仅是第一步。今天来讨论具体实施 RPC 过程中，遇到的一些细节。</p>
+
+<p>写下第一个真正的 RPC 服务，首先遇到的问题就是服务划分，或者叫服务的分层。当然最简单的就是不分层，把所有的接口都写在一起，即当服务启动的时候所有的接口都被载入内存从而被访问。现如今软件架构的趋势是使用分布式的独立的微型服务（Micro Service）搭积木，SOA 正是实现这一构想的途径之一，但如果不给服务做划分显然和初衷背道而驰。我们最终选定的划分方式是按照业务（Domain）首先划分出基础服务，我们称之为 LEVEL-1，跨基础服务的接口称之为 LEVEL-2，一些与商业无关的，更为通用的模块称之为 LEVEL-0。</p>
+
+<p>这里以淘宝为例，列举几个服务分层的例子：</p>
+
+<p>LEVEL-1：买家，卖家，账户，商品，交易</p>
+
+<p>LEVEL-2：用户购买一个商品，需要读取账户信息（余额、银行卡），需要读取商品信息（价格、运费），成功后产生一条交易记录。横跨了几乎所有 LEVEL-1 服务，显然是在 LEVEL-2 了。理论上讲 LEVEL-1 的服务各种组合都会产生一个 LEVEL-2 服务。但我的经验是，可以先把所有的 LEVEL-2 都写在一起，等到一些组合十分明确的时候再拆出去。</p>
+
+<p>LEVEL-0：国际化和本地化的一些需求（地理位置，汇率，多语言），敏感词过滤等等，这些服务的特点是都被 LEVEL-1 依赖，又和核心商业逻辑关系不大。</p>
+
+<p>同时围绕这 3 层服务，有一个原则：只能自上而下调用，不可自下而上掉用，同时不可同级应用之间调用。这里指的调用是 RPC，而不是代码上的依赖和调用。</p>
+
+<p>解决了服务划分的问题，在架构设计时同样应该考虑开发、测试、运维。先简单说开发和运维，使用 Ansible + Vagrant 可以保证开发环境的一致性，以及开发环境与生产环境的一致性。在开发环境配置阶段，会将 SOA 的客户端和服务端都部署在同一个虚拟环境里。同时在开发新项目的过程中，不可避免的需要更新数据库，我认为更新数据库的代码也应该是整个项目的一部分，即数据库的变更也应该体现在版本控制中，这个非常重要，这是最终上线前准备工作的重要一环。不同语言的 ORM 都提供了 Migration 工具，但由于 SOA 是跨平台跨语言的，所以我选择了将每一次 Migration 都转化为 SQL 文件，提交到 Ansible Playbook 的仓库，由 Ansible 在部署过程中自动生效。</p>
+
+<p>下面重点说说测试，我们没有专职的测试人员，使用 TDD + Code Review 的方式来保证软件交付的质量，基本上的要求是所有接口都应该是先写测试代码再写实现代码，Review 过程中至少 2 个 Reviewer 通过才可以合并。随着对 TDD 的理解不断加深，我目前所理解的测试代码大概分为两个层面：单元测试，集成测试。</p>
+
+<p>单元测试是指代码中原子性的方法。单元测试遇到其他系统依赖，比如发送邮件，往往需要 mock 这些方法，只是模拟这些方法在特定输入输出下的行为是否符合预期，并非真正的发出邮件。在我所设计的服务分层中，LEVEL-2 测试调用 LEVEL-1 也同样需要 mock，而不是真的启一个 LEVEL-1 的服务用来单元测试。这里需要特别指出的是，严格意义上来讲数据库也是外部依赖，但 <code>SQLite</code> 几乎都预装的前提下，我们可以模拟出一个比较真实的测试环境，所以一般来讲现在都可以真实的操作数据库而不是 mock 方法的返回值了。每次测试前创建数据表及测试数据，测试后再清除所有内容，这是单元测试的标准流程。</p>
+
+<p>集成测试是指将整个系统的各个组件真实的组建起来做统一的测试，还以发送邮件为例，集成测试就需要真正的触发发送邮件的动作。由于我们开发的是 Web 应用，所以我们选择使用 <a href="https://en.wikipedia.org/?title=Acceptance_testing">User Acceptance Testing</a> 来做集成测试。简答来说就是借助浏览器，或是可以执行 JavaScript，CSS 的服务端软件，来模拟用户行为，将网站所有功能点都使用一遍与预设的输出来对比。这里有几个问题要解决：
+第一，和单元测试一样，每次测试使用的数据要重置，要预留测试需要用到的测试数据。
+第二，与单元测试不同的是，测试数据不仅仅为特定的方法准备，而是需要完整的，足以支撑整个网站运行的数据。
+第三，由于 SOA 架构，客户端和服务端需要在测试期间连接同一个测试数据库。
+为了解决以上的问题，利用 Ansible 给每个开发环境的虚拟机都部署了一个专门用来做集成测试的数据库，以及集成测试专用的配置文件（主要是数据库连接）。另外给集成测试的命令加了一些 wrapper ：重置数据库、导入准备好的测试数据（为了保持数据之间的关联，我直接从线上 dump 下一小部分）、切换至测试专用配置文件（包括客户端和服务端）、执行集成测试、切换回正常配置文件。</p>
+
+<p>至此，在 SOA 实践中遇到的一些问题都得到了比较好的解决。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[极致的平衡]]></title>
+    <link href="http://liangshan.me/blog/2015/06/14/ji-zhi-de-ping-heng/"/>
+    <updated>2015-06-14T22:17:45+08:00</updated>
+    <id>http://liangshan.me/blog/2015/06/14/ji-zhi-de-ping-heng</id>
+    <content type="html"><![CDATA[<p>我们经常说「要追求极致」，每每谈到这个话题，乔布斯就会成为永恒的范例：他是如何苛刻的追求极致的产品体验，以及如何受到养父关于「别人看不到的地方也要追求完美」的影响。</p>
+
+<p>而实际生活中，我们又常常不得不平衡。平衡家庭与工作、工作中的效率与质量、管理中的育人与做事等等。在科学界，平衡更是无处不在，正极与负极、正数与负数、作用力与反作用力等等，可以说我们的世界更倾向于建立在平衡之中。</p>
+
+<p>有一个问题一直在困扰我，到底应该追求「平衡」还是「极致」？或许一个显而易见的答案是「看情况」，那么到底什么情况下应该追求「平衡」，而什么情况下应该追求「极致」？</p>
+
+<p>最近好像突然想通了，不知道是不是看了权利的游戏跟着编剧一起打开了脑洞呢:D</p>
+
+<p>问题的关键在于，我忽略了「平衡」也可以追求「极致」，那么最终来说还是应该追求「极致」了。</p>
+
+<p>比如烹饪一个菜肴，这时候其实你要追求的就是「极致的平衡」，各种食材的味道与口感完美融合，其中的任何一味差了一丝一毫便会影响口感，菜肴本身是平衡的，而你找到这个平衡的过程又是极致的。</p>
+
+<p>其实非常的简单，如果你抛开所谓极致和平衡的观点，重新审视疑惑，会问题的本质在于，你不是在纠结到底应该极致还是平衡，而是在纠结怎么才能把事做好。从这个角度出发，所有疑惑都会迎刃而解了，因为根本无所谓极致和平衡，这两者只是达到目的过程中，不同阶段需要的不同心态而已。这里需要注意的是，很多人对极致和平衡的理解都有偏差，极致绝不是极端，而平衡也绝不是妥协。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[选择是一种能力]]></title>
+    <link href="http://liangshan.me/blog/2014/12/24/choosing-is-an-ability/"/>
+    <updated>2014-12-24T16:28:05+08:00</updated>
+    <id>http://liangshan.me/blog/2014/12/24/choosing-is-an-ability</id>
+    <content type="html"><![CDATA[<p>今年从不同的几个人嘴里都说出了一句话：『有时候选择比能力更重要』。第一次听见这句话，感觉说对了一半：想要有很多选择，首先需要有很强的能力才行，另外选择的过程本身就是一种能力的体现。这 2 个月的经历更让我坚信了这一点。</p>
+
+<p>10 月份开始动了想换工作的念头，先说说为什么想换工作。其实我之前的工作可能在一些人看来是非常完美的，甚至是很多工程师的理想环境：公司的纯技术部门，简直是技术部的特种部队，可以按照自己的想法来实践方案，受到很多工程师和领导的尊重。</p>
+
+<p>但我却感觉越来越不舒服。</p>
+
+<p>我的技术哲学是，不仅要不断学习，更要实践。当时的实际情况是，我们几个想要推行一些新的实践时最后的结果往往是变成小范围的玩具。因为公司几年已经积累了太多工具和代码，基本上该有的都有了。好用不好用是一个问题，但起码够用，所以公司对于改进底层技术的意愿远没有说的那么强烈。这时我想起有人说重构的一个目的就是让工程师开心，这下我彻底接受这个观点了。</p>
+
+<p>有时候太安逸真的是一个问题，对于公司如此，对于我来说更是深知这份「美差」不是好事。</p>
+
+<p>几经面试，有了几个选择，而对方愿意给我机会还是因为我在架构部门的独特经历。同时公司也给出了足够的诚意来挽留我，给了新的部门和薪水。在这个过程中，我仍然相信是能力带来了选择。</p>
+
+<p>在得知我在找工作后，有位前辈好心教导我，应该去大公司待几年，刷刷身份，前途无限。或许他是对的，但我想如果是那样，和我留下又有什么区别？除了可能公司名字更加响亮，可以认识更多的技术人之外，「大公司毛病」我想大同小异。得益于身边的几位同事，我对于所谓的大型架构和大牛早已看透了，选合适的方案解决问题而已，我想要的氛围是 &lsquo;<em>Move fast and breaking things</em>&#8216;，这句是来自 Facebook 的名言。说句题外话，GitHub, Google 或者 Facebook 当然是非常有吸引力，但似乎离我还有点遥远，压根也就没考虑。有人能帮我过去一定让我知道，千万别客气。</p>
+
+<p>这时现在的公司出现在我的选择里，看起来很奇怪的公司。</p>
+
+<p>是跨国公司，但又是初创公司；是互联网公司，却还没有自己成型的研发团队；团队的中国人都会讲英文，团队的老外几乎都会讲中文。兼职和外包是当时工程师的主要来源，这些为公司干活的工程师在世界各地，他们用 slask 交流，用 GitHub 托管代码，用 AWS 托管服务器，用 jira 来管理项目，用 xbox 在办公室踢 fifa，用 CEO 戴假发在球场当拉拉队。</p>
+
+<p>一直以来，我坚持认为公司的技术部门应该走精英化路线。
+第一，写代码说到底还是创造性劳动，效率和质量与人的能力不是线性关系，我觉得应该接近于指数。
+第二，精英喜欢且只喜欢与精英一起工作。
+第三，公司不需要因为开展新的业务而大量招聘，举例来说一个传统网站想要开展新的移动业务，只需要找到一个有丰富实践经验的人，就可以让所有人都变成 iOS/Android 开发工程师，因为精英乐于接受新的挑战。
+第四，最重要的一点，精英基本不需要管理，只要给一个大家都认可的方向即可。</p>
+
+<p>这里唯一的问题是精英难找，不过只要找到第一个，只要让他认可你的观点，就一定能找到第二个、第 N 个。在公司达到一定规模时，可以去学校招一些优秀的毕业生。这只是我的想法，没有实践过，比如说公司正在迅速成长，一下子哪来那么多精英可招？我认为精英比例虽小，但找几个满足一家公司的需求还是不难的吧？就看你有没有决心，有没有诚意。</p>
+
+<p>一些迹象表明这个团队有希望成为我想象的那样，几经交谈，我决定加入这里。</p>
+
+<p>让我们再从头看一次整个过程。安逸和挑战，我选择了挑战；去上市公司、留守、创业外企，我根据自己的内心做出了选择。由于这些年的积累获得了这些选择，而这些选择本身代表了我对于技术和事业的理解。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[How to Choose RPC Framework]]></title>
+    <link href="http://liangshan.me/blog/2014/11/03/how-to-choose-rpc-framework/"/>
+    <updated>2014-11-03T15:16:21+08:00</updated>
+    <id>http://liangshan.me/blog/2014/11/03/how-to-choose-rpc-framework</id>
+    <content type="html"><![CDATA[<p>RPC 是 remote procedure call 的缩写，意指调用远程进程的方法。这里的远程需要广义的理解，有时为了协议的统一即使调用本地进程也叫做 RPC，所以 RPC 可简单理解为进程间通信。</p>
+
+<p>在选择 RPC 框架之前，要搞清楚为什么需要 RPC？ RPC 主要是为了解决服务化架构中客户端与服务端以及服务之间通讯的问题。在最早接触 RPC 的时候，我一直有一个疑问： RESTful API 不就搞定了么？为什么需要 RPC？直到深入实践了 RPC，我自己总结了 RPC 与 RESTful API 最大的几个不同。</p>
+
+<!-- more -->
+
+
+<p>首先，RESTful API 经常纠结的问题就是，到底在什么样的资源粒度上开放接口？到底需要哪些接口？而在 RPC 中这个问题被很大程度上淡化了，因为 RPC 使用起来几乎和本地方法没有太多区别。</p>
+
+<p>其次，RESTful API 在应用层使用 HTTP 协议，这使得传输数据受到限制，实践中早些年流行过 xml，现在 JSON 应该是标准做法了。但这些在大量读写时，都会消耗较大的流量，构造这些结构必然消耗额外的带宽。而 RPC 的协议都是由各框架自己定义的，目前还没有形成标准，以 Apache Thrift （以下简称 Thrift）为例，使用二进制的编码大大降低了数据大小。</p>
+
+<p>最后，也是我认为最重要的区别， RPC 可以实现异步请求，而受限于 HTTP 协议的 RESTful API 则无法实现这个功能。而异步请求让整个请求过程变得非阻塞，比如在一个 PHP 进程中将互不依赖的几个数据请求变成异步执行，这样执行时间取决于最慢的请求而不是它们相加。</p>
+
+<p>基于以上 3 点，我们非常确定需要选择一个 RPC 框架，比较流行的有 Thrift, Google Protocol Buffer, Avro。我将它们归为一类，并以 Thrift 为代表。但我倾向于另外一个选择：基于 ZeroMQ 和 Msgpack 的 ZeroRPC。下面以 Thrift 和 ZeroRPC 的对比来解释我的选择，这些对比并不涉及易用性或者安全性，仅仅从核心的信息传递角度来比较。</p>
+
+<p>在 RPC 框架中，最重要的 3 个核心组件： transport，protocol，encoding。</p>
+
+<p>Transport，即传输方式。Thrift 使用 socket，而 ZeroRPC 使用 ZeroMQ —— 一个丰富扩展过的 socket 类库。在传输方式的灵活性上，ZeroRPC 明显胜过一筹。</p>
+
+<p>Protocol，即通讯协议。Thrift 使用自己定义的 Tprotocol，协议并不复杂，以 byte 长度来规定消息格式。比如前 4 个 byte 来表示状态码。而基于 ZeroMQ 的扩展， ZeroRPC 可以使用消息帧（Frames）来构建更加灵活的通讯协议。</p>
+
+<p>Encoding，即序列化或简单理解为数据压缩。Thrift 的文档中并没有透露过多关于序列化算法的细节，而 ZeroRPC 使用 Msgpack 作为序列化/反序列化的工具。 Msgpack 本身是一个优秀的开源项目，功能更加强大。</p>
+
+<p>除了以上 3 个维度，我认为 ZeroRPC 还有另外一个明显的优势，ZeroRPC 是由 2 款开源软件组合而成，这意味着可以灵活的替换为其他类似的组件。比如 nanomsg 来替代 ZeroMQ，只要 SDK 封装的足够抽象，可以无缝的切换类库。</p>
+
+<p>说了这么多，其实 ZeroRPC 最大的优势就是 ZeroMQ，给 socket 加上了更加丰富的可能性。但 ZeroRPC 没有提供 PHP 的客户端，我可能需要根据它的协议来自己构建一个。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[到底什么是产品经理]]></title>
+    <link href="http://liangshan.me/blog/2014/09/10/what-is-product-manager-exactly/"/>
+    <updated>2014-09-10T14:13:28+08:00</updated>
+    <id>http://liangshan.me/blog/2014/09/10/what-is-product-manager-exactly</id>
+    <content type="html"><![CDATA[<p>不知道有多少人和我一样，即使在互联网公司工作了很多年，还是没搞清楚「产品经理」到底是什么样的一个职位。我甚至特意看过很多关于产品经理的文章，仍然没有搞清楚这个问题。而在工程师的圈子里，弥漫着对产品经理的各种，恩，各种情绪。上篇文章说了，我要用自己的大脑思考取得结论，到底什么是产品经理？</p>
+
+<!-- more -->
+
+
+<p>我承认在念这个疑问句的时候，想要某些位置加几个屏蔽词来着，因为这个问题实在是难以回答。我估计甚至大多数产品经理自己也很难说清楚，今天我要来完成这个挑战。</p>
+
+<p>其实写下这一行的时候我还没有确切的思路，只有一些零星的想法，看看能否边写边整理出答案。</p>
+
+<p>上面说过我看了很多关于产品经理的文章，这些文章大多数是产品经理们自己写的，无一例外的把笔尖对准了「怎么做一名好的产品经理」，描绘了一副美好的产品经理蓝图。但读完其实更糊涂了，因为跟我感受到的差距很大。我们能否从另外一个角度来寻找答案，如果现在公司里没有产品经理将发生什么？这样没人做的事或者是其他人应该多做的事，是不是可以大致理解为产品经理的工作？从这个思路出发，我先试着往其他几个角色上套，注意这里说的「角色」，而不是职位。比如我们都知道软件需要测试，但并不是每个公司都有测试工程师这个职位。</p>
+
+<p>如果没有开发工程师，即便假设最优的情况：所有现有项目都没有 BUG，不出现不可抗力程序不会挂掉。公司新的想法也无人实现，公司将静止在最后一次上线的那一刻。</p>
+
+<p>如果没有运维工程师，我们仍然假设最优的情况：所有现有机器上的资源针对现有业务都很充裕，做了很好的策略保证流量稳定，磁盘不会被写满，不出现不可抗力机器不会宕机。那么新的项目仍然无法上线，因为那会打破现在资源的平衡，与没有开发工程师的结局类似。</p>
+
+<p>如果没有测试工程师，可能会很糟，甚至比什么不做还要遭，但也可能由于高超的开发技巧避免了严重的问题。（<em>但无论如何，我认为专门的测试工程师应该认真思考自己的未来。</em>）</p>
+
+<p>如果没有公关部，公司可以少做发一些奇怪的虚假软文。</p>
+
+<p>如果没有 HR，恩，可以不听公司的广播。</p>
+
+<p>看来这个思路可行，很好的分析了各个角色的作用，代入产品经理试试看。</p>
+
+<p>如果没有产品经理，老实讲这个逗号之后我停留了很久，但思考的结果让我震惊。震惊的原因是，既不是完全没有变化，也不是每个人都会产生变化。没有产品经理之后，最忙居然是开发部门！</p>
+
+<ul>
+<li>销售、运营、市场部门、Boss 有需求将直接找到开发部门</li>
+<li>需求文档将由开发部门自己完成，当然可以由需求方提供详细的逻辑，但开发显然更合适</li>
+<li>开发必须和视觉设计师密切工作</li>
+<li>有些没有需求方的项目，开发需要自己完成不断的迭代。比如搜索或推荐系统的应用。</li>
+</ul>
+
+
+<p>从这里也可以看出，<strong>产品经理日常的工作主要是收集需求、设计逻辑、和视觉设计师一起确定样式、创造一些新的产品、迭代一些现有的产品</strong>。工作内容整理清楚了，看起来还不错。那么接下来主要来分析开发工程师对产品经理的情绪从哪来。</p>
+
+<ul>
+<li>从上面的列表其实可以发现，产品经理的产出是文字，而写字人人都会</li>
+<li>逻辑每个人都会设计，有人说「人人都是产品经理」，老板们往往称自己是「产品」</li>
+<li>经常给老板们汇报工作，跟高层更接近，当然看起来比工程师高大上</li>
+<li>经常假借迭代之名，折腾很多没意义的项目。不服的看看新浪微博。</li>
+</ul>
+
+
+<p>总结一下就是，这帮人动动嘴皮子，写点作文，画画流程图，每天除了开会就是在去开会的路上，公司完全可以不需要 TA 们。居然还跟老板混的熟，看起来比我精通 5 门编程语言、倒背算法导论的天才开发还要重要！这不科学！</p>
+
+<p>前面说过了，我写这篇文章就是因为自己也没有完全想清楚，但确定觉得并不是上面列的那样，因为这个职位每个公司都存在一定不是巧合。那么我们反过来想，假设在没有产品经理的年代里，这个角色是如何在公司里产生的？</p>
+
+<p>我们不妨再看一遍：</p>
+
+<blockquote><ul>
+<li>销售、运营、市场部门、Boss 有需求将直接找到开发部门</li>
+<li>需求文档将由开发部门自己完成，当然可以由需求方提供详细的逻辑，但开发显然更合适</li>
+<li>开发必须和视觉设计师密切工作</li>
+<li>有些没有需求方的项目，开发需要自己完成不断的迭代。比如搜索或推荐系统的应用。</li>
+</ul>
+</blockquote>
+
+<p>想象一下开发工程师需要和别人沟通原始需求的日子；自己整理需求、整理逻辑的日子；参与讨论产品视觉效果的日子。我不想说实话，不过必须承认工程师的沟通技巧和大多数人对产品的直觉都难以恭维。我想产品经理就是在这种情况下应运而生的职位吧。</p>
+
+<p>如果我的假设没错的话，我认为产品经理的核心价值就体现在 3 点：</p>
+
+<ol>
+<li>善于倾听和整理，真正理解需求方的需求，设计出合理的使用流程</li>
+<li>能够分辨纷杂需求中真正有价值的项目，能够控制产品的品质，而不是造一堆项目来回瞎折腾</li>
+<li>更高级的是，对业务有着深刻理解和洞见，可以为公司创造一些产品，甚至成为新的流量/收入来源</li>
+</ol>
+
+
+<p>能做到上述所有 3 点的才能称为称职的产品经理，我想我也会很认同 TA 们的价值，实际上确实类似 manager，对自己的产品负责。</p>
+
+<p>但问题在于，大多数产品经理其实很难达到上面的要求，很多大学生去做产品经理居然是因为不想写代码，只好去做产品，然后做个一年半载助理，开始自称「产品经理」，混迹于各个互联网公司，来回折腾没意义的项目。</p>
+
+<p>写到这里，我心里已经有答案了。如果我来给各位产品总监的最重要的建议是：</p>
+
+<ol>
+<li>更明确产品这条职业道路上的几个阶段的标准，对「产品经理」这个词保持敬畏感，就好比开发人员对于计算机科学应该保持敬畏感。而不是「人人都是产品经理」。</li>
+<li>将如何判断产品经理的好坏，以及如何能做出好产品尽可能的变成标准的方法论，这样对于人才培养和选拔都有好处，别人也更容易理解这个职业。</li>
+</ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[换个姿势写博客]]></title>
+    <link href="http://liangshan.me/blog/2014/09/09/huan-ge-zi-shi-xie-bo-ke/"/>
+    <updated>2014-09-09T15:39:18+08:00</updated>
+    <id>http://liangshan.me/blog/2014/09/09/huan-ge-zi-shi-xie-bo-ke</id>
+    <content type="html"><![CDATA[<p>之前一直看 Hack News，最近开始看国内版本——Startup News。
+结果里面看到王垠的那篇征集女粉丝的博文，后来他删了又写了篇撤回征集女粉丝，现在第二篇也已经删掉了。</p>
+
+<p>以前读过别人分享他的一些文章，并没有读过他关于具体技术的见解。
+这次系统了浏览一遍现在能看到的博文，之所以说现在能看到的，是因为他会删除文章，并且不许评论，应该是一个完美主义者吧（其实删除会导致一些文章中的链接失效，也不算十分完美）。
+其中发现了一篇 <a href="http://www.yinwang.org/blog-cn/2014/04/24/sql-nosql/">SQL, NoSQL 以及数据库的实质</a>，读完之后的感觉是他看问题比我要深入很多。具体的细节我可能会单独写文章说明，不在这里展开。</p>
+
+<p>所有文章都看完之后，我根本不想去评价王垠这个人，只想说他的文章给我带来什么思考。</p>
+
+<p>能给人带来思考的文章都是好文章，他所写的每一篇都引起我思考。这只有一种可能就是他比我要厉害，主要是在思考问题的深度（无论对错）和在计算机科学学术方面。
+学术和知识上比我厉害，这个其实很难追得起来（人家毕竟上了十年博士对吧，除去清华的 4 年，也还有 6 年 :P）。
+但还好这个世界并不是谁学术能力强就一定取得更大成就。我稍微总结了一下，为什么他的文章能引发我思考。</p>
+
+<p>首先是不信权威。完全不信权威难免有些绝对，我想更合理的理解这句话应该是，在选择相信权威之前先经过自己思考。只有当自己彻底想明白之后再接受别人的说法，而不是某句话听起来很酷，转身就变成自己的口头禅。直觉上大家都会认为自己不这样，但仔细想想这种例子其实太多。RTFSC 就是我中枪的一条，因为这是 Linus 大神说的。在这一点上我同意王垠的观点。别人期待的是你的经验之谈，而你甩出一句 「Read The F***ing Source Code」来伤害对方真的很酷？</p>
+
+<p>其次是要努力看到本质。要看清技术的本质，需要很深的功力，这个也只能尽力而为了。但要时刻提醒自己，理解一个技术，需要从它要解决的问题根源开始思考，而不是看着手册学习手册。
+比如我其实从来没有思考过「到底为什么要有 SQL」这种问题，我是说为什么是通过 SQL 这种方式来跟数据文件交互？因为习惯了 SQL，最开始用 MongoDB 之类的 NoSQL 的时候反而会不习惯，其实仔细想想 MongoDB 的交互终端才比较符合作为一个程序的用法。</p>
+
+<p>从这一点上来说，这个博客虽然才写了几个月，但已经诞生了很多没有什么意义的文章。因为操作手册会过时，基本是没有意义的，但我应该不会删除它们。以这篇文章做分割线，看看以后会不会好一点。</p>
+
+<p>我本来以为至少要几年后才会回头鄙视自己，没想到这个日子这么快就来了。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[在 Gentoo 上安装 Awesome]]></title>
+    <link href="http://liangshan.me/blog/2014/08/07/install-awesome-on-gentoo/"/>
+    <updated>2014-08-07T14:06:30+08:00</updated>
+    <id>http://liangshan.me/blog/2014/08/07/install-awesome-on-gentoo</id>
+    <content type="html"><![CDATA[<p>都装 gentoo 了，趁热装桌面环境吧。linux 的视窗系统称为 X Window System。
+在开源世界里，通常是协议先行，各自实现。同样 X 只是协议，在各种实现中以 X.Org 最受欢迎，当时使用的协议为 X11，所以后来 X 也被人们称为 X11。</p>
+
+<!-- more -->
+
+
+<p>X 分为 server 和 client, 但这里的 server 和 client 和我直觉上的理解有点相反。比如接收用户行为的反而是 server。另外一大特色就是 client 之间是不知道对方存在的，比如桌面上运行了 terminal 和 chrome，它们之间的位置关系互相是不清楚的。所以需要一个软件来管理 client 的位置、大小、外观，同时提供类似于桌面的环境，这个软件就叫 X window manager，我们这里选择的是 awesome。X 具体的协议要去翻协议或者看 wiki 可以了解大概。</p>
+
+<p>安装也分为 server 和 window manager 来进行。gentoo 安装每个软件基本上都会有一个 wiki 页面，照着手册来就可以了，所以建议照着 gentoo 的 wiki 来安装软件，而不是软件本身的手册。下面只讲手册上没说的内容，也就是我踩到的坑。</p>
+
+<p>先讲 X server，第一次使用的驱动是开源版本 nouveau，也是手册上推荐的版本。但 awesome 装好之后无法启动。重新改了 make.conf 把显卡模块改为 nvidia 重装 server 就成功了。不知道是某款型号的个体问题还是普遍问题，仅供参考吧。</p>
+
+<p>再说 awesome，首先要装较新版本的 awesome，这时候安装使用下面的命令：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ ACCEPT_KEYWORDS</span><span class="o">=</span><span class="s2">&quot;~*&quot;</span> emerge x11-wm/awesome
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>装完之后运行 <code>startx</code> 应该有一个朴素的桌面启动了，这时候我们要花很多时间来美化它。</p>
+
+<p>我是说在没有社区的情况下:D</p>
+
+<p>github 上搜索 awesome themes，结果一大把了，早有人帮大家归纳了很多漂亮的皮肤，即使没有一个喜欢的，参考配置文件总是不错的。</p>
+
+<p>我使用的叫做 <a href="https://github.com/copycat-killer/awesome-copycats">awesome-copycats</a>，除此之外还有中文字体，输入法，终端配置等等要折腾。我把用到的配置文件都放进 <a href="https://github.com/liangshan/liangshan.gentoo">github</a> 上，省的再次折腾。这里只是需要几个备注：</p>
+
+<ol>
+<li>这个皮肤的网络控件需要先安装 <code>iproute</code></li>
+<li>编译终端需要 <code>USE=xft</code> 才能使用 X Font Server 的字体</li>
+</ol>
+
+
+<p>最后安装一下最新版的 firefox（仍然使用 <code>ACCEPT_KEYWORDS="~*"</code> 确保新版），需要提到的是 perl 的 <code>XML-Parser</code> 模块过期了，可能要先升级一下，否则编译过程会报错。</p>
+
+<p>要注意整个过程都没有安装 DM(display manager)，还是手动的 <code>startx</code> 来启动，以后遇到问题再装吧。</p>
+
+<p>上个图吧（为什么有种女人写美容攻略的感觉？），其实我最早就是想弄个 awesome，没想到整了这么多。</p>
+
+<p><img src="http://liangshan.me/images/custom/awesome.png" /></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[使用 SystemRescueCD 安装 Gentoo]]></title>
+    <link href="http://liangshan.me/blog/2014/08/06/install-gentoo-from-systemrescuecd/"/>
+    <updated>2014-08-06T17:50:10+08:00</updated>
+    <id>http://liangshan.me/blog/2014/08/06/install-gentoo-from-systemrescuecd</id>
+    <content type="html"><![CDATA[<p>在使用 Ubuntu 有 3 年之后，第一次有了换个发行版的想法。
+其实我觉得做任何事情都要循序渐进，在合适的时候做合适的事情才能事半功倍。</p>
+
+<p>3 年前选择从 Ubuntu 入手应该是不错的选择，现在想换一个更自由的发行版也是水到渠成。选来选去，选了 gentoo，主要是在浏览的过程中以下几点吸引了我:</p>
+
+<ol>
+<li>自由度高，一切从头开始</li>
+<li>升级频繁</li>
+<li>很先进的包管理工具</li>
+</ol>
+
+
+<p>其实大多数时候我不是一个爱折腾的人，所以这次抓住了一闪而过想折腾的机会，第一天下午就开始动手了。第一个动作就是买一个 U 盘，是的，要准备一个 U 盘。</p>
+
+<!-- more -->
+
+
+<p>在开始之前，先说一下各个工具的版本。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>SystemRescueCD == 4.3.0
+</span><span class='line'>kernel == linux-3.14.14-gentoo
+</span><span class='line'>gentoo == Gentoo Base System release 2.2</span></code></pre></td></tr></table></div></figure>
+
+
+<p>原本我只是打算照着 gentoo 的手册从头看到尾，但第一章我就晕了，至少给了 3 种安装方式。选哪个好呢？经同事介绍：都不好。
+有网络的条件下，最好是使用 SystemRescueCD 来安装。一开始我不太理解，装完之后我同意这种看法。</p>
+
+<p>先讲 SystemRescueCD，这是一种特殊的 Live CD，内置了一个基于 Gentoo 内核的小型系统，以及一些很棒的工具。就像名字所指，主要用来恢复系统。
+而这些「很棒的工具」就是 SystemRescueCD 来安装 gentoo 的最大优势。比如自带了 dhcp 客户端，很舒服的 bash 环境，elinks 在终端浏览网页等等。</p>
+
+<p>简单来说，使用 SystemRescueCD 来安装 gentoo，可以直接跳到 gentoo 手册的第 4 章。而把 SystemRescueCD 装进 U 盘，只要参考 <a href="http://www.sysresccd.org/Sysresccd-manual-en_How_to_install_SystemRescueCD_on_an_USB-stick">wiki</a> 就可以了，分分钟就能搞定。</p>
+
+<p>制作完成之后，插上 U 盘，从 U 盘启动，进入 systemrescd。然后我们跳到 <a href="https://www.gentoo.org/doc/en/handbook/handbook-amd64.xml?part=1&amp;chap=4">gentoo handbook 第 4 章</a>。第一，不要看中文版，已经不维护了，全部过时；第二，选好 CPU 架构，这篇是针对 amd64 或者叫 x86_64（这名字无力吐槽）。</p>
+
+<p>gentoo 手册不只是告诉你步骤，还试图向你解释每一步的原因，当然可以选择略过。所以你也可以读完本文的一些解释，也可以略过:D</p>
+
+<p>第 4 章的几个关键字：MBR， GPT， UEFI， BIOS boot partision。简单的把这些关键字串一下：上一代的计算机启动方式是 BIOS + MBR(Master Boot Record)，但两者有很多限制，也确实太过古老了。比如 MBR 使用 512 bytes 记录主分区信息，所以主分区数量受限制，虽然可以使用扩展分区和逻辑分区来弥补，但不够 native；以及 MBR 没有备份等问题。GPT 就是 MBR 的升级版，而 UEFI 就是针对 BIOS 的改进。而 BIOS boot 分区 主要是为了 GRUB2 准备的，也就是说如果使用 GRUB2 来选择操作系统，最好是有一个。需要特别说明的是，UEFI 需要主板支持，如果没有的话 BIOS + GPT 在大多数情况下可以的，除了要安装 windows（只认 UEFI + GPT 组合）。</p>
+
+<p>给硬盘分好区并 mount 之后，就可以进入第 5 章。这里主要是准备整个安装过程会用到的一些工具，比如 stage3 安装包。名字很有趣，台阶。要知道除了 stage3 之外还有 stage2 和 stage1 可以选择。大概意思是你要从第几层开始工作，基本上越底层自己要做的工作就越多。新手就用 stage3 可以了，想要挑战的可以试试 stage2 和 stage1，这让我想起了 Diablo 3 的地狱和炼狱模式。这里需要注意的是，新的 SystemRescueCD 带的是 elinks，而不是手册上的 links，但用法基本是一样的。</p>
+
+<p>第 6 章是装内核之前的准备，唯一要注意的是在选择 profile 的时候，因为是要装桌面环境，但我又不想用 GNOME 和 KDE，所以选择 desktop 选项就好了。</p>
+
+<p>第 7 章安装内核，配置内核参数太过复杂，第一次安装基本就一路默认吧，或者直接使用 genkernel 让它自己来。这里 initramfs 最好装一下，虽然我还没有深入理解它的作用，但看介绍是需要的。</p>
+
+<p>第 8 章开始装一些必要的软件了，这里唯一的问题是网卡的名字和默认的不一致。原因在<a href="http://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/">这里</a>有详细解释，大概是说新版的 linux 设备管理器不再使用 <code>eth0</code> 这样的名字，而是给每个设备都按照固定规则分配一个固定的名字比如 <code>enp0s25</code>，所以网络配置需要拿到真实的名字之后重新配一下。</p>
+
+<p>除了手册上的软件之外，我这里再补充 2 个。<code>sudo</code> 居然也没有，这个挺让我惊讶的，另外一个就是 <code>git</code>。</p>
+
+<p>然后一路到底就可以啦，整个过程最需要的条件是内存和网络。而我选择了跳过最复杂的 USE 配置及内核参数配置，所以还算顺利。</p>
+
+<p>如果重启后无法进入系统，恭喜你获得了再来一次的机会。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[七年之痒]]></title>
+    <link href="http://liangshan.me/blog/2014/07/02/seven-year-itch/"/>
+    <updated>2014-07-02T15:34:35+08:00</updated>
+    <id>http://liangshan.me/blog/2014/07/02/seven-year-itch</id>
+    <content type="html"><![CDATA[<blockquote><p>“七年之痒”是个舶来词，人的细胞七年会完成一次整体的新陈代谢，可能七年后你就不爱这个人了。</p></blockquote>
+
+<p>我跟老婆不知不觉认识已经有七年了。</p>
+
+<p>但今天说的跟老婆没什么关系。</p>
+
+<p>因为再往前就是工作的第七个年头。</p>
+
+<!-- more -->
+
+
+<p>想到写这个话题是因为最近看 2 个不相关的开源软件，发现最终都指向了 TCP/IP 协议的相关细节。
+最近一年总是有这种感觉，软件的背后总是指向「那几样东西」。</p>
+
+<p>魂牵梦绕，挥之不去。</p>
+
+<p>人总是会觉得以前的想法很傻。所以冒着被以后的自己鄙视的风险，说说现在我对技术的理解。</p>
+
+<p>其实我并不是狂热的技术追求者，那种废寝忘食，涉猎技术的方方面面的人。我很钦佩那种人，但我清楚的知道我不是。
+有时候知道自己不是什么，比知道是什么更可贵。因为这让我更具有专注力，知道怎么能够事半功倍。</p>
+
+<p>在我看来，技术总是为了实现人类需求而发展。某些革命性技术的出现又会推动人类发展从而产生更多的需求。
+但对于大多工程师来讲，基本上以满足需求为主要的工作内容。
+在自由软件和开源软件运动的驱动下，我们非常便利的获取别人的软件和成果。
+配合标准化的软件开发流程管理，好像开发软件变成了非常容易的事情，软件工程师甚至被称为「码农」。
+但随着对技术了解的越多，越发现「根基」的重要性。</p>
+
+<blockquote><p>&ldquo;Good developers know how things work. Great developers know why things work.&rdquo;</p></blockquote>
+
+<p>我大概要给它加上一句 &ldquo; developers know how to work with things. &rdquo;</p>
+
+<p>技术的知识图谱如果画出来，应该是一个枝繁叶茂的大树。
+大树的每片叶子是一个个软件，大树的根基是我前面提到的「那几样东西」。
+从每片叶子深入探索，你在最后总是碰到它们。</p>
+
+<p>其实就是大学里面学到的那些基础课程：数据结构、编译原理、计算机网络、操作系统。</p>
+
+<p>上大学的时候觉得这些课程很无聊，但最近却常常后悔没有把这些知识学好，或者常常有那种感觉「哦！学校里学的XX原来是这个意思」。
+学校教理论没错，工作中实践也没错。我觉得问题可能出在学校里没有把理论和实践结合起来，这是题外话就此打住。</p>
+
+<p>只有掌握了这些根基，才能更快的了解新技术、新软件，才能更好的使用他们，甚至是站在设计者的角度理解他们。
+只有掌握了这些根基，才能在设计时像搭积木一样设计出优雅的系统。</p>
+
+<p>说到搭积木，影响我最深的应该是 UNIX 的设计哲学：只做一件事，做好它。
+一个复杂的系统应该是由多个简单的系统搭建而成，每个系统都应该有自己标准输入输出。再复杂的系统，看每个组件都应该是足够小而优雅。
+这让我想起了上学的时光。上学的时候我总结出一条规律：任何难题都是经过很多小题组合嵌套而成，嵌套的层数越多就越难。</p>
+
+<p>好像我从小就展露了工程师潜力呢:D</p>
+
+<p>最后送上一些感悟吧：</p>
+
+<p>面对这棵大树，必须保持一定的敬畏感，因为你知道它太大了，甚至无法看清它的全貌。</p>
+
+<p>面对这棵大树，必须保持一定的自信，因为它每一个小的枝叶都足以给你丰富的养料。</p>
+
+<p>面对这棵大树，必须保持一定的开放心态，因为它每一个枝叶都有不同的精彩，不要一叶障目。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Build a Scalable Recommendation System]]></title>
+    <link href="http://liangshan.me/blog/2014/06/08/build-a-scalable-recommendation-system/"/>
+    <updated>2014-06-08T20:06:19+08:00</updated>
+    <id>http://liangshan.me/blog/2014/06/08/build-a-scalable-recommendation-system</id>
+    <content type="html"><![CDATA[<p>从接触推荐系统以来，断断续续的已经有一年半的时间了。
+今天想单纯从工程角度来总结一下我得到的经验，不涉及推荐的数学算法和理论。
+第一是公司还没有到必须扩展现有的推荐算法的地步，第二是本人自知没有足够能力来改进现有的推荐算法。</p>
+
+<p>其实主要是因为第二点。</p>
+
+<h2>总体回顾</h2>
+
+<p>在介绍可扩展的推荐平台我是如何设计之前，还是稍微回顾一下公司推荐的发展历程，因为这可能具有一定的代表性。或许在开展新的推荐研究时有一定参考价值。</p>
+
+<h3>诺基亚</h3>
+
+<p>我开始做推荐之前一直是我们数据部门的同学来做的，当时是使用 SQL 查询来实现了推荐的相关算法。想必这也是不得已而为之吧，最起码说明算法理论很熟悉:P。
+调整一些参数或是新增推荐显然很痛苦。</p>
+
+<p>但有总比没有强，在 iPhone 出现之前，诺基亚一直已智能手机自居。人们的感觉是跟智能有点关系，但总觉得怪怪的。这也是当时我们公司使用推荐的感觉。</p>
+
+<h3>Romar</h3>
+
+<p>在开始做新的推荐引擎之后，我们的思路就是找一个开源实现。很快就锁定了 <a href="https://mahout.apache.org/">Mahout</a>，原因有以下几点:</p>
+
+<ol>
+<li>Apache 基金，项目的更新和质量有保证</li>
+<li>实现了大多数已知的推荐算法，同时考虑了机器学习的其他两个分支：聚类和分类</li>
+<li>分布式计算，为大数据而设计</li>
+</ol>
+
+
+<p>但 Mahout 只是一个类库，我一直喜欢拿 Solr 和 Lucence 的关系来类比。 Mahout 类似 Lucence 是一个底层类库，并不是上层应用和产品。
+于此同时，Mahout 版本的 &lsquo;Solr&rsquo; 还没有出现，有几款开源实现但并不理想，也不是 Apache 官方的作品。</p>
+
+<p>所以我们决定自己简单的在 Mahout 上面薄薄的搭一层 API 来提供服务，起了个名字叫 Romar。很快这个目的就实现了，项目可以在 <a href="https://github.com/anjuke/romar">GitHub</a> 上找到。</p>
+
+<p>Romar 1.0 的版本应该足以应付千万级别用户行为的协同过滤计算，所以很快在公司内部得到了快速应用。
+得益于其能够快速响应业务需求的特点，短短半年内覆盖了公司所有产品线，这也算技术推动产品的经典案例了。</p>
+
+<p>但问题随之而来。</p>
+
+<p>管理这些推荐引擎变得痛苦，越来越多的实例。它们的管理成了最大的问题，包括部署、监控、可靠性、平滑升级。</p>
+
+<!-- More -->
+
+
+<h2>备选方案</h2>
+
+<p>很显然需要一个平台来管理这些实例，同时推荐引擎本身也需要一些升级。</p>
+
+<ol>
+<li>平台来管理、部署实例及其配置</li>
+<li>平台来查看实例服务的状态</li>
+<li>推荐引擎为以后准备，支持海量数据的离线计算</li>
+</ol>
+
+
+<p>与刚开始时类似，我们也找了几个开源实现，其实和我们思路类似，都是基于 Mahout 的一些产品，这里稍作介绍。</p>
+
+<h3>PredictionIO vs Oryx</h3>
+
+<p><a href="http://prediction.io/">PredictionIO</a> 是一个大而全的产品。说到「大而全」，已经概括了我对这个产品的看法。</p>
+
+<ol>
+<li>主打 Cloud 业务，即部署在他们的云端。这是主要的盈利方式。只是顺便开源了代码，可以自己搭建。</li>
+<li>但自己搭建并没有很好的脚手架或是文档，开源的安装脚本落后且复杂，一旦出错需要从头开始。</li>
+<li>配置太多，把更多的选择留给用户，看似是自由度很高，反过来看就是复杂。</li>
+<li>唯一可取的是界面样式设计很有科技感。</li>
+</ol>
+
+
+<p>所以 PredictionIO 还没到真实数据测试阶段就已经被放弃了。</p>
+
+<p><a href="https://github.com/cloudera/oryx">Oryx</a> 的前身叫 Myrrix，后来被 Cloudera 收购改了这个名字。值得一提的是 Oryx 的维护者就是 Mahout 的主要贡献者。</p>
+
+<p>严格来讲 Oryx 并不是我要找的「平台」，但我们考虑用来直接代替 Romar 来作为后端引擎。</p>
+
+<p>Oryx 具有以下特点：</p>
+
+<ol>
+<li>Hadoop 版本跟着 CDH 升级</li>
+<li>将推荐引擎分为 Serving Layer 和 Computing Layer，隔离出 Serving Layer 让扩展变得很容易</li>
+<li>同时支持推荐、聚类、分类的机器学习</li>
+<li>数据引入了 Generation 的概念，提供了很好的增量补充数据的支持</li>
+</ol>
+
+
+<p>看起来很美好，试用之后发现了一些问题，其中的大多数都与作者做了深入的沟通，总结起来可能有以下几点:</p>
+
+<ol>
+<li>没有额外的组件，意味着没有额外的存储空间。Serving Layer 内存有瓶颈。</li>
+<li>只支持了一种协同过滤算法，即 <a href="https://github.com/cloudera/oryx#collaborative-filtering--recommendation">ALS (alternating least squares) </a>。这种算法精度更高，但计算时间长，且中间结果无法缓存，Serving Layer 在不到百兆数据级别就会响应很慢。
+具体可以看这个 <a href="https://github.com/cloudera/oryx/issues/55">issue</a>。</li>
+</ol>
+
+
+<p>基于以上 2 点，我们还是最终没有把 Oryx 应用到生产中。</p>
+
+<h2>The answer</h2>
+
+<p>我们总是讨厌重复造轮子，但如果能基于现有方案造出更好的轮子，也不失为一种选择。</p>
+
+<p>融合了 PredictionIO 与 Oryx 的优点，我认为一个用户友好的、可扩展的、成熟的推荐系统应该具备以下特点:</p>
+
+<ol>
+<li>方便部署。应该使用一些 CM(Configure Management) 工具，或者配合 Docker、Vagrant 等虚拟环境来快速的搭建统一的环境。</li>
+<li>支持多种算法，有些场景简单的余弦相似度已经满足需求。</li>
+<li>Serving Layer 要与 Computing Layer 解耦。</li>
+<li>增加 key-value 缓存层，释放 Serving Layer 的内存压力。</li>
+<li>平台界面操作简单，尽可能的对用户隐藏后端引擎的细节。</li>
+<li>推荐引擎对客户端透明，这个比较难理解，后面单独说明。</li>
+</ol>
+
+
+<p>设想中的架构应该类似于这样:</p>
+
+<p><img src="http://liangshan.me/images/custom/rec-arch.png" /></p>
+
+<h3>Platform</h3>
+
+<p>从平台的逻辑角度来说，可以将推荐引擎分为两层: App 和 Instance。</p>
+
+<p>一个 App 字面上理解就是一个推荐应用，应该包括了使用的数据和引擎的配置。
+一个 App 可以有多个 Instance 同时进行服务，各个 Instance 使用 App 的数据和配置。</p>
+
+<p>创建新的推荐应用<strong>不需要</strong>关心背后使用的引擎、版本，以及部署在哪台机器、哪个端口（但在创建完成后可以查看）。</p>
+
+<h3>Serving Layer</h3>
+
+<p>仅从 Cache 中获取结果返回给客户端。同时保留将来一定的扩展性，比如没有读到数据可以发指令给 Computing Layer 重新计算。</p>
+
+<h3>Computing Layer</h3>
+
+<p>同时支持离线集群计算和单机计算。当单机计算时，计算结果直接存入 Cache；当离线计算时，将结果从集群中读出后转存至 Cache。</p>
+
+<h3>Data Storage</h3>
+
+<p>如何获取和存储用户行为是另外一个很大的课题，不在这里展开。这里我们假设可以方便的拿到所有用户行为。</p>
+
+<h3>CRGI</h3>
+
+<p>受到 <a href="http://en.wikipedia.org/wiki/Common_Gateway_Interface">CGI(Common Gateway Interface)</a> 的启发，我认为只要规定好输入输出，推荐的客户端可以无视后端引擎。
+而后端引擎可以只要满足输入输出，便可以随意更换实现。</p>
+
+<p>即 CRGI(Common Recommendation Gateway Interface)，CRGI 是一份协议或声明，凡是满足协议中描述的输入输出，理论上都可以作为这套系统的推荐引擎。</p>
+
+<p>由于这里 Serving Layer 由我们自己控制，所以一定是满足 CRGI 协议。如果后端更换了第三方引擎，则需要 Proxy 来适配。</p>
+
+<h3>Load Balance</h3>
+
+<p>在所有 Serving Layer 的 HTTP Server 之前加一层 LB。
+这样可以进一步简化客户端调用，不需要知道 IP 地址和端口号。同时可以在 LB 上统一的管理所有 APP 的访问日志。</p>
+
+<h3>Logs and Monitor</h3>
+
+<p>访问日志由 LB 统一管理，Error Log 则由各 App 自己管理。可以使用第三方工具来监控 Error Log 并依据访问日志来绘图。
+最终展示在 Platform 上。</p>
+
+<h3>Engine Upgrade</h3>
+
+<ol>
+<li>所有 App 使用同一版本引擎</li>
+<li>如果更换引擎则所有 App 需要同时更换</li>
+<li>如果引擎升级，则视为一次更换</li>
+</ol>
+
+
+<p>避免了 App 间的版本差异，会给管理带来很多好处。只是需要制定详尽的在线升级策略。</p>
+
+<p>做到了以上几点应该可以构建出非常强大而灵活的推荐系统。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[如何将 Octopress 的文章分享至微信和微博]]></title>
+    <link href="http://liangshan.me/blog/2014/05/28/how-to-share-octopress-pages-to-weixin-and-weibo/"/>
+    <updated>2014-05-28T12:54:14+08:00</updated>
+    <id>http://liangshan.me/blog/2014/05/28/how-to-share-octopress-pages-to-weixin-and-weibo</id>
+    <content type="html"><![CDATA[<p>昨天想把自己的文章分享到微信，没有仔细思考选了一种很土的办法。就是直接在微信的内容里输入地址，容易出错不说，效率也很低下。
+今天再回头思考这个问题，想到可以像 twitter 和 google+ 一样做一个分享按钮。Octopress 自己是不带国内社交网站分享的，要稍微做点功课。</p>
+
+<!-- more -->
+
+
+<p>稍微想了一下，发现微信较为特殊，因为只有手机应用，想要把网页分享至 app，只能曲线救国，想办法把网址输入到手机，然后使用 app 的功能再分享。</p>
+
+<p>后来搜索了一下，发现 <a href="http://www.jiathis.com">jiathis.com</a> 已经按照这个思路做过了。自不必说是「模仿」 <a href="http://www.addthis.com">addthis.com</a>，连域名都如此相似:P。</p>
+
+<h2>注册</h2>
+
+<p>需要先注册一个 jiathis 用户，注册过程很简洁，好像也没有验证邮箱。注册完就直接跳转到加码页，也算是体验不错。</p>
+
+<h2>修改 Octopress</h2>
+
+<p>接下来需要做 4 项源代码级别的修改。修改的流程遵循 Octopress 自己的逻辑，比葫芦画瓢的改法，而不是直接贴代码了事。</p>
+
+<h3>添加 config</h3>
+
+<p>在 <code>__config.yml</code> 中添加 jiathis 的相关配置，<code>$uid</code> 替换为真正的 <code>userid</code>，<code>userid</code> 可以从 jiathis 的示例代码中获取。</p>
+
+<figure class='code'><figcaption><span>__config.yml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="c1">## 下面的内容添加至文件尾部</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Jiathis</span>
+</span><span class='line'><span class="l-Scalar-Plain">jiathis_user</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">$uid</span>
+</span><span class='line'><span class="l-Scalar-Plain">jiathis_share</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>修改模板文件</h3>
+
+<p>下面的代码首先是拆成几部分，上面讲过要符合 octopress 的做法，另外我精简过了。
+jiathis 给的代码带一个「+」号还有分享数字，样式很不河蟹被我删掉了。
+另外 jiathis 还会默认开启 site tracker 功能，我觉得这个有点多余，这部分代码我也都删掉了。</p>
+
+<figure class='code'><figcaption><span>source/_include/post/sharing</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='html+jinja'><span class='line'>  <span class="c">&lt;!-- 添加到相应的位置，twitter google+ 前后皆可 --&gt;</span>
+</span><span class='line'>  <span class="cp">{%</span> <span class="k">if</span> <span class="nv">site.jiathis_share</span> <span class="cp">%}</span>
+</span><span class='line'>  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;jiathis_style_24x24&quot;</span> <span class="na">style=</span><span class="s">&quot;text-indent: 0px; margin: 0px; padding: 0px; border-style: none; float: none; line-height: normal; font-size: 1px; vertical-align: baseline; display: inline-block;  background: transparent;&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;jiathis_button_weixin&quot;</span><span class="nt">&gt;&lt;/a&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;jiathis_button_tsina&quot;</span><span class="nt">&gt;&lt;/a&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>  <span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>source/_includes/after_footer.html</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='html+jinja'><span class='line'><span class="c">&lt;!-- 只加第 5 行 --&gt;</span>
+</span><span class='line'><span class="cp">{%</span> <span class="k">include</span> <span class="nv">disqus.html</span> <span class="cp">%}</span>
+</span><span class='line'><span class="cp">{%</span> <span class="k">include</span> <span class="nv">facebook_like.html</span> <span class="cp">%}</span>
+</span><span class='line'><span class="cp">{%</span> <span class="k">include</span> <span class="nv">google_plus_one.html</span> <span class="cp">%}</span>
+</span><span class='line'><span class="cp">{%</span> <span class="k">include</span> <span class="nv">twitter_sharing.html</span> <span class="cp">%}</span>
+</span><span class='line'><span class="cp">{%</span> <span class="k">include</span> <span class="nv">jiathis_share.html</span> <span class="cp">%}</span>
+</span><span class='line'><span class="cp">{%</span> <span class="k">include</span> <span class="nv">custom</span><span class="o">/</span><span class="nv">after_footer.html</span> <span class="cp">%}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>添加一个文件</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>touch <span class="nb">source</span>/_includes/jiathis_share.html
+</span><span class='line'><span class="nv">$ </span>vi <span class="nb">source</span>/_includes/jiathis_share.html
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>该文件的内容</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='html+jinja'><span class='line'><span class="cp">{%</span> <span class="k">if</span> <span class="nv">site.jiathis_share</span> <span class="cp">%}</span>
+</span><span class='line'><span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&quot;display:none&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;http://v3.jiathis.com/code/jia.js?uid=</span><span class="cp">{{</span> <span class="nv">site.jiathis_user</span> <span class="cp">}}</span><span class="s">&quot;</span> <span class="na">charset=</span><span class="s">&quot;utf-8&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span><span class='line'><span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>之后就可以在本地预览并部署了。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[我为什么如此反感在公司放广播]]></title>
+    <link href="http://liangshan.me/blog/2014/05/27/why-i-hate-broadcasting-at-company/"/>
+    <updated>2014-05-27T17:27:33+08:00</updated>
+    <id>http://liangshan.me/blog/2014/05/27/why-i-hate-broadcasting-at-company</id>
+    <content type="html"><![CDATA[<p>最近公司决定在早中晚全公司范围内播放广播。早晚内容是「广告」和「司歌」，中午是罗振宇的「罗辑思维」片段。</p>
+
+<p>对此我在微信上表达了强烈的愤怒，措辞很激进。坦白来讲，我倒是希望有人传话给决策者，让他们知道我的愤怒，不是我不想混了，因为我相信我有足够的理由和众多的支持者，只是大家都不敢出声罢了。</p>
+
+<!-- more -->
+
+
+<p>其实我的理由很简单：</p>
+
+<ol>
+<li>作为一个 TIAN CHAO 屁民，难道受强迫还少么？大家应该对强制性措施有一种「天然的抵触」</li>
+<li>作为一个工程师，更不应该容忍一切封闭的、无法控制、强制性的事情。</li>
+<li>甚至我觉得可以上升到人权角度。</li>
+</ol>
+
+
+<p>在 <a href="http://translations.readthedocs.org/en/latest/hacker_howto.html#id9">How to be a hacker</a> 中有详细的描述了黑客应具备的几种态度，其中一条是「崇尚自由」:</p>
+
+<blockquote><p>黑客们是天生的反权威主义者。任何能向你发号施令的人都可以让你停止解决令你着迷的问题，同时，按照权威主义者的一般思路，他通常会给出一些极端愚昧的理由。因此，不论何处，任何权威主义的做法，只要它影响到了你和其他的黑客，你就要和它斗到底。</p>
+
+<p>（这并非向所有权威挑战。儿童需要监护，罪犯要被看管起来。如果服从命令得到某种东西比起用其他方式得到它更节约时间，黑客可以同意接受某种形式的权威。但这是一个有限度的，斟酌过的的交易；那种权威主义者想要的个人服从是不在考虑范围内的。）</p>
+
+<p>权威主义者喜欢审查和保密。他们不信任自愿的合作和信息的共享——他们只喜欢由他们控制的所谓“合作”。因此，作为一个黑客，你应该对审查、保密，以及使用武力或欺骗去压迫有行为能力的人们的做法有一种本能的敌意。同时你要有为此信念付出的意愿。</p></blockquote>
+
+<p>我既然提出了问题，自然会奉上解决方案。</p>
+
+<p>一样作为互联网公司，看看别人的做法: <a href="https://github.com/play/play">GitHub/Play</a>，我并没有贬低任何人的意思，不过有双眼睛就能分辨哪种方案更好。是强制性播放，还是随意性收听。</p>
+
+<blockquote><p>Play is an employee-powered iTunes-based client-driven distributed music server for your office. Also it can prepare your taxes.</p>
+
+<p><img src="https://camo.githubusercontent.com/7eae837ee32161f7a22ba0f064f0e976f10ea2de/687474703a2f2f636c2e6c792f316c336f3070304b334f3172304332553361335a2f706c61792e706e67" alt="" /></p></blockquote>
+
+<p>这事说大不大，不过真的非常令人沮丧。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Isolate Ansible Code and Source Code]]></title>
+    <link href="http://liangshan.me/blog/2014/05/22/isolate-ansible-code-and-source-code/"/>
+    <updated>2014-05-22T16:56:16+08:00</updated>
+    <id>http://liangshan.me/blog/2014/05/22/isolate-ansible-code-and-source-code</id>
+    <content type="html"><![CDATA[<p>我们经常要开发一些「系统」，这些「系统」具备以下特点：</p>
+
+<ul>
+<li>用到很多系统软件。比如 ngnix, compass, ruby, mongodb 等等；</li>
+<li>项目本身有很多组件组成。比如 web 程序，job 系统和对应的消息队列；</li>
+</ul>
+
+
+<p>那么在开发这类系统时就会遇到一些问题：</p>
+
+<ul>
+<li>开发环境和线上环境不等价。平台可能不同，软件版本可能不同；</li>
+<li>开发环境配置复杂，任意环节出错就会影响整个系统的启动；</li>
+</ul>
+
+
+<p>为了解决这些问题，我们将整个环境安装在虚拟机内，这在安居客被认为是一种最佳实践，成功的应用在很多系统的开发当中。
+而开发环境，生产环境的部署则交给 ansible 来完成。那么我们的项目目录看起来是这样:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'> .                  # root  
+</span><span class='line'> |-- .provisioning/ # ansible 脚本目录
+</span><span class='line'> |-- src/           # 源代码目录
+</span><span class='line'> |-- Vagrantfile    # vagrant 启动脚本</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样有一个好处，虚拟机启动之后，源代码对应 <code>/vagrant</code> 这个共享目录，修改源代码会同时在虚拟机内生效。
+但这样 ansible 或是其他一些 CM(Configure Management) 工具的代码和源代码就会混在一个仓库内。</p>
+
+<p>本文就介绍一种简单的方法可以将 DevOps 的代码与源代码隔离，并达到相同的效果。</p>
+
+<!-- more -->
+
+
+<p>首先我们需要准备两个仓库，一个源代码仓库我们暂且叫做 <code>src</code>，另一个仓库 <code>src-ansible</code> 放 ansible 脚本。</p>
+
+<h2>src-ansible</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'> .
+</span><span class='line'> |-- host_vars/
+</span><span class='line'> |-- roles/
+</span><span class='line'> |-- playbook.xml
+</span><span class='line'> |-- host.vagrant
+</span><span class='line'> |-- .Vagrantfile</span></code></pre></td></tr></table></div></figure>
+
+
+<p>其他都是常规的 ansible 脚本，唯独 <code>.Vagrantfile</code> 比较特殊。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># -*- mode: ruby -*-</span>
+</span><span class='line'><span class="c1"># vi: set ft=ruby :</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span> <span class="o">=</span> <span class="s2">&quot;trusty32&quot;</span>
+</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box_url</span> <span class="o">=</span> <span class="s2">&quot;http://vagrant.corp.anjuke.com/boxes/trusty32.box&quot;</span>
+</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span> <span class="ss">:private_network</span><span class="p">,</span> <span class="ss">ip</span><span class="p">:</span> <span class="s2">&quot;192.168.222.22&quot;</span>
+</span><span class='line'>  <span class="c1"># config.vm.network &quot;public_network&quot;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span> <span class="ss">:ansible</span> <span class="k">do</span> <span class="o">|</span><span class="n">ansible</span><span class="o">|</span>
+</span><span class='line'>    <span class="n">ansible</span><span class="o">.</span><span class="n">playbook</span> <span class="o">=</span> <span class="s1">&#39;.provisioning/playbook.yml&#39;</span>
+</span><span class='line'>    <span class="n">ansible</span><span class="o">.</span><span class="n">inventory_path</span> <span class="o">=</span> <span class="s1">&#39;.provisioning/hosts.vagrant&#39;</span>
+</span><span class='line'>    <span class="n">ansible</span><span class="o">.</span><span class="n">host_key_checking</span> <span class="o">=</span> <span class="kp">false</span>
+</span><span class='line'>    <span class="n">ansible</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="s1">&#39;vvvv&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>你会发现这里面用到的 <code>playbook</code> 和 <code>inventory</code> 路径都不存在，文件名也以 <code>.</code> 开头。其实这个文件就是给源代码仓库用的，而不能在这里直接使用。</p>
+
+<p>这里借鉴了 Ruby On Rails 的一个重要思想「约定大于配置」。比如这里约定了源代码仓库的 ansible 脚本放在 <code>.provisioning</code> 这个目录。</p>
+
+<h2>src</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='text'><span class='line'> .
+</span><span class='line'> |-- src/
+</span><span class='line'> |-- Makefile
+</span><span class='line'> |-- .gitignore
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>.gitgnore</code> 添加以下内容：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='text'><span class='line'>.vagrant/
+</span><span class='line'>.provisioning/
+</span><span class='line'>Vagrantfile
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>make</code> 其实就是执行一些 shell 命令，如果翻译成 shell 应该类似下面的脚本。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>mkdir .provisioning
+</span><span class='line'><span class="nb">cd</span> .provisioning
+</span><span class='line'>git init
+</span><span class='line'>git remote add origin git@gitserver.com:username/src-ansible.git
+</span><span class='line'>git pull origin master
+</span><span class='line'>cp .Vagrantfile ../Vagrantfile
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>于此对应，再写一个 <code>make</code> 的 <code>target</code> 用于更新 ansible 脚本。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">cd</span> .provisioning
+</span><span class='line'>git pull origin master
+</span><span class='line'>cp .Vagrantfile ../Vagrantfile
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>完成了这些步骤，就可以直接在源代码仓库使用 vagrant 的命令来安装、更新虚拟机。但又可以将这些脚本与源代码隔离开来。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[The Twelve-Factor App]]></title>
+    <link href="http://liangshan.me/blog/2014/05/22/the-twelve-factor-app/"/>
+    <updated>2014-05-22T16:37:03+08:00</updated>
+    <id>http://liangshan.me/blog/2014/05/22/the-twelve-factor-app</id>
+    <content type="html"><![CDATA[<p>前些年翻译的 <a href="http://12factor.net/">12-factor</a>。一直放在公司内部的博客上，现在复制一份过来。</p>
+
+<hr />
+
+<p><img class="right" src="http://0.gravatar.com/avatar/7cdf5b1c46308979e3bf81390b0c8639"></p>
+
+<p>中文翻译：<a href="https://github.com/liangshan/">梁山</a><br/>
+英文原文：<a href="http://www.12factor.net/">Adam Wiggins</a></p>
+
+<p><em><a href="https://github.com/liangshan/12factor/issues">翻译问题反馈</a></em></p>
+
+<h4>简介</h4>
+
+<p>如今，软件通常会作为一种服务来交付，它们被称为“互联网应用程序”（web apps），或“软件即服务”（SaaS）。这篇“<strong><em>互联网应用的十二要素</em></strong>”为构建如下的互联网应用程序提供了指导方法：</p>
+
+<ul>
+<li>使用<strong>标准化</strong>流程自动配置，从而使新的开发者花费最少的学习成本加入这个项目；</li>
+<li>和操作系统之间尽可能的<strong>划清界限</strong>，在各个系统中提供<strong>最大的可移植性</strong>；</li>
+<li>适合<strong>部署</strong>在现代的<strong>云计算平台</strong>，从而在服务器和系统管理方面节省资源；</li>
+<li>将开发环境和生产环境的<strong>差异降至最低</strong>，并使用<strong>持续交付</strong>实施敏捷开发；</li>
+<li>可以在工具、架构和开发流程不发生明显变化的前提下实现<strong>扩展</strong>；</li>
+</ul>
+
+
+<p>这套理论适用于任意语言和后端服务（数据库、消息队列、缓存等）开发的应用程序。</p>
+
+<h4>背景</h4>
+
+<p>本文的贡献者参与过数以百计的应用程序的开发和部署，并通过 <a href="http://www.heroku.com/">Heroku</a> 平台间接见证了数十万应用程序的开发，运作以及扩展的过程。</p>
+
+<p>本文综合了我们关于 SaaS 应用几乎所有的经验和智慧，是开发此类应用的理想实践标准，并特别关注于应用程序如何保持良性成长，开发者之间如何进行有效的代码协作，以及如何 <a href="http://blog.heroku.com/archives/2011/6/28/the_new_heroku_4_erosion_resistance_explicit_contracts/">避免软件污染</a>。</p>
+
+<p>我们的初衷是分享在现代软件开发过程中发现的一些系统性问题，并加深对这些问题的认识。我们提供了讨论这些问题时所需的共享词汇，同时使用相关术语给出一套针对这些问题的广义解决方案。本文格式的灵感来自于 Martin Fowler 的书籍：<a href="http://books.google.com/books/about/Patterns_of_enterprise_application_archi.html?id=FyWZt5DdvFkC"><em>Patterns of Enterprise Application Architecture</em></a>，<a href="http://books.google.com/books/about/Refactoring.html?id=1MsETFPD3I0C"><em>Refactoring</em></a>。</p>
+
+<h4>读者应该是哪些人？</h4>
+
+<p>任何 SaaS 应用的开发人员；部署和管理此类应用的运维工程师。</p>
+
+<!-- more -->
+
+
+<h2>I. 基准代码</h2>
+
+<p><strong><em>一份基准代码（<em>Codebase</em>），多份部署（<em>deploy</em>）</em></strong></p>
+
+<p>12-Factor App（译者注：应该是说一个使用本文概念来设计的应用，下同）通常会使用版本控制系统加以管理，如 <a href="http://git-scm.com/">Git</a>, <a href="http://mercurial.selenic.com/">Mercurial</a>, <a href="http://subversion.apache.org/">Subversion</a>。一份用来跟踪代码所有修订版本的数据库被称作 <em>代码库</em>（code repository, code repo, repo）。</p>
+
+<p>在类似 SVN 这样的集中式版本控制系统中， <em>基准代码</em> 就是指控制系统中的这一份代码库；而在 Git 那样的分布式版本控制系统中， <em>基准代码</em> 则是指最上游的那份代码库。</p>
+
+<p><img src="https://github.com/anjuke/12factor/raw/zh_CN/public/images/codebase-deploys.png" alt="一份代码库对应多份部署" /></p>
+
+<p>基准代码和应用之间总是保持一一对应的关系：</p>
+
+<ul>
+<li>一旦有多个基准代码，就不能称为一个应用，而是一个分布式系统。分布式系统中的每一个组件都是一个应用，每一个应用可以分别使用 12-Factor 进行开发。</li>
+<li>多个应用共享一份基准代码是有悖于 12-Factor 原则的。解决方案是将共享的代码拆分为独立的类库，然后使用 <a href="#dependencies">依赖管理</a> 策略去加载它们。</li>
+</ul>
+
+
+<p>尽管每个应用只对应一份基准代码，但可以同时存在多份部署。每份 <em>部署</em> 相当于运行了一个应用的实例。通常会有一个生产环境，一个或多个预发布环境。此外，每个开发人员都会在自己本地环境运行一个应用实例，这些都相当于一份部署。</p>
+
+<p>所有部署的基准代码相同，但每份部署可以使用其不同的版本。比如，开发人员可能有一些提交还没有同步至预发布环境；预发布环境也有一些提交没有同步至生产环境。但它们都共享一份基准代码，我们就认为它们只是相同应用的不同部署而已。</p>
+
+<h2>II. 依赖</h2>
+
+<p><strong><em>显式声明依赖关系(<em>dependency</em>)</em></strong></p>
+
+<p>大多数编程语言都会提供一个打包系统，用来为各个类库提供打包服务，就像 Perl 的 <a href="http://www.cpan.org/">CPAN</a> 或是 Ruby 的 <a href="http://rubygems.org/">Rubygems</a>。通过打包系统安装的类库可以是系统级的（称之为 &ldquo;site packages&#8221;），或仅供某个应用程序使用，部署在相应的目录中（称之为 &#8220;vendoring&rdquo; 或 &ldquo;bunding&#8221;）。</p>
+
+<p><strong>12-Factor 规则下的应用程序不会隐式依赖系统级的类库。</strong> 它一定通过 <em>依赖清单</em> ，确切地声明所有依赖项。此外，在运行过程中通过 <em>依赖隔离</em> 工具来确保程序不会调用系统中存在但清单中未声明的依赖项。这一做法会统一应用到生产和开发环境。</p>
+
+<p>例如，Ruby 的 <a href="http://gembundler.com/">Gem Bundler</a> 使用 <code>Gemfile</code> 作为依赖项声明清单，使用 <code>bundle exec</code> 来进行依赖隔离。Python 中则可分别使用两种工具 &ndash; <a href="http://www.pip-installer.org/en/latest/">Pip</a> 用作依赖声明，<a href="http://www.virtualenv.org/en/latest/">Virtualenv</a> 用作依赖隔离。甚至 C 语言也有类似工具，<a href="http://www.gnu.org/s/autoconf/">Autoconf</a> 用作依赖声明，静态链接库用作依赖隔离。无论用什么工具，依赖声明和依赖隔离必须一起使用，否则无法满足 12-Factor 规范。</p>
+
+<p>显式声明依赖的优点之一是为新进开发者简化了环境配置流程。新进开发者可以检出应用程序的基准代码，安装编程语言环境和它对应的依赖管理工具，只需通过一个 <em>构建命令</em> 来安装所有的依赖项，即可开始工作。例如，Ruby/Bundler 下使用<code>bundle install</code>，而 Clojure/<a href="https://github.com/technomancy/leiningen#readme">Leiningen</a> 则是 <code>lein deps</code>。</p>
+
+<p>12-Factor 应用同样不会隐式依赖某些系统工具，如 ImageMagick 或是<code>curl</code>。即使这些工具存在于几乎所有系统，但终究无法保证所有未来的系统都能支持应用顺利运行，或是能够和应用兼容。如果应用必须使用到某些系统工具，那么这些工具应该被包含在应用之中。</p>
+
+<h2>III. 配置</h2>
+
+<p><strong><em>在环境中存储配置</em></strong></p>
+
+<p>通常，应用的 <em>配置</em> 在不同<a href="#codebase">部署</a> (预发布、生产环境、开发环境等等)间会有很大差异。这其中包括：</p>
+
+<ul>
+<li>数据库，Memcached，以及其他 <a href="#backing-services">后端服务</a> 的配置</li>
+<li>第三方服务的证书，如 Amazon S3、Twitter 等</li>
+<li>每份部署特有的配置，如域名等</li>
+</ul>
+
+
+<p>有些应用在代码中使用常量保存配置，这与 12-factor 所要求的<strong>代码和配置严格分离</strong>显然大相径庭。配置文件在各部署间存在大幅差异，代码却完全一致。</p>
+
+<p>判断一个应用是否正确地将配置排除在代码之外，一个简单的方法是看该应用的基准代码是否可以立刻开源，而不用担心会暴露任何敏感的信息。</p>
+
+<p>需要指出的是，这里定义的&#8221;配置&#8221;并<strong>不</strong>包括应用的内部配置，比如 Rails 的 <code>config/routes.rb</code>，或是使用 <a href="http://www.springsource.org/">Spring</a> 时 <a href="http://static.springsource.org/spring/docs/2.5.x/reference/beans.html">代码模块间的依赖注入关系</a>。这类配置在不同部署间不存在差异，所以应该写入代码。</p>
+
+<p>另外一个解决方法是使用配置文件，但不把它们纳入版本控制系统，就像 Rails 的 <code>config/database.yml</code>。这相对于在代码中使用常量已经是长足进步，但仍然有缺点：总是会不小心将配置文件签入了代码库；配置文件的可能会分散在不同的目录，并有着不同的格式，这让找出一个地方来统一管理所有配置变的不太现实。更糟的是，这些格式通常是语言或框架特定的。</p>
+
+<p><strong>12-Factor 推荐将应用的配置存储于<em>环境变量</em>中</strong> （<em>env vars</em>, <em>env</em>）。环境变量可以非常方便地在不同的部署间做修改，却不动一行代码；与配置文件不同，不小心把它们签入代码库的概率微乎其微；与一些传统的解决配置问题的机制（比如 Java 的属性配置文件）相比，环境变量与语言和系统无关。</p>
+
+<p>配置管理的另一个方面是分组。有时应用会将配置按照特定部署进行分组（或叫做“环境”），例如 Rails 中的 <code>development</code>、<code>test</code> 和 <code>production</code>环境。这种方法无法轻易扩展：更多部署意味着更多新的环境，例如 <code>staging</code> 或 <code>qa</code> 。随着项目的不断深入，开发人员可能还会添加他们自己的环境，比如 <code>joes-staging</code>，这将导致各种配置组合的激增，从而给管理部署增加了很多不确定因素。</p>
+
+<p>12-Factor 应用中，环境变量的粒度要足够小，且相对独立。它们永远也不会组合成一个所谓的“环境”，而是独立存在于每个部署之中。当应用程序不断扩展，需要更多种类的部署时，这种配置管理方式能够做到平滑过渡。</p>
+
+<h2>IV. 后端服务</h2>
+
+<p><strong><em>把后端服务（<em>backing services</em>）当作附加资源</em></strong></p>
+
+<p><em>后端服务</em> 是指程序运行所需要的通过网络调用的各种服务，如数据库（<a href="http://dev.mysql.com/">MySQL</a>，<a href="http://couchdb.apache.org/">CouchDB</a>），消息/队列系统（<a href="http://www.rabbitmq.com/">RabbitMQ</a>，<a href="http://kr.github.com/beanstalkd/">Beanstalkd</a>），SMTP 邮件发送服务（<a href="http://www.postfix.org/">Postfix</a>），以及缓存系统（<a href="http://memcached.org/">Memcached</a>）。</p>
+
+<p>类似数据库的后端服务，通常由部署应用程序的系统管理员一起管理。除了本地服务之外，应用程序有可能使用了第三方发布和管理的服务。示例包括 SMTP（例如 <a href="http://postmarkapp.com/">Postmark</a>），数据收集服务（例如 <a href="http://newrelic.com/">New Relic</a> 或 <a href="http://www.loggly.com/">Loggly</a>），数据存储服务（如 <a href="http://http://aws.amazon.com/s3/">Amazon S3</a>），以及使用 API 访问的服务（例如 <a href="http://dev.twitter.com/">Twitter</a>, <a href="http://code.google.com/apis/maps/index.html">Google Maps</a>, <a href="http://www.last.fm/api">Last.fm</a>）。</p>
+
+<p><strong>12-Factor 应用不会区别对待本地或第三方服务。</strong> 对应用程序而言，两种都是附加资源，通过一个 url 或是其他存储在 <a href="#config">配置</a> 中的服务定位/服务证书来获取数据。12-Factor 应用的任意 <a href="#codebase">部署</a> ，都应该可以在不进行任何代码改动的情况下，将本地 MySQL 数据库换成第三方服务(例如 <a href="http://aws.amazon.com/rds/">Amazon RDS</a>)。类似的，本地 SMTP 服务应该也可以和第三方SMTP服务(例如Postmark)互换。上述 2 个例子中，仅需修改配置中的资源地址。</p>
+
+<p>每个不同的后端服务是一份<em>资源</em>。例如，一个 MySQL 数据库是一个资源，两个 MySQL 数据库(用来数据分区)就被当作是 2 个不同的资源。12-Factor 应用将这些数据库都视作<em>附加资源</em>，并且与这些附加资源保持松耦合。</p>
+
+<p><img src="https://github.com/anjuke/12factor/raw/zh_CN/public/images/attached-resources.png" alt="一种部署附加4个后端服务" /></p>
+
+<p>部署可以按需加载或卸载资源。例如，如果应用的数据库服务由于硬件问题出现异常，管理员可以从最近的备份中恢复一个数据库，卸载当前的数据库，然后加载新的数据库 &ndash; 整个过程都不需要修改代码。</p>
+
+<h2>V. 构建，发布，运行</h2>
+
+<p><strong><em>严格分离构建和运行</em></strong></p>
+
+<p><a href="#codebase">基准代码</a> 转化为一份部署(非开发环境)需要以下三个阶段：</p>
+
+<ul>
+<li><em>构建阶段</em>是指将代码仓库转化为可执行包的过程。构建时会使用指定版本的代码，获取和打包 <a href="#dependencies">依赖项</a>，编译成二进制文件和资源文件。</li>
+<li><em>发布阶段</em>会将构建的结果和当前部署所需 <a href="#config">配置</a> 相结合，并能够立刻在运行环境中投入使用。</li>
+<li><em>运行阶段</em>（或者说“运行时”）是指针对选定的发布版本，在执行环境中启动一系列应用程序 <a href="#processes">进程</a>。</li>
+</ul>
+
+
+<p><img src="https://github.com/anjuke/12factor/raw/zh_CN/public/images/release.png" alt="代码被构建，然后和配置结合成为发布版本" /></p>
+
+<p><strong>12-facfor应用严格区分构建、发布、运行这三个步骤。</strong> 举例来说，直接修改处于运行状态的代码是非常不可取的做法，因为这些修改很难再同步回构建步骤。</p>
+
+<p>部署工具通常都提供了发布管理工具，最引人注目的功能是退回至较旧的发布版本。比如，<a href="https://github.com/capistrano/capistrano/wiki">Capistrano</a> 将所有发布版本都存储在一个叫 <code>releases</code> 的子目录中，当前的在线版本只需映射至对应的目录即可。该工具的 <code>rollback</code> 命令可以很容易地实现回退版本的功能。</p>
+
+<p>每一个发布版本必须对应一个唯一的发布 ID，例如可以使用发布时的时间戳(<code>2011-04-06-20:32:17</code>)，亦或是一个增长的数字(<code>v100</code>) 。发布的版本就像一本只能追加的账本，一旦发布就不可修改，任何的变动都应该产生一个新的发布版本。</p>
+
+<p>新的代码在部署之前，需要开发人员触发构建操作。但是，运行阶段不一定需要人为触发，而是可以自动进行。如服务器重启，或是进程管理器重启了一个崩溃的进程。因此，运行阶段应该保持尽可能少的模块，这样假设半夜发生系统故障而开发人员又捉襟见肘也不会引起太大问题。构建阶段是可以相对复杂一些的，因为错误信息能够立刻展示在开发人员面前，从而得到妥善处理。</p>
+
+<h2>VI. 进程</h2>
+
+<p><strong><em>以一个或多个无状态进程运行应用</em></strong></p>
+
+<p>运行环境中，应用程序通常是以一个和多个<em>进程</em>运行的。</p>
+
+<p>最简单的场景中，代码是一个独立的脚本，运行环境是开发人员自己的笔记本电脑，进程由一条命令行（例如 <code>python my_script.py</code>）。另外一个极端情况是，复杂的应用可能会使用很多 <a href="#concurrency">进程类型</a>，也就是零个或多个进程实例。</p>
+
+<p><strong>12-factor应用的进程必须无状态且 <a href="http://en.wikipedia.org/wiki/Shared_nothing_architecture">无共享</a> 。</strong> 任何需要持久化的数据都要存储在 <a href="#backing-services">后端服务</a> 内，比如数据库。</p>
+
+<p>内存区域或磁盘空间可以作为进程在做某种事务型操作时的缓存，例如下载一个很大的文件，对其操作并将结果写入数据库的过程。12-Factor 应用根本不用考虑这些缓存的内容是不是可以保留给之后的请求来使用，这是因为应用启动了多种类型的进程，将来的请求多半会由其他进程来服务。即使在只有一个进程的情形下，先前保存的数据（内存或文件系统中）也会因为重启（如代码部署、配置更改、或运行环境将进程调度至另一个物理区域执行）而丢失。</p>
+
+<p>源文件打包工具（<a href="http://documentcloud.github.com/jammit/">Jammit</a>, <a href="http://code.google.com/p/django-assetpackager/">django-assetpackager</a>) 使用文件系统来缓存编译过的源文件。12-Factor 应用更倾向于在 <a href="#build-release-run">构建步骤</a> 做此动作——正如 <a href="http://ryanbigg.com/guides/asset_pipeline.html">Rails资源管道</a>，而不是在运行阶段。</p>
+
+<p>一些互联网系统依赖于“<a href="http://en.wikipedia.org/wiki/Load_balancing_%28computing%29#Persistence">粘性 session </a>”，这是指将用户 session 中的数据缓存至某进程的内存中，并将同一用户的后续请求路由到同一个进程。粘性 session 是 12-Factor 极力反对的。Session 中的数据应该保存在诸如 <a href="http://memcached.org/">Memcached</a> 或 <a href="http://redis.io/">Redis</a> 这样的带有过期时间的缓存中。</p>
+
+<h2>VII. 端口绑定</h2>
+
+<p><strong><em>通过端口绑定(<em>Port binding</em>)来提供服务</em></strong></p>
+
+<p>互联网应用有时会运行于服务器的容器之中。例如 PHP 经常作为 <a href="http://httpd.apache.org/">Apache HTTPD</a> 的一个模块来运行，正如 Java 运行于 <a href="http://tomcat.apache.org/">Tomcat</a>。</p>
+
+<p><strong>12-Factor 应用完全自我加载</strong>而不依赖于任何网络服务器就可以创建一个面向网络的服务。互联网应用<strong>通过端口绑定来提供服务</strong>，并监听发送至该端口的请求。</p>
+
+<p>本地环境中，开发人员通过类似 <code>http://localhost:5000/</code> 的地址来访问服务。在线上环境中，请求统一发送至公共域名而后路由至绑定了端口的网络进程。</p>
+
+<p>通常的实现思路是，将网络服务器类库通过 <a href="#dependencies">依赖声明</a> 载入应用。例如，Python 的 <a href="http://www.tornadoweb.org/">Tornado</a>、Ruby 的<a href="http://code.macournoyer.com/thin/">Thin</a>、Java 以及其他基于 JVM 语言的 <a href="http://jetty.codehaus.org/jetty/">Jetty</a>。完全由<em>用户端</em>，确切的说应该是应用的代码，发起请求。和运行环境约定好绑定的端口即可处理这些请求。</p>
+
+<p>HTTP 并不是唯一一个可以由端口绑定提供的服务。其实几乎所有服务器软件都可以通过进程绑定端口来等待请求。例如，使用 <a href="http://xmpp.org/">XMPP</a> 的 <a href="http://www.ejabberd.im/">ejabberd</a>，以及使用 <a href="http://redis.io/topics/protocol">Redis协议</a> 的 <a href="http://redis.io/">Redis</a>。</p>
+
+<p>还要指出的是，端口绑定这种方式也意味着一个应用可以成为另外一个应用的 <a href="#backing-services">后端服务</a>，调用方将服务方提供的相应 URL 当作资源存入 <a href="#config">配置</a> 以备将来调用。</p>
+
+<h2>VIII. 并发</h2>
+
+<p><strong><em>通过进程模型进行扩展</em></strong></p>
+
+<p>任何计算机程序，一旦启动，就会生成一个或多个进程。互联网应用采用多种进程运行方式。例如，PHP 进程作为 Apache 的子进程存在，随请求按需启动。Java 进程则采取了相反的方式，在程序启动之初 JVM 就提供了一个超级进程储备了大量的系统资源（CPU 和内存），并通过多线程实现内部的并发管理。上述2个例子中，进程是开发人员可以操作的最小单位。</p>
+
+<p><img src="https://github.com/anjuke/12factor/raw/zh_CN/public/images/process-types.png" alt="扩展表现为运行中的进程，工作多样性表现为进程类型。" /></p>
+
+<p><strong>在 12-Factor 应用中，进程是一等公民。</strong> 12-Factor 应用的进程主要借鉴于<a href="http://adam.heroku.com/past/2011/5/9/applying_the_unix_process_model_to_web_apps/"> Unix 守护进程模型</a>。开发人员可以运用这个模型去设计应用架构，将不同的工作分配给不同的<em>进程类型</em>。例如，HTTP 请求可以交给 web 进程来处理，而常驻的后台工作则交由 worker 进程负责。</p>
+
+<p>这并不表示应用不能通过单个进程来处理并发，如使用 VM 运行时的线程机制，或是由 <a href="http://rubyeventmachine.com/">EventMachine</a>、<a href="http://twistedmatrix.com/trac/">Twisted</a>、<a href="http://nodejs.org/">Node.js</a> 等工具提供的异步/事件驱动模型。但是，单个 VM 的垂直扩展能力是有限的，所以应用必须能够扩展到多台物理机器上运行。</p>
+
+<p>在需要对系统进行扩展时，进程模型的作用会大放异彩。<a href="#processes">12-Factor 应用的进程所具备的无共享，水平分区的特性</a>意味着增加并发处理能力会是一项简单而稳妥的操作。这些进程的类型以及每个类型中进程的数量就被称作 <em>进程构成</em>。</p>
+
+<p>12-Factor 应用<a href="http://dustin.github.com/2010/02/28/running-processes.html">不需要作为守护进程启动</a>或是写入 PID 文件。相反的，应该借助操作系统的进程管理器(例如 <a href="http://upstart.ubuntu.com/">Upstart</a>，分布式的进程管理云平台，或在开发环境中使用类似 <a href="http://blog.daviddollar.org/2011/05/06/introducing-foreman.html">Foreman</a> 的工具)，来管理 <a href="#logs">输出流</a>，应对进程崩溃，以及处理用户触发的重启和关闭操作。</p>
+
+<h2>IX. 易处理</h2>
+
+<p><strong><em>快速启动和优雅终止可最大化健壮性</em></strong></p>
+
+<p><strong>12-Factor 应用的 <a href="#processes">进程</a> 是<em>可支配</em>的，意思是说它们可以瞬间开启或停止。</strong> 这有利于快速、弹性的伸缩应用，迅速部署变化的 <a href="#codebase">代码</a> 或 <a href="#config">配置</a> ，稳健的部署应用。</p>
+
+<p>进程应当追求<strong>最小启动时间</strong>。理想状态下，进程从敲下命令到真正启动并等待请求的时间应该只需很短的时间。更少的启动时间提供了更敏捷的 <a href="#build-release-run">发布</a> 以及扩展过程，此外还增加了健壮性，因为进程管理器可以在授权情形下容易的将进程搬到新的物理机器上。</p>
+
+<p>进程<strong>一旦接收 <a href="http://en.wikipedia.org/wiki/SIGTERM">终止信号(<code>SIGTERM</code>)</a> 就会优雅的终止</strong>。就网络进程而言，优雅终止是指停止监听服务的端口，即拒绝所有新的请求，并继续执行当前已接收的请求，然后退出。此类型的进程所隐含的要求是HTTP请求大多都很短(不会超过几秒钟)，而在长时间轮询中，客户端在丢失连接后应该马上尝试重连。</p>
+
+<p>对于worker进程来说，优雅终止是指将当前任务退回队列。例如，<a href="http://www.rabbitmq.com/">RabbitMQ</a> 中，worker 可以发送一个 <a href="http://www.rabbitmq.com/amqp-0-9-1-quickref.html#basic.nack"><code>NACK</code></a> 信号。<a href="http://kr.github.com/beanstalkd/">Beanstalkd</a> 中，任务终止并退回队列会在 worker 断开时自动触发。有锁机制的系统诸如 <a href="https://github.com/collectiveidea/delayed_job#readme">Delayed Job</a> 则需要确定释放了系统资源。此类型的进程所隐含的要求是，任务都应该 <a href="http://en.wikipedia.org/wiki/Reentrant_%28subroutine%29">可重复执行</a>，这主要由将结果包装进事务或是使重复操作 <a href="http://en.wikipedia.org/wiki/Idempotence">幂等</a> 来实现。</p>
+
+<p>进程还应当<strong>在面对突然死亡时保持健壮</strong>，例如底层硬件故障。虽然这种情况比起优雅终止来说少之又少，但终究有可能发生。一种推荐的方式是使用一个健壮的后端队列，例如 <a href="http://kr.github.com/beanstalkd/">Beanstalkd</a>，它可以在客户端断开或超时后自动退回任务。无论如何，12-Factor 应用都应该可以设计能够应对意外的、不优雅的终结。<a href="http://lwn.net/Articles/191059/">Crash-only design</a> 将这种概念转化为 <a href="http://couchdb.apache.org/docs/overview.html">合乎逻辑的理论</a>。</p>
+
+<h2>X. 开发环境与线上环境等价</h2>
+
+<p><strong><em>尽可能的保持开发，预发布，线上环境相同</em></strong></p>
+
+<p>从以往经验来看，开发环境（即开发人员的本地<a href="#codebase">部署</a>）和线上环境（外部用户访问的真实部署）之间存在着很多差异。这些差异表现在以下三个方面：</p>
+
+<ul>
+<li><strong>时间差异：</strong> 开发人员正在编写的代码可能需要几天，几周，甚至几个月才会上线。</li>
+<li><strong>人员差异：</strong> 开发人员编写代码，运维人员部署代码。</li>
+<li><strong>工具差异：</strong> 开发人员或许使用Nginx，SQLite，OS X，而线上环境使用Apache，MySQL以及Linux。</li>
+</ul>
+
+
+<p><strong>12-Factor 应用想要做到 <a href="http://www.avc.com/a_vc/2011/02/continuous-deployment.html">持续部署</a> 就必须缩小本地与线上差异。</strong> 再回头看上面所描述的三个差异:</p>
+
+<ul>
+<li>缩小时间差异：开发人员可以几小时，甚至几分钟就部署代码。</li>
+<li>缩小人员差异：开发人员不只要编写代码，更应该密切参与部署过程以及代码在线上的表现。</li>
+<li>缩小工具差异：尽量保证开发环境以及线上环境的一致性。</li>
+</ul>
+
+
+<p>将上述总结变为一个表格如下：</p>
+
+<table>
+  <tr>
+    <th></th>
+    <th>传统应用</th>
+    <th>12-factor应用</th>
+  </tr>
+  <tr>
+    <th>每次部署间隔</th>
+    <td>数周</td>
+    <td>几小时</td>
+  </tr>
+  <tr>
+    <th>开发人员 vs 运维人员</th>
+    <td>不同的人</td>
+    <td>相同的人</td>
+  </tr>
+  <tr>
+    <th>开发环境 vs 线上环境</th>
+    <td>不同</td>
+    <td>尽量接近</td>
+  </tr>
+</table>
+
+
+<p><a href="#backing-services">后端服务</a> 是保持开发与线上等价的重要部分，例如数据库，队列系统，以及缓存。许多语言都提供了简化获取后端服务的类库，例如不同类型服务的<em>适配器</em>。下列表格提供了一些例子。</p>
+
+<table>
+  <tr>
+    <th>类型</th>
+    <th>语言</th>
+    <th>类库</th>
+    <th>适配器</th>
+  </tr>
+  <tr>
+    <td>数据库</td>
+    <td>Ruby/Rails</td>
+    <td>ActiveRecord</td>
+    <td>MySQL, PostgreSQL, SQLite</td>
+  </tr>
+  <tr>
+    <td>队列</td>
+    <td>Python/Django</td>
+    <td>Celery</td>
+    <td>RabbitMQ, Beanstalkd, Redis</td>
+  </tr>
+  <tr>
+    <td>缓存</td>
+    <td>Ruby/Rails</td>
+    <td>ActiveSupport::Cache</td>
+    <td>Memory, filesystem, Memcached</td>
+  </tr>
+</table>
+
+
+<p>开发人员有时会觉得在本地环境中使用轻量的后端服务具有很强的吸引力，而那些更重量级的健壮的后端服务应该使用在生产环境。例如，本地使用 SQLite 线上使用 PostgreSQL；又如本地缓存在进程内存中而线上存入 Memcached。</p>
+
+<p><strong>12-Factor 应用的开发人员应该反对在不同环境间使用不同的后端服务</strong>，即使适配器已经可以几乎消除使用上的差异。这是因为，不同的后端服务意味着会突然出现的不兼容，从而导致测试、预发布都正常的代码在线上出现问题。这些错误会给持续部署带来阻力。从应用程序的生命周期来看，消除这种阻力需要花费很大的代价。</p>
+
+<p>与此同时，轻量的本地服务也不像以前那样引人注目。借助于 <a href="http://mxcl.github.com/homebrew/">Homebrew</a>，<a href="https://help.ubuntu.com/community/AptGet/Howto">apt-get</a>等现代的打包系统，诸如 Memcached、PostgreSQL、RabbitMQ 等后端服务的安装与运行也并不复杂。此外，使用类似 <a href="http://www.opscode.com/chef/">Chef</a> 和 <a href="http://docs.puppetlabs.com/">Puppet</a> 的声明式配置工具，结合像 <a href="http://vagrantup.com/">Vagrant</a>这样轻量的虚拟环境就可以使得开发人员的本地环境与线上环境无限接近。与同步环境和持续部署所带来的益处相比，安装这些系统显然是值得的。</p>
+
+<p>不同后端服务的适配器仍然是有用的，因为它们可以使移植后端服务变得简单。但应用的所有部署，这其中包括开发、预发布以及线上环境，都应该使用同一个后端服务的相同版本。</p>
+
+<h2>XI. 日志</h2>
+
+<p><strong><em>把日志当作事件流</em></strong></p>
+
+<p><em>日志</em>使得应用程序运行的动作变得透明。在基于服务器的环境中，日志通常被写在硬盘的一个文件里，但这只是一种输出格式。</p>
+
+<p>日志应该是 <a href="http://adam.heroku.com/past/2011/4/1/logs_are_streams_not_files/">事件流</a> 的汇总，将所有运行中进程和后端服务的输出流按照时间顺序收集起来。日志的原始形式通常是文本文件，一行一个事件（程序异常产生的跟踪信息会跨越多行）。日志没有确定开始和结束，但随着应用在运行会持续的增加。</p>
+
+<p><strong>12-Factor 应用本身从不考虑存储自己的输出流。</strong> 不应该试图去写或者管理日志文件。相反，每一个运行的进程都会直接的标准输出（<code>stdout</code>）事件流。开发环境中，开发人员可以通过这些数据流，实时在终端看到应用的活动。</p>
+
+<p>在预发布或线上部署中，每个进程的输出流由运行环境截获，并将其他输出流整理在一起，然后一并发送给一个或多个最终的处理程序，用于查看或是长期存档。这些存档路径对于应用来说不可见也不可配置，而是完全交给程序的运行环境管理。类似 <a href="https://github.com/heroku/logplex">Logplex</a> 和 <a href="https://github.com/fluent/fluentd">Fluent</a> 的开源工具可以达到这个目的。</p>
+
+<p>这些事件流可以输出至文件，或者在终端实时观察。最重要的，输出流可以发送到 <a href="http://www.splunk.com/">Splunk</a> 这样的日志索引及分析系统，或 <a href="http://hive.apache.org/">Hadoop/Hive</a> 这样的通用数据存储系统。这些系统为查看应用的历史活动提供了强大而灵活的功能，包括：</p>
+
+<ul>
+<li>找出过去一段时间特殊的事件。</li>
+<li>图形化一个大规模的趋势，比如每分钟的请求量。</li>
+<li>根据用户定义的条件实时触发警报，比如每分钟的报错超过某个警戒线。</li>
+</ul>
+
+
+<h2>XII. 管理进程</h2>
+
+<p><strong><em>后台管理任务当作一次性进程运行</em></strong></p>
+
+<p><a href="#concurrency">进程构成</a> 是指用来处理应用的常规业务(比如处理web请求)的一组进程。与此不同，开发人员经常希望执行一些管理或维护应用的一次性任务，例如：</p>
+
+<ul>
+<li>运行数据移植（Django 中的 <code>manage.py syncdb</code>, Rails 中的 <code>rake db:migrate</code>）。</li>
+<li>运行一个控制台（也被称为 <a href="http://en.wikipedia.org/wiki/Read-eval-print_loop">REPL</a> shell），来执行一些代码或是针对线上数据库做一些检查。大多数语言都通过解释器提供了一个 REPL 工具（<code>python</code> 或 <code>erl</code>） ，或是其他命令（Ruby 使用 <code>irb</code>, Rails 使用 <code>rails console</code>）。</li>
+<li>运行一些提交到代码仓库的一次性脚本。</li>
+</ul>
+
+
+<p>一次性管理进程应该和正常的 <a href="#processes">常驻进程</a> 使用同样的环境。这些管理进程和任何其他的进程一样使用相同的 <a href="#codebase">代码</a> 和 <a href="#config">配置</a>，基于某个 <a href="#build-release-run">发布版本</a> 运行。后台管理代码应该随其他应用程序代码一起发布，从而避免同步问题。</p>
+
+<p>所有进程类型应该使用同样的 <a href="#dependencies">依赖隔离</a> 技术。例如，如果 Ruby 的 web 进程使用了命令 <code>bundle exec thin start</code>，那么数据库移植应使用 <code>bundle exec rake db:migrate</code>。同样的，如果一个 Python 程序使用了 Virtualenv，则需要在运行 Tornado Web 服务器和任何<code>manage.py</code> 管理进程时引入 <code>bin/python</code> 。</p>
+
+<p>12-Factor 尤其青睐那些提供了 REPL shell 的语言，因为那会让运行一次性脚本变得简单。在本地部署中，开发人员直接在命令行使用 shell 命令调用一次性管理进程。在线上部署中，开发人员依旧可以使用ssh或是运行环境提供的其他机制来运行这样的进程。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[安居客导师指南]]></title>
+    <link href="http://liangshan.me/blog/2014/05/22/how-to-teach-people-at-anjuke/"/>
+    <updated>2014-05-22T11:23:34+08:00</updated>
+    <id>http://liangshan.me/blog/2014/05/22/how-to-teach-people-at-anjuke</id>
+    <content type="html"><![CDATA[<p>安居客近年来非常重视校招，尤其是研发方向。实际操作下来，感觉校招还是不错的选择，这次我主要站在公司的角度来说。</p>
+
+<!-- more -->
+
+
+<p>公司应该是看中应届毕业生便宜、够用、潜力。这里要说一个现象，大多数很优秀的应届生都选择去了大公司，类似 BAT，薪水高、品牌响这倒也无可厚非。所以这里讨论的是我接触到的学生们，并非是说公司的招到的学生不好，只是学生之间是有差距的这也是事实。</p>
+
+<p>当然招校招生也存在几个风险，其中最大的风险无非就是学生也只是把公司当跳板。对于这个我的观点比较简单，说明公司的吸引力不够，这个不怪学生。
+对此安居客的对策是为学生安排专人辅导，我们内部称为「导师」，或者是 buddy。这里导师的作用除了辅导之外，其实很大程度上是为了留住学生，所以导师的选择和导师的付出其实和最后学生的发展有着比较密切的关系。</p>
+
+<p>我有幸参与了安居客的几届学生培养，作为导师代表给所有导师做了一次分享。这里贴上 slides:</p>
+
+<script async class="speakerdeck-embed" data-id="1b324900a388013120061af8c79ec55f" data-ratio="1.33333333333333" src="//speakerdeck.com/assets/embed.js"></script>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[使用 Virtualenv 绿色安装 Ansible]]></title>
+    <link href="http://liangshan.me/blog/2014/05/20/using-ansible-with-virtualenv-without-install/"/>
+    <updated>2014-05-20T14:45:59+08:00</updated>
+    <id>http://liangshan.me/blog/2014/05/20/using-ansible-with-virtualenv-without-install</id>
+    <content type="html"><![CDATA[<p><a href="http://www.ansible.com/home">Ansible</a> 是一个自动化配置管理工具 (Automate configure management)。用 python 编写，所以安装方式一般有以下几种：</p>
+
+<p><strong> <code>pip</code> 安装 </strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ pip install ansible</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong> MacOS 用户可以选择使用 <code>homebrew</code> 安装 </strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew install ansible</span></code></pre></td></tr></table></div></figure>
+
+
+<p>但这两种方法都不可避免将「污染」系统的 python 环境。所以本文主要介绍如何绿色安装 Ansible。</p>
+
+<!-- more -->
+
+
+<h3>安装 Virtualenv</h3>
+
+<p>不污染系统的关键在于虚拟化 python 的环境，所以需要准备 virtualenv。</p>
+
+<p>这里偷懒选择使用 pip 安装，如果连 virtualenv 也不想装在系统级别也是可以的，就不在这里介绍了。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ pip install virtualenv</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>下载 ansible</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git clone git@github.com:ansible/ansible.git
+</span><span class='line'>$ cd ansible</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>安装</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ virtualenv .virtualenv
+</span><span class='line'>$ .virtualenv/bin/python setup.py develop</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>A little trick</h3>
+
+<p>这个时候使用 virtualenv 激活当前目录的 python 环境，其实 <code>bin/ansible</code> 就已经可以工作了。</p>
+
+<p>但我们还希望将 ansible 命令加在系统的 PATH 里，这就需要一些小技巧。简单来说需要自己准备一个脚本，脚本的内容如下:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>touch ~/bin/_ansible_wrapper
+</span><span class='line'><span class="nv">$ </span>vim ~/bin/_ansible_wrapper
+</span><span class='line'>
+</span><span class='line'><span class="c">#!/bin/bash</span>
+</span><span class='line'><span class="nb">source</span> <span class="s2">&quot;$HOME/apps/ansible/hacking/env-setup&quot;</span> -q
+</span><span class='line'><span class="k">if</span> <span class="o">[</span> -f <span class="s2">&quot;$ANSIBLE_HOME/.virtualenv/bin/activate&quot;</span> <span class="o">]</span> <span class="p">;</span> <span class="k">then</span>
+</span><span class='line'>    <span class="nb">source</span> <span class="s2">&quot;$ANSIBLE_HOME/.virtualenv/bin/activate&quot;</span>
+</span><span class='line'><span class="k">fi</span>
+</span><span class='line'><span class="nv">PYENV_VERSION</span><span class="o">=</span>2.7.6 <span class="nb">exec</span> <span class="s2">&quot;$ANSIBLE_HOME/bin/${0##/*/}&quot;</span> <span class="nv">$@</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>$HOME/apps/ansible/hacking/env-setup</code> 是 ansible 为 hacker 准备的一个脚本，设置一些环境变量。其中 <code>$HOME/apps/ansible</code> 是 ansible 的根目录。</p>
+
+<p><code>${0##/*/}</code> 比较有趣，作用是正则匹配 <code>/*/</code> 然后把匹配到的部分从第 0 个参数（即命令本身）中删除。关于 bash 参数，更详细可以看[1]。</p>
+
+<p><code>$@</code> 则比较常见，是 bash 拿到的除命令名之外的所有参数。</p>
+
+<p>其实这个脚本就是一个 wrapper，作用如下：</p>
+
+<ol>
+<li>设置相关环境变量</li>
+<li>激活 ansible 下的 python 环境</li>
+<li>将收到的所有命令都转发给 <code>$ANSIBLE_HOME/bin</code> 下的相同命令执行</li>
+</ol>
+
+
+<p>假设 <code>$HOME/bin</code> 在 PATH 中，设置几个软链就全部搞定了。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>ln -s <span class="nv">$HOME</span>/bin/_ansible_wrapper <span class="nv">$HOME</span>/bin/ansible
+</span><span class='line'><span class="nv">$ </span>ln -s <span class="nv">$HOME</span>/bin/_ansible_wrapper <span class="nv">$HOME</span>/bin/ansible-playbook
+</span><span class='line'><span class="nv">$ </span>ln -s <span class="nv">$HOME</span>/bin/_ansible_wrapper <span class="nv">$HOME</span>/bin/ansible-galaxy
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>参考资料</h3>
+
+<ol>
+<li><a href="http://www.ibm.com/developerworks/opensource/library/l-bash-parameters/index.html">Linux tip: Bash parameters and parameter expansions</a></li>
+</ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[使用 Octopress 在 GitHub Pages 上快速搭建自定义域名Blog]]></title>
+    <link href="http://liangshan.me/blog/2014/05/12/build-custom-domain-blog-with-octopress-and-github-pages/"/>
+    <updated>2014-05-12T14:17:19+08:00</updated>
+    <id>http://liangshan.me/blog/2014/05/12/build-custom-domain-blog-with-octopress-and-github-pages</id>
+    <content type="html"><![CDATA[<p>一直没有搭博客，因为一直感觉自己不是一个标准的技术人，主要是不够狂热。但受身边人熏陶，偶尔还是想写点东西。
+尤其是看中 <code>liangshan.me</code> 这个域名，买下之后觉得闲着也是浪费，所以有了利用 GitHub Pages 来搭一下的想法。</p>
+
+<h2>预备</h2>
+
+<ul>
+<li>你需要具备一些 <code>Git</code> 的常识</li>
+<li>你需要一张 Visa 卡或是支付宝账号</li>
+<li>如果有 Ruby 经验，将会帮你更好的理解这个系统</li>
+</ul>
+
+
+<h2>Quick Start</h2>
+
+<p>整体来说，整个部署过程分3大步</p>
+
+<ol>
+<li>购买域名</li>
+<li>配置解析</li>
+<li>部署至 GitHub Pages</li>
+<li>评论插件</li>
+</ol>
+
+
+<!-- more -->
+
+
+<h3>购买域名</h3>
+
+<p>这里选用 <a href="http://www.godaddy.com">Godaddy</a>， 理由很简单，就是他支持支付宝。购买和支付流程很顺畅，应该不会有什么障碍。</p>
+
+<h3>配置解析</h3>
+
+<p>为了防止 Godaddy 自己的 DNS 解析被墙[1]，所以选用了国内的 <a href="https://www.dnspod.cn">DNSPod</a> 来解析域名，免费服务够用，还有手机二次验证。</p>
+
+<ol>
+<li>在 Godaddy 上设置 NameServer 到 DNSPod 提供的地址</li>
+<li>如果是顶级域名，需要在 DNSPod 上设置一个 A 记录到 Github Pages 的 IP 地址，这个地址可能会变化，可以查看<a href="https://help.github.com/articles/my-custom-domain-isn-t-working">这里</a>获取最新的地址</li>
+<li>如果是子域名，可以设置 CNAME</li>
+</ol>
+
+
+<p>关于 DNS 的设置，更详细的可以看 <a href="https://help.github.com/articles/setting-up-a-custom-domain-with-github-pages#step-1-add-a-cname-file-to-your-repository">GitHub Pages 的说明文档</a></p>
+
+<p><em>更新: DNSPod 不支持 alias，所以无法享受 github 的 DNS 缓存</em></p>
+
+<h3>部署至 GitHub Pages</h3>
+
+<p>关于 GitHub Pages 的技术细节，看[2]可能会有收获，一句话来概括就是<strong>使用动态语言来编辑纯文本文件，生成静态 HTML 代码，然后部署在 GitHub 上。</strong></p>
+
+<p>这种方式很巧妙，我之前也一直在用<a href="https://github.com/liangshan/markdown2deckjs">类似的做法</a>管理我的 Slides。</p>
+
+<p>这里并没有直接使用 Jekyll，而是使用基于他的 <a href="http://octopress.org/docs/setup/">Octopress</a>。遵循页面的 <code>Next Steps</code> 应该可以很快搭好环境。</p>
+
+<p>并且 Octopress 做好了和 GitHub Pages 对接的<a href="http://octopress.org/docs/deploying/github/">脚手架</a>。</p>
+
+<p>这里主要记录一些踩到的坑：</p>
+
+<ol>
+<li>使用 Homebrew 安装 rbenv, 再用 rbenv 安装 ruby, 提醒最新的 MacOS 安装的 Xcode 并没有 GCC，需要手动安装 GCC</li>
+<li><code>~/.rbenv/shims</code> 目录需要添加至 PATH，Homebrew 安装过程中好像并没有做这一步，并且 Octopress 关于这部分的文档可能过时了，文档中使用的 <code>~/.rbenv/bin</code></li>
+</ol>
+
+
+<h3>评论插件</h3>
+
+<p>由于是纯静态页面，所以要增加评论的动态功能 需要借助一些第三方前端工具。比如 <a href="http://disqus.com">Disqus</a>，配置非常简单 更多参考[3]。</p>
+
+<h2>参考资料</h2>
+
+<ol>
+<li><a href="http://beiyuu.com/github-pages/">使用Github Pages建独立博客</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2012/08/blogging_with_jekyll.html">搭建一个免费的，无限流量的Blog&mdash;-github Pages和Jekyll入门</a></li>
+<li><a href="http://seagg.github.io/blog/2012/09/03/config-comment-on-octopress/">给octopress添加Disqus评论功能</a></li>
+</ol>
+
+]]></content>
+  </entry>
+  
+</feed>

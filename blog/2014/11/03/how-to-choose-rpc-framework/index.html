@@ -1,0 +1,329 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>How to Choose RPC Framework - Liangshan</title>
+  <meta name="author" content="Liangshan">
+
+  
+  <meta name="description" content="Why we need RPC, and discuss how to choose by comparing Apache Thrift and ZeroRPC.">
+  <meta name="keywords" content="rpc, thrift, zerorpc">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://liangshan.me/blog/2014/11/03/how-to-choose-rpc-framework">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Liangshan" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script> 
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='//fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-50920618-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body    class="collapse-sidebar sidebar-footer" >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Liangshan</a></h1>
+  
+    <h2>Inner peace.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:liangshan.me" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a target="_blank" href="/about.html">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">How to Choose RPC Framework</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-11-03T15:16:21+08:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>3</span><span class='date-suffix'>rd</span>, <span class='date-year'>2014</span></span> <span class='time'>3:16 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>RPC 是 remote procedure call 的缩写，意指调用远程进程的方法。这里的远程需要广义的理解，有时为了协议的统一即使调用本地进程也叫做 RPC，所以 RPC 可简单理解为进程间通信。</p>
+
+<p>在选择 RPC 框架之前，要搞清楚为什么需要 RPC？ RPC 主要是为了解决服务化架构中客户端与服务端以及服务之间通讯的问题。在最早接触 RPC 的时候，我一直有一个疑问： RESTful API 不就搞定了么？为什么需要 RPC？直到深入实践了 RPC，我自己总结了 RPC 与 RESTful API 最大的几个不同。</p>
+
+<!-- more -->
+
+
+<p>首先，RESTful API 经常纠结的问题就是，到底在什么样的资源粒度上开放接口？到底需要哪些接口？而在 RPC 中这个问题被很大程度上淡化了，因为 RPC 使用起来几乎和本地方法没有太多区别。</p>
+
+<p>其次，RESTful API 在应用层使用 HTTP 协议，这使得传输数据受到限制，实践中早些年流行过 xml，现在 JSON 应该是标准做法了。但这些在大量读写时，都会消耗较大的流量，构造这些结构必然消耗额外的带宽。而 RPC 的协议都是由各框架自己定义的，目前还没有形成标准，以 Apache Thrift （以下简称 Thrift）为例，使用二进制的编码大大降低了数据大小。</p>
+
+<p>最后，也是我认为最重要的区别， RPC 可以实现异步请求，而受限于 HTTP 协议的 RESTful API 则无法实现这个功能。而异步请求让整个请求过程变得非阻塞，比如在一个 PHP 进程中将互不依赖的几个数据请求变成异步执行，这样执行时间取决于最慢的请求而不是它们相加。</p>
+
+<p>基于以上 3 点，我们非常确定需要选择一个 RPC 框架，比较流行的有 Thrift, Google Protocol Buffer, Avro。我将它们归为一类，并以 Thrift 为代表。但我倾向于另外一个选择：基于 ZeroMQ 和 Msgpack 的 ZeroRPC。下面以 Thrift 和 ZeroRPC 的对比来解释我的选择，这些对比并不涉及易用性或者安全性，仅仅从核心的信息传递角度来比较。</p>
+
+<p>在 RPC 框架中，最重要的 3 个核心组件： transport，protocol，encoding。</p>
+
+<p>Transport，即传输方式。Thrift 使用 socket，而 ZeroRPC 使用 ZeroMQ —— 一个丰富扩展过的 socket 类库。在传输方式的灵活性上，ZeroRPC 明显胜过一筹。</p>
+
+<p>Protocol，即通讯协议。Thrift 使用自己定义的 Tprotocol，协议并不复杂，以 byte 长度来规定消息格式。比如前 4 个 byte 来表示状态码。而基于 ZeroMQ 的扩展， ZeroRPC 可以使用消息帧（Frames）来构建更加灵活的通讯协议。</p>
+
+<p>Encoding，即序列化或简单理解为数据压缩。Thrift 的文档中并没有透露过多关于序列化算法的细节，而 ZeroRPC 使用 Msgpack 作为序列化/反序列化的工具。 Msgpack 本身是一个优秀的开源项目，功能更加强大。</p>
+
+<p>除了以上 3 个维度，我认为 ZeroRPC 还有另外一个明显的优势，ZeroRPC 是由 2 款开源软件组合而成，这意味着可以灵活的替换为其他类似的组件。比如 nanomsg 来替代 ZeroMQ，只要 SDK 封装的足够抽象，可以无缝的切换类库。</p>
+
+<p>说了这么多，其实 ZeroRPC 最大的优势就是 ZeroMQ，给 socket 加上了更加丰富的可能性。但 ZeroRPC 没有提供 PHP 的客户端，我可能需要根据它的协议来自己构建一个。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Liangshan</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2014-11-03T15:16:21+08:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>3</span><span class='date-suffix'>rd</span>, <span class='date-year'>2014</span></span> <span class='time'>3:16 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/rpc/'>rpc</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <div class="jiathis_style_24x24" style="width: 100px; text-indent: 0px; margin: 0px; padding: 0px; border-style: none; float: none; line-height: normal; font-size: 1px; vertical-align: baseline; display: inline-block;  background: transparent;">
+    <a class="jiathis_button_weixin"></a>
+    <a class="jiathis_button_tsina"></a>
+  </div>
+  
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://liangshan.me/blog/2014/11/03/how-to-choose-rpc-framework/" data-via="LisumL" data-counturl="http://liangshan.me/blog/2014/11/03/how-to-choose-rpc-framework/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/09/10/what-is-product-manager-exactly/" title="Previous Post: 到底什么是产品经理">&laquo; 到底什么是产品经理</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/12/24/choosing-is-an-ability/" title="Next Post: 选择是一种能力">选择是一种能力 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/06/21/dive-into-soa-architecture/">深入实践 SOA 架构</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/06/14/ji-zhi-de-ping-heng/">极致的平衡</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/12/24/choosing-is-an-ability/">选择是一种能力</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/03/how-to-choose-rpc-framework/">How to Choose RPC Framework</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/10/what-is-product-manager-exactly/">到底什么是产品经理</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/liangshan">@liangshan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'liangshan',
+            count: 7,
+            skip_forks: false,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+<section>
+  <h1>Categories</h1>
+    <ul id="category-list"><li><a href='/blog/categories/anjuke'>anjuke (2)</a></li><li><a href='/blog/categories/ansible'>ansible (2)</a></li><li><a href='/blog/categories/best-practice'>best practice (1)</a></li><li><a href='/blog/categories/devops'>devops (1)</a></li><li><a href='/blog/categories/linux'>linux (2)</a></li><li><a href='/blog/categories/meta'>meta (2)</a></li><li><a href='/blog/categories/recommendation'>recommendation (1)</a></li><li><a href='/blog/categories/rpc'>rpc (2)</a></li><li><a href='/blog/categories/vagrant'>vagrant (1)</a></li><li><a href='/blog/categories/virtualenv'>virtualenv (1)</a></li></ul>
+</section>
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/112113128668997126531?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Liangshan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'liangshan';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://liangshan.me/blog/2014/11/03/how-to-choose-rpc-framework/';
+        var disqus_url = 'http://liangshan.me/blog/2014/11/03/how-to-choose-rpc-framework/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+<div style="display:none">
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1376902770881935" charset="utf-8"></script>
+</div>
+
+
+
+
+
+</body>
+</html>

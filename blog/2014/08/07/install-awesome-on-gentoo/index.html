@@ -1,0 +1,343 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>在 Gentoo 上安装 Awesome - Liangshan</title>
+  <meta name="author" content="Liangshan">
+
+  
+  <meta name="description" content="使用 SystemRescueCD 快速的安装 gentoo，然后安装 awesome 桌面环境。">
+  <meta name="keywords" content="linux, gentoo, x11, awesome, SystemRescueCD">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://liangshan.me/blog/2014/08/07/install-awesome-on-gentoo">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Liangshan" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script> 
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='//fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-50920618-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body    class="collapse-sidebar sidebar-footer" >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Liangshan</a></h1>
+  
+    <h2>Inner peace.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:liangshan.me" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a target="_blank" href="/about.html">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">在 Gentoo 上安装 Awesome</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-08-07T14:06:30+08:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>2:06 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>都装 gentoo 了，趁热装桌面环境吧。linux 的视窗系统称为 X Window System。
+在开源世界里，通常是协议先行，各自实现。同样 X 只是协议，在各种实现中以 X.Org 最受欢迎，当时使用的协议为 X11，所以后来 X 也被人们称为 X11。</p>
+
+<!-- more -->
+
+
+<p>X 分为 server 和 client, 但这里的 server 和 client 和我直觉上的理解有点相反。比如接收用户行为的反而是 server。另外一大特色就是 client 之间是不知道对方存在的，比如桌面上运行了 terminal 和 chrome，它们之间的位置关系互相是不清楚的。所以需要一个软件来管理 client 的位置、大小、外观，同时提供类似于桌面的环境，这个软件就叫 X window manager，我们这里选择的是 awesome。X 具体的协议要去翻协议或者看 wiki 可以了解大概。</p>
+
+<p>安装也分为 server 和 window manager 来进行。gentoo 安装每个软件基本上都会有一个 wiki 页面，照着手册来就可以了，所以建议照着 gentoo 的 wiki 来安装软件，而不是软件本身的手册。下面只讲手册上没说的内容，也就是我踩到的坑。</p>
+
+<p>先讲 X server，第一次使用的驱动是开源版本 nouveau，也是手册上推荐的版本。但 awesome 装好之后无法启动。重新改了 make.conf 把显卡模块改为 nvidia 重装 server 就成功了。不知道是某款型号的个体问题还是普遍问题，仅供参考吧。</p>
+
+<p>再说 awesome，首先要装较新版本的 awesome，这时候安装使用下面的命令：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ ACCEPT_KEYWORDS</span><span class="o">=</span><span class="s2">&quot;~*&quot;</span> emerge x11-wm/awesome
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>装完之后运行 <code>startx</code> 应该有一个朴素的桌面启动了，这时候我们要花很多时间来美化它。</p>
+
+<p>我是说在没有社区的情况下:D</p>
+
+<p>github 上搜索 awesome themes，结果一大把了，早有人帮大家归纳了很多漂亮的皮肤，即使没有一个喜欢的，参考配置文件总是不错的。</p>
+
+<p>我使用的叫做 <a href="https://github.com/copycat-killer/awesome-copycats">awesome-copycats</a>，除此之外还有中文字体，输入法，终端配置等等要折腾。我把用到的配置文件都放进 <a href="https://github.com/liangshan/liangshan.gentoo">github</a> 上，省的再次折腾。这里只是需要几个备注：</p>
+
+<ol>
+<li>这个皮肤的网络控件需要先安装 <code>iproute</code></li>
+<li>编译终端需要 <code>USE=xft</code> 才能使用 X Font Server 的字体</li>
+</ol>
+
+
+<p>最后安装一下最新版的 firefox（仍然使用 <code>ACCEPT_KEYWORDS="~*"</code> 确保新版），需要提到的是 perl 的 <code>XML-Parser</code> 模块过期了，可能要先升级一下，否则编译过程会报错。</p>
+
+<p>要注意整个过程都没有安装 DM(display manager)，还是手动的 <code>startx</code> 来启动，以后遇到问题再装吧。</p>
+
+<p>上个图吧（为什么有种女人写美容攻略的感觉？），其实我最早就是想弄个 awesome，没想到整了这么多。</p>
+
+<p><img src="/images/custom/awesome.png" /></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Liangshan</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2014-08-07T14:06:30+08:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>2:06 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/linux/'>linux</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <div class="jiathis_style_24x24" style="width: 100px; text-indent: 0px; margin: 0px; padding: 0px; border-style: none; float: none; line-height: normal; font-size: 1px; vertical-align: baseline; display: inline-block;  background: transparent;">
+    <a class="jiathis_button_weixin"></a>
+    <a class="jiathis_button_tsina"></a>
+  </div>
+  
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://liangshan.me/blog/2014/08/07/install-awesome-on-gentoo/" data-via="LisumL" data-counturl="http://liangshan.me/blog/2014/08/07/install-awesome-on-gentoo/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/08/06/install-gentoo-from-systemrescuecd/" title="Previous Post: 使用 SystemRescueCD 安装 gentoo">&laquo; 使用 SystemRescueCD 安装 gentoo</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/09/09/huan-ge-zi-shi-xie-bo-ke/" title="Next Post: 换个姿势写博客">换个姿势写博客 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/06/21/dive-into-soa-architecture/">深入实践 SOA 架构</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/06/14/ji-zhi-de-ping-heng/">极致的平衡</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/12/24/choosing-is-an-ability/">选择是一种能力</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/03/how-to-choose-rpc-framework/">How to Choose RPC Framework</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/10/what-is-product-manager-exactly/">到底什么是产品经理</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/liangshan">@liangshan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'liangshan',
+            count: 7,
+            skip_forks: false,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+<section>
+  <h1>Categories</h1>
+    <ul id="category-list"><li><a href='/blog/categories/anjuke'>anjuke (2)</a></li><li><a href='/blog/categories/ansible'>ansible (2)</a></li><li><a href='/blog/categories/best-practice'>best practice (1)</a></li><li><a href='/blog/categories/devops'>devops (1)</a></li><li><a href='/blog/categories/linux'>linux (2)</a></li><li><a href='/blog/categories/meta'>meta (2)</a></li><li><a href='/blog/categories/recommendation'>recommendation (1)</a></li><li><a href='/blog/categories/rpc'>rpc (2)</a></li><li><a href='/blog/categories/vagrant'>vagrant (1)</a></li><li><a href='/blog/categories/virtualenv'>virtualenv (1)</a></li></ul>
+</section>
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/112113128668997126531?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Liangshan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'liangshan';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://liangshan.me/blog/2014/08/07/install-awesome-on-gentoo/';
+        var disqus_url = 'http://liangshan.me/blog/2014/08/07/install-awesome-on-gentoo/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+<div style="display:none">
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1376902770881935" charset="utf-8"></script>
+</div>
+
+
+
+
+
+</body>
+</html>

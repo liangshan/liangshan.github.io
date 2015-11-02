@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Meta | Liangshan]]></title>
+  <link href="http://liangshan.me/blog/categories/meta/atom.xml" rel="self"/>
+  <link href="http://liangshan.me/"/>
+  <updated>2015-06-22T00:49:39+08:00</updated>
+  <id>http://liangshan.me/</id>
+  <author>
+    <name><![CDATA[Liangshan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[如何将 Octopress 的文章分享至微信和微博]]></title>
+    <link href="http://liangshan.me/blog/2014/05/28/how-to-share-octopress-pages-to-weixin-and-weibo/"/>
+    <updated>2014-05-28T12:54:14+08:00</updated>
+    <id>http://liangshan.me/blog/2014/05/28/how-to-share-octopress-pages-to-weixin-and-weibo</id>
+    <content type="html"><![CDATA[<p>昨天想把自己的文章分享到微信，没有仔细思考选了一种很土的办法。就是直接在微信的内容里输入地址，容易出错不说，效率也很低下。
+今天再回头思考这个问题，想到可以像 twitter 和 google+ 一样做一个分享按钮。Octopress 自己是不带国内社交网站分享的，要稍微做点功课。</p>
+
+<!-- more -->
+
+
+<p>稍微想了一下，发现微信较为特殊，因为只有手机应用，想要把网页分享至 app，只能曲线救国，想办法把网址输入到手机，然后使用 app 的功能再分享。</p>
+
+<p>后来搜索了一下，发现 <a href="http://www.jiathis.com">jiathis.com</a> 已经按照这个思路做过了。自不必说是「模仿」 <a href="http://www.addthis.com">addthis.com</a>，连域名都如此相似:P。</p>
+
+<h2>注册</h2>
+
+<p>需要先注册一个 jiathis 用户，注册过程很简洁，好像也没有验证邮箱。注册完就直接跳转到加码页，也算是体验不错。</p>
+
+<h2>修改 Octopress</h2>
+
+<p>接下来需要做 4 项源代码级别的修改。修改的流程遵循 Octopress 自己的逻辑，比葫芦画瓢的改法，而不是直接贴代码了事。</p>
+
+<h3>添加 config</h3>
+
+<p>在 <code>__config.yml</code> 中添加 jiathis 的相关配置，<code>$uid</code> 替换为真正的 <code>userid</code>，<code>userid</code> 可以从 jiathis 的示例代码中获取。</p>
+
+<pre><code class="yaml __config.yml">## 下面的内容添加至文件尾部
+
+# Jiathis
+jiathis_user: $uid
+jiathis_share: true
+</code></pre>
+
+<h3>修改模板文件</h3>
+
+<p>下面的代码首先是拆成几部分，上面讲过要符合 octopress 的做法，另外我精简过了。
+jiathis 给的代码带一个「+」号还有分享数字，样式很不河蟹被我删掉了。
+另外 jiathis 还会默认开启 site tracker 功能，我觉得这个有点多余，这部分代码我也都删掉了。</p>
+
+<p></p>
+
+<pre><code class="html+jinja source/_include/post/sharing">  &lt;!-- 添加到相应的位置，twitter google+ 前后皆可 --&gt;
+  {% if site.jiathis_share %}
+  &lt;div class="jiathis_style_24x24" style="text-indent: 0px; margin: 0px; padding: 0px; border-style: none; float: none; line-height: normal; font-size: 1px; vertical-align: baseline; display: inline-block;  background: transparent;"&gt;
+    &lt;a class="jiathis_button_weixin"&gt;&lt;/a&gt;
+    &lt;a class="jiathis_button_tsina"&gt;&lt;/a&gt;
+  &lt;/div&gt;
+  {% endif %}
+</code></pre>
+
+<p>&#8220;`html+jinja source/_includes/after_footer.html</p>
+
+<!-- 只加第 5 行 -->
+
+
+<p>{% include disqus.html %}
+{% include facebook_like.html %}
+{% include google_plus_one.html %}
+{% include twitter_sharing.html %}
+{% include jiathis_share.html %}
+{% include custom/after_footer.html %}
+&#8220;`</p>
+
+<pre><code class="bash 添加一个文件">$ touch source/_includes/jiathis_share.html
+$ vi source/_includes/jiathis_share.html
+</code></pre>
+
+<p>&#8220;`html+jinja 该文件的内容</p>
+
+<p>{% if site.jiathis_share %}</p>
+
+<div style="display:none">
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid={{ site.jiathis_user }}" charset="utf-8"></script>
+</div>
+
+
+<p>{% endif %}</p>
+
+<p>&#8220;`</p>
+
+<p></p>
+
+<p>之后就可以在本地预览并部署了。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[使用 Octopress 在 GitHub Pages 上快速搭建自定义域名Blog]]></title>
+    <link href="http://liangshan.me/blog/2014/05/12/build-custom-domain-blog-with-octopress-and-github-pages/"/>
+    <updated>2014-05-12T14:17:19+08:00</updated>
+    <id>http://liangshan.me/blog/2014/05/12/build-custom-domain-blog-with-octopress-and-github-pages</id>
+    <content type="html"><![CDATA[<p>一直没有搭博客，因为一直感觉自己不是一个标准的技术人，主要是不够狂热。但受身边人熏陶，偶尔还是想写点东西。
+尤其是看中 <code>liangshan.me</code> 这个域名，买下之后觉得闲着也是浪费，所以有了利用 GitHub Pages 来搭一下的想法。</p>
+
+<h2>预备</h2>
+
+<ul>
+<li>你需要具备一些 <code>Git</code> 的常识</li>
+<li>你需要一张 Visa 卡或是支付宝账号</li>
+<li>如果有 Ruby 经验，将会帮你更好的理解这个系统</li>
+</ul>
+
+
+<h2>Quick Start</h2>
+
+<p>整体来说，整个部署过程分3大步</p>
+
+<ol>
+<li>购买域名</li>
+<li>配置解析</li>
+<li>部署至 GitHub Pages</li>
+<li>评论插件</li>
+</ol>
+
+
+<!-- more -->
+
+
+<h3>购买域名</h3>
+
+<p>这里选用 <a href="http://www.godaddy.com">Godaddy</a>， 理由很简单，就是他支持支付宝。购买和支付流程很顺畅，应该不会有什么障碍。</p>
+
+<h3>配置解析</h3>
+
+<p>为了防止 Godaddy 自己的 DNS 解析被墙[1]，所以选用了国内的 <a href="https://www.dnspod.cn">DNSPod</a> 来解析域名，免费服务够用，还有手机二次验证。</p>
+
+<ol>
+<li>在 Godaddy 上设置 NameServer 到 DNSPod 提供的地址</li>
+<li>如果是顶级域名，需要在 DNSPod 上设置一个 A 记录到 Github Pages 的 IP 地址，这个地址可能会变化，可以查看<a href="https://help.github.com/articles/my-custom-domain-isn-t-working">这里</a>获取最新的地址</li>
+<li>如果是子域名，可以设置 CNAME</li>
+</ol>
+
+
+<p>关于 DNS 的设置，更详细的可以看 <a href="https://help.github.com/articles/setting-up-a-custom-domain-with-github-pages#step-1-add-a-cname-file-to-your-repository">GitHub Pages 的说明文档</a></p>
+
+<p><em>更新: DNSPod 不支持 alias，所以无法享受 github 的 DNS 缓存</em></p>
+
+<h3>部署至 GitHub Pages</h3>
+
+<p>关于 GitHub Pages 的技术细节，看[2]可能会有收获，一句话来概括就是<strong>使用动态语言来编辑纯文本文件，生成静态 HTML 代码，然后部署在 GitHub 上。</strong></p>
+
+<p>这种方式很巧妙，我之前也一直在用<a href="https://github.com/liangshan/markdown2deckjs">类似的做法</a>管理我的 Slides。</p>
+
+<p>这里并没有直接使用 Jekyll，而是使用基于他的 <a href="http://octopress.org/docs/setup/">Octopress</a>。遵循页面的 <code>Next Steps</code> 应该可以很快搭好环境。</p>
+
+<p>并且 Octopress 做好了和 GitHub Pages 对接的<a href="http://octopress.org/docs/deploying/github/">脚手架</a>。</p>
+
+<p>这里主要记录一些踩到的坑：</p>
+
+<ol>
+<li>使用 Homebrew 安装 rbenv, 再用 rbenv 安装 ruby, 提醒最新的 MacOS 安装的 Xcode 并没有 GCC，需要手动安装 GCC</li>
+<li><code>~/.rbenv/shims</code> 目录需要添加至 PATH，Homebrew 安装过程中好像并没有做这一步，并且 Octopress 关于这部分的文档可能过时了，文档中使用的 <code>~/.rbenv/bin</code></li>
+</ol>
+
+
+<h3>评论插件</h3>
+
+<p>由于是纯静态页面，所以要增加评论的动态功能 需要借助一些第三方前端工具。比如 <a href="http://disqus.com">Disqus</a>，配置非常简单 更多参考[3]。</p>
+
+<h2>参考资料</h2>
+
+<ol>
+<li><a href="http://beiyuu.com/github-pages/">使用Github Pages建独立博客</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2012/08/blogging_with_jekyll.html">搭建一个免费的，无限流量的Blog&mdash;-github Pages和Jekyll入门</a></li>
+<li><a href="http://seagg.github.io/blog/2012/09/03/config-comment-on-octopress/">给octopress添加Disqus评论功能</a></li>
+</ol>
+
+]]></content>
+  </entry>
+  
+</feed>

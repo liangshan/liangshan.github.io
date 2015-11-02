@@ -1,1 +1,690 @@
-My Octopress Page is coming soon &hellip;
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Liangshan</title>
+  <meta name="author" content="Liangshan">
+
+
+  <meta name="description" content="之前介绍了如何选择 RPC 框架，选择 RPC 框架是实施 SOA 的重要一步，但也仅仅是第一步。今天来讨论具体实施 RPC 过程中，遇到的一些细节。 写下第一个真正的 RPC 服务，首先遇到的问题就是服务划分，或者叫服务的分层。当然最简单的就是不分层，把所有的接口都写在一起， &hellip;">
+
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <link rel="canonical" href="http://liangshan.me">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Liangshan" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='//fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+
+
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-50920618-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body    class="collapse-sidebar sidebar-footer" >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Liangshan</a></h1>
+
+    <h2>Inner peace.</h2>
+
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+
+</ul>
+
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:liangshan.me" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a target="_blank" href="/about.html">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+
+
+
+    <article>
+
+  <header>
+
+      <h1 class="entry-title"><a href="/blog/2015/06/21/dive-into-soa-architecture/">深入实践 SOA 架构</a></h1>
+
+
+      <p class="meta">
+
+
+
+
+
+<time class='entry-date' datetime='2015-06-21T22:16:05+08:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2015</span></span> <span class='time'>10:16 pm</span></time>
+
+      </p>
+
+  </header>
+
+
+  <div class="entry-content"><p>之前介绍了<a href="/blog/2014/11/03/how-to-choose-rpc-framework/">如何选择 RPC 框架</a>，选择 RPC 框架是实施 SOA 的重要一步，但也仅仅是第一步。今天来讨论具体实施 RPC 过程中，遇到的一些细节。</p>
+
+<p>写下第一个真正的 RPC 服务，首先遇到的问题就是服务划分，或者叫服务的分层。当然最简单的就是不分层，把所有的接口都写在一起，即当服务启动的时候所有的接口都被载入内存从而被访问。现如今软件架构的趋势是使用分布式的独立的微型服务（Micro Service）搭积木，SOA 正是实现这一构想的途径之一，但如果不给服务做划分显然和初衷背道而驰。我们最终选定的划分方式是按照业务（Domain）首先划分出基础服务，我们称之为 LEVEL-1，跨基础服务的接口称之为 LEVEL-2，一些与商业无关的，更为通用的模块称之为 LEVEL-0。</p>
+
+<p>这里以淘宝为例，列举几个服务分层的例子：</p>
+
+<p>LEVEL-1：买家，卖家，账户，商品，交易</p>
+
+<p>LEVEL-2：用户购买一个商品，需要读取账户信息（余额、银行卡），需要读取商品信息（价格、运费），成功后产生一条交易记录。横跨了几乎所有 LEVEL-1 服务，显然是在 LEVEL-2 了。理论上讲 LEVEL-1 的服务各种组合都会产生一个 LEVEL-2 服务。但我的经验是，可以先把所有的 LEVEL-2 都写在一起，等到一些组合十分明确的时候再拆出去。</p>
+
+<p>LEVEL-0：国际化和本地化的一些需求（地理位置，汇率，多语言），敏感词过滤等等，这些服务的特点是都被 LEVEL-1 依赖，又和核心商业逻辑关系不大。</p>
+
+<p>同时围绕这 3 层服务，有一个原则：只能自上而下调用，不可自下而上掉用，同时不可同级应用之间调用。这里指的调用是 RPC，而不是代码上的依赖和调用。</p>
+
+<p>解决了服务划分的问题，在架构设计时同样应该考虑开发、测试、运维。先简单说开发和运维，使用 Ansible + Vagrant 可以保证开发环境的一致性，以及开发环境与生产环境的一致性。在开发环境配置阶段，会将 SOA 的客户端和服务端都部署在同一个虚拟环境里。同时在开发新项目的过程中，不可避免的需要更新数据库，我认为更新数据库的代码也应该是整个项目的一部分，即数据库的变更也应该体现在版本控制中，这个非常重要，这是最终上线前准备工作的重要一环。不同语言的 ORM 都提供了 Migration 工具，但由于 SOA 是跨平台跨语言的，所以我选择了将每一次 Migration 都转化为 SQL 文件，提交到 Ansible Playbook 的仓库，由 Ansible 在部署过程中自动生效。</p>
+
+<p>下面重点说说测试，我们没有专职的测试人员，使用 TDD + Code Review 的方式来保证软件交付的质量，基本上的要求是所有接口都应该是先写测试代码再写实现代码，Review 过程中至少 2 个 Reviewer 通过才可以合并。随着对 TDD 的理解不断加深，我目前所理解的测试代码大概分为两个层面：单元测试，集成测试。</p>
+
+<p>单元测试是指代码中原子性的方法。单元测试遇到其他系统依赖，比如发送邮件，往往需要 mock 这些方法，只是模拟这些方法在特定输入输出下的行为是否符合预期，并非真正的发出邮件。在我所设计的服务分层中，LEVEL-2 测试调用 LEVEL-1 也同样需要 mock，而不是真的启一个 LEVEL-1 的服务用来单元测试。这里需要特别指出的是，严格意义上来讲数据库也是外部依赖，但 <code>SQLite</code> 几乎都预装的前提下，我们可以模拟出一个比较真实的测试环境，所以一般来讲现在都可以真实的操作数据库而不是 mock 方法的返回值了。每次测试前创建数据表及测试数据，测试后再清除所有内容，这是单元测试的标准流程。</p>
+
+<p>集成测试是指将整个系统的各个组件真实的组建起来做统一的测试，还以发送邮件为例，集成测试就需要真正的触发发送邮件的动作。由于我们开发的是 Web 应用，所以我们选择使用 <a href="https://en.wikipedia.org/?title=Acceptance_testing">User Acceptance Testing</a> 来做集成测试。简答来说就是借助浏览器，或是可以执行 JavaScript，CSS 的服务端软件，来模拟用户行为，将网站所有功能点都使用一遍与预设的输出来对比。这里有几个问题要解决：
+第一，和单元测试一样，每次测试使用的数据要重置，要预留测试需要用到的测试数据。
+第二，与单元测试不同的是，测试数据不仅仅为特定的方法准备，而是需要完整的，足以支撑整个网站运行的数据。
+第三，由于 SOA 架构，客户端和服务端需要在测试期间连接同一个测试数据库。
+为了解决以上的问题，利用 Ansible 给每个开发环境的虚拟机都部署了一个专门用来做集成测试的数据库，以及集成测试专用的配置文件（主要是数据库连接）。另外给集成测试的命令加了一些 wrapper ：重置数据库、导入准备好的测试数据（为了保持数据之间的关联，我直接从线上 dump 下一小部分）、切换至测试专用配置文件（包括客户端和服务端）、执行集成测试、切换回正常配置文件。</p>
+
+<p>至此，在 SOA 实践中遇到的一些问题都得到了比较好的解决。</p>
+</div>
+
+
+
+
+    </article>
+
+
+    <article>
+
+  <header>
+
+      <h1 class="entry-title"><a href="/blog/2015/06/14/ji-zhi-de-ping-heng/">极致的平衡</a></h1>
+
+
+      <p class="meta">
+
+
+
+
+
+<time class='entry-date' datetime='2015-06-14T22:17:45+08:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>14</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>10:17 pm</span></time>
+
+      </p>
+
+  </header>
+
+
+  <div class="entry-content"><p>我们经常说「要追求极致」，每每谈到这个话题，乔布斯就会成为永恒的范例：他是如何苛刻的追求极致的产品体验，以及如何受到养父关于「别人看不到的地方也要追求完美」的影响。</p>
+
+<p>而实际生活中，我们又常常不得不平衡。平衡家庭与工作、工作中的效率与质量、管理中的育人与做事等等。在科学界，平衡更是无处不在，正极与负极、正数与负数、作用力与反作用力等等，可以说我们的世界更倾向于建立在平衡之中。</p>
+
+<p>有一个问题一直在困扰我，到底应该追求「平衡」还是「极致」？或许一个显而易见的答案是「看情况」，那么到底什么情况下应该追求「平衡」，而什么情况下应该追求「极致」？</p>
+
+<p>最近好像突然想通了，不知道是不是看了权利的游戏跟着编剧一起打开了脑洞呢:D</p>
+
+<p>问题的关键在于，我忽略了「平衡」也可以追求「极致」，那么最终来说还是应该追求「极致」了。</p>
+
+<p>比如烹饪一个菜肴，这时候其实你要追求的就是「极致的平衡」，各种食材的味道与口感完美融合，其中的任何一味差了一丝一毫便会影响口感，菜肴本身是平衡的，而你找到这个平衡的过程又是极致的。</p>
+
+<p>其实非常的简单，如果你抛开所谓极致和平衡的观点，重新审视疑惑，会问题的本质在于，你不是在纠结到底应该极致还是平衡，而是在纠结怎么才能把事做好。从这个角度出发，所有疑惑都会迎刃而解了，因为根本无所谓极致和平衡，这两者只是达到目的过程中，不同阶段需要的不同心态而已。这里需要注意的是，很多人对极致和平衡的理解都有偏差，极致绝不是极端，而平衡也绝不是妥协。</p>
+</div>
+
+
+
+
+    </article>
+
+
+    <article>
+
+  <header>
+
+      <h1 class="entry-title"><a href="/blog/2014/12/24/choosing-is-an-ability/">选择是一种能力</a></h1>
+
+
+      <p class="meta">
+
+
+
+
+
+<time class='entry-date' datetime='2014-12-24T16:28:05+08:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>24</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>4:28 pm</span></time>
+
+      </p>
+
+  </header>
+
+
+  <div class="entry-content"><p>今年从不同的几个人嘴里都说出了一句话：『有时候选择比能力更重要』。第一次听见这句话，感觉说对了一半：想要有很多选择，首先需要有很强的能力才行，另外选择的过程本身就是一种能力的体现。这 2 个月的经历更让我坚信了这一点。</p>
+
+<p>10 月份开始动了想换工作的念头，先说说为什么想换工作。其实我之前的工作可能在一些人看来是非常完美的，甚至是很多工程师的理想环境：公司的纯技术部门，简直是技术部的特种部队，可以按照自己的想法来实践方案，受到很多工程师和领导的尊重。</p>
+
+<p>但我却感觉越来越不舒服。</p>
+
+<p>我的技术哲学是，不仅要不断学习，更要实践。当时的实际情况是，我们几个想要推行一些新的实践时最后的结果往往是变成小范围的玩具。因为公司几年已经积累了太多工具和代码，基本上该有的都有了。好用不好用是一个问题，但起码够用，所以公司对于改进底层技术的意愿远没有说的那么强烈。这时我想起有人说重构的一个目的就是让工程师开心，这下我彻底接受这个观点了。</p>
+
+<p>有时候太安逸真的是一个问题，对于公司如此，对于我来说更是深知这份「美差」不是好事。</p>
+
+<p>几经面试，有了几个选择，而对方愿意给我机会还是因为我在架构部门的独特经历。同时公司也给出了足够的诚意来挽留我，给了新的部门和薪水。在这个过程中，我仍然相信是能力带来了选择。</p>
+
+<p>在得知我在找工作后，有位前辈好心教导我，应该去大公司待几年，刷刷身份，前途无限。或许他是对的，但我想如果是那样，和我留下又有什么区别？除了可能公司名字更加响亮，可以认识更多的技术人之外，「大公司毛病」我想大同小异。得益于身边的几位同事，我对于所谓的大型架构和大牛早已看透了，选合适的方案解决问题而已，我想要的氛围是 &lsquo;<em>Move fast and breaking things</em>&#8216;，这句是来自 Facebook 的名言。说句题外话，GitHub, Google 或者 Facebook 当然是非常有吸引力，但似乎离我还有点遥远，压根也就没考虑。有人能帮我过去一定让我知道，千万别客气。</p>
+
+<p>这时现在的公司出现在我的选择里，看起来很奇怪的公司。</p>
+
+<p>是跨国公司，但又是初创公司；是互联网公司，却还没有自己成型的研发团队；团队的中国人都会讲英文，团队的老外几乎都会讲中文。兼职和外包是当时工程师的主要来源，这些为公司干活的工程师在世界各地，他们用 slask 交流，用 GitHub 托管代码，用 AWS 托管服务器，用 jira 来管理项目，用 xbox 在办公室踢 fifa，用 CEO 戴假发在球场当拉拉队。</p>
+
+<p>一直以来，我坚持认为公司的技术部门应该走精英化路线。
+第一，写代码说到底还是创造性劳动，效率和质量与人的能力不是线性关系，我觉得应该接近于指数。
+第二，精英喜欢且只喜欢与精英一起工作。
+第三，公司不需要因为开展新的业务而大量招聘，举例来说一个传统网站想要开展新的移动业务，只需要找到一个有丰富实践经验的人，就可以让所有人都变成 iOS/Android 开发工程师，因为精英乐于接受新的挑战。
+第四，最重要的一点，精英基本不需要管理，只要给一个大家都认可的方向即可。</p>
+
+<p>这里唯一的问题是精英难找，不过只要找到第一个，只要让他认可你的观点，就一定能找到第二个、第 N 个。在公司达到一定规模时，可以去学校招一些优秀的毕业生。这只是我的想法，没有实践过，比如说公司正在迅速成长，一下子哪来那么多精英可招？我认为精英比例虽小，但找几个满足一家公司的需求还是不难的吧？就看你有没有决心，有没有诚意。</p>
+
+<p>一些迹象表明这个团队有希望成为我想象的那样，几经交谈，我决定加入这里。</p>
+
+<p>让我们再从头看一次整个过程。安逸和挑战，我选择了挑战；去上市公司、留守、创业外企，我根据自己的内心做出了选择。由于这些年的积累获得了这些选择，而这些选择本身代表了我对于技术和事业的理解。</p>
+</div>
+
+
+
+
+    </article>
+
+
+    <article>
+
+  <header>
+
+      <h1 class="entry-title"><a href="/blog/2014/11/03/how-to-choose-rpc-framework/">How to Choose RPC Framework</a></h1>
+
+
+      <p class="meta">
+
+
+
+
+
+<time class='entry-date' datetime='2014-11-03T15:16:21+08:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>3</span><span class='date-suffix'>rd</span>, <span class='date-year'>2014</span></span> <span class='time'>3:16 pm</span></time>
+
+      </p>
+
+  </header>
+
+
+  <div class="entry-content"><p>RPC 是 remote procedure call 的缩写，意指调用远程进程的方法。这里的远程需要广义的理解，有时为了协议的统一即使调用本地进程也叫做 RPC，所以 RPC 可简单理解为进程间通信。</p>
+
+<p>在选择 RPC 框架之前，要搞清楚为什么需要 RPC？ RPC 主要是为了解决服务化架构中客户端与服务端以及服务之间通讯的问题。在最早接触 RPC 的时候，我一直有一个疑问： RESTful API 不就搞定了么？为什么需要 RPC？直到深入实践了 RPC，我自己总结了 RPC 与 RESTful API 最大的几个不同。</p>
+
+</div>
+
+
+    <footer>
+      <a rel="full-article" href="/blog/2014/11/03/how-to-choose-rpc-framework/">Read on &rarr;</a>
+    </footer>
+
+
+
+    </article>
+
+
+    <article>
+
+  <header>
+
+      <h1 class="entry-title"><a href="/blog/2014/09/10/what-is-product-manager-exactly/">到底什么是产品经理</a></h1>
+
+
+      <p class="meta">
+
+
+
+
+
+<time class='entry-date' datetime='2014-09-10T14:13:28+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>2:13 pm</span></time>
+
+      </p>
+
+  </header>
+
+
+  <div class="entry-content"><p>不知道有多少人和我一样，即使在互联网公司工作了很多年，还是没搞清楚「产品经理」到底是什么样的一个职位。我甚至特意看过很多关于产品经理的文章，仍然没有搞清楚这个问题。而在工程师的圈子里，弥漫着对产品经理的各种，恩，各种情绪。上篇文章说了，我要用自己的大脑思考取得结论，到底什么是产品经理？</p>
+
+</div>
+
+
+    <footer>
+      <a rel="full-article" href="/blog/2014/09/10/what-is-product-manager-exactly/">Read on &rarr;</a>
+    </footer>
+
+
+
+    </article>
+
+
+    <article>
+
+  <header>
+
+      <h1 class="entry-title"><a href="/blog/2014/09/09/huan-ge-zi-shi-xie-bo-ke/">换个姿势写博客</a></h1>
+
+
+      <p class="meta">
+
+
+
+
+
+<time class='entry-date' datetime='2014-09-09T15:39:18+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>9</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>3:39 pm</span></time>
+
+      </p>
+
+  </header>
+
+
+  <div class="entry-content"><p>之前一直看 Hack News，最近开始看国内版本——Startup News。
+结果里面看到王垠的那篇征集女粉丝的博文，后来他删了又写了篇撤回征集女粉丝，现在第二篇也已经删掉了。</p>
+
+<p>以前读过别人分享他的一些文章，并没有读过他关于具体技术的见解。
+这次系统了浏览一遍现在能看到的博文，之所以说现在能看到的，是因为他会删除文章，并且不许评论，应该是一个完美主义者吧（其实删除会导致一些文章中的链接失效，也不算十分完美）。
+其中发现了一篇 <a href="http://www.yinwang.org/blog-cn/2014/04/24/sql-nosql/">SQL, NoSQL 以及数据库的实质</a>，读完之后的感觉是他看问题比我要深入很多。具体的细节我可能会单独写文章说明，不在这里展开。</p>
+
+<p>所有文章都看完之后，我根本不想去评价王垠这个人，只想说他的文章给我带来什么思考。</p>
+
+<p>能给人带来思考的文章都是好文章，他所写的每一篇都引起我思考。这只有一种可能就是他比我要厉害，主要是在思考问题的深度（无论对错）和在计算机科学学术方面。
+学术和知识上比我厉害，这个其实很难追得起来（人家毕竟上了十年博士对吧，除去清华的 4 年，也还有 6 年 :P）。
+但还好这个世界并不是谁学术能力强就一定取得更大成就。我稍微总结了一下，为什么他的文章能引发我思考。</p>
+
+<p>首先是不信权威。完全不信权威难免有些绝对，我想更合理的理解这句话应该是，在选择相信权威之前先经过自己思考。只有当自己彻底想明白之后再接受别人的说法，而不是某句话听起来很酷，转身就变成自己的口头禅。直觉上大家都会认为自己不这样，但仔细想想这种例子其实太多。RTFSC 就是我中枪的一条，因为这是 Linus 大神说的。在这一点上我同意王垠的观点。别人期待的是你的经验之谈，而你甩出一句 「Read The F***ing Source Code」来伤害对方真的很酷？</p>
+
+<p>其次是要努力看到本质。要看清技术的本质，需要很深的功力，这个也只能尽力而为了。但要时刻提醒自己，理解一个技术，需要从它要解决的问题根源开始思考，而不是看着手册学习手册。
+比如我其实从来没有思考过「到底为什么要有 SQL」这种问题，我是说为什么是通过 SQL 这种方式来跟数据文件交互？因为习惯了 SQL，最开始用 MongoDB 之类的 NoSQL 的时候反而会不习惯，其实仔细想想 MongoDB 的交互终端才比较符合作为一个程序的用法。</p>
+
+<p>从这一点上来说，这个博客虽然才写了几个月，但已经诞生了很多没有什么意义的文章。因为操作手册会过时，基本是没有意义的，但我应该不会删除它们。以这篇文章做分割线，看看以后会不会好一点。</p>
+
+<p>我本来以为至少要几年后才会回头鄙视自己，没想到这个日子这么快就来了。</p>
+</div>
+
+
+
+
+    </article>
+
+
+    <article>
+
+  <header>
+
+      <h1 class="entry-title"><a href="/blog/2014/08/07/install-awesome-on-gentoo/">在 Gentoo 上安装 Awesome</a></h1>
+
+
+      <p class="meta">
+
+
+
+
+
+<time class='entry-date' datetime='2014-08-07T14:06:30+08:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>2:06 pm</span></time>
+
+      </p>
+
+  </header>
+
+
+  <div class="entry-content"><p>都装 gentoo 了，趁热装桌面环境吧。linux 的视窗系统称为 X Window System。
+在开源世界里，通常是协议先行，各自实现。同样 X 只是协议，在各种实现中以 X.Org 最受欢迎，当时使用的协议为 X11，所以后来 X 也被人们称为 X11。</p>
+
+</div>
+
+
+    <footer>
+      <a rel="full-article" href="/blog/2014/08/07/install-awesome-on-gentoo/">Read on &rarr;</a>
+    </footer>
+
+
+
+    </article>
+
+
+    <article>
+
+  <header>
+
+      <h1 class="entry-title"><a href="/blog/2014/08/06/install-gentoo-from-systemrescuecd/">使用 SystemRescueCD 安装 Gentoo</a></h1>
+
+
+      <p class="meta">
+
+
+
+
+
+<time class='entry-date' datetime='2014-08-06T17:50:10+08:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>6</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>5:50 pm</span></time>
+
+      </p>
+
+  </header>
+
+
+  <div class="entry-content"><p>在使用 Ubuntu 有 3 年之后，第一次有了换个发行版的想法。
+其实我觉得做任何事情都要循序渐进，在合适的时候做合适的事情才能事半功倍。</p>
+
+<p>3 年前选择从 Ubuntu 入手应该是不错的选择，现在想换一个更自由的发行版也是水到渠成。选来选去，选了 gentoo，主要是在浏览的过程中以下几点吸引了我:</p>
+
+<ol>
+<li>自由度高，一切从头开始</li>
+<li>升级频繁</li>
+<li>很先进的包管理工具</li>
+</ol>
+
+
+<p>其实大多数时候我不是一个爱折腾的人，所以这次抓住了一闪而过想折腾的机会，第一天下午就开始动手了。第一个动作就是买一个 U 盘，是的，要准备一个 U 盘。</p>
+
+</div>
+
+
+    <footer>
+      <a rel="full-article" href="/blog/2014/08/06/install-gentoo-from-systemrescuecd/">Read on &rarr;</a>
+    </footer>
+
+
+
+    </article>
+
+
+    <article>
+
+  <header>
+
+      <h1 class="entry-title"><a href="/blog/2014/07/02/seven-year-itch/">七年之痒</a></h1>
+
+
+      <p class="meta">
+
+
+
+
+
+<time class='entry-date' datetime='2014-07-02T15:34:35+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>2</span><span class='date-suffix'>nd</span>, <span class='date-year'>2014</span></span> <span class='time'>3:34 pm</span></time>
+
+      </p>
+
+  </header>
+
+
+  <div class="entry-content"><blockquote><p>“七年之痒”是个舶来词，人的细胞七年会完成一次整体的新陈代谢，可能七年后你就不爱这个人了。</p></blockquote>
+
+<p>我跟老婆不知不觉认识已经有七年了。</p>
+
+<p>但今天说的跟老婆没什么关系。</p>
+
+<p>因为再往前就是工作的第七个年头。</p>
+
+</div>
+
+
+    <footer>
+      <a rel="full-article" href="/blog/2014/07/02/seven-year-itch/">Read on &rarr;</a>
+    </footer>
+
+
+
+    </article>
+
+
+    <article>
+
+  <header>
+
+      <h1 class="entry-title"><a href="/blog/2014/06/08/build-a-scalable-recommendation-system/">Build a Scalable Recommendation System</a></h1>
+
+
+      <p class="meta">
+
+
+
+
+
+<time class='entry-date' datetime='2014-06-08T20:06:19+08:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>8</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>8:06 pm</span></time>
+
+      </p>
+
+  </header>
+
+
+  <div class="entry-content"><p>从接触推荐系统以来，断断续续的已经有一年半的时间了。
+今天想单纯从工程角度来总结一下我得到的经验，不涉及推荐的数学算法和理论。
+第一是公司还没有到必须扩展现有的推荐算法的地步，第二是本人自知没有足够能力来改进现有的推荐算法。</p>
+
+<p>其实主要是因为第二点。</p>
+
+<h2>总体回顾</h2>
+
+<p>在介绍可扩展的推荐平台我是如何设计之前，还是稍微回顾一下公司推荐的发展历程，因为这可能具有一定的代表性。或许在开展新的推荐研究时有一定参考价值。</p>
+
+<h3>诺基亚</h3>
+
+<p>我开始做推荐之前一直是我们数据部门的同学来做的，当时是使用 SQL 查询来实现了推荐的相关算法。想必这也是不得已而为之吧，最起码说明算法理论很熟悉:P。
+调整一些参数或是新增推荐显然很痛苦。</p>
+
+<p>但有总比没有强，在 iPhone 出现之前，诺基亚一直已智能手机自居。人们的感觉是跟智能有点关系，但总觉得怪怪的。这也是当时我们公司使用推荐的感觉。</p>
+
+<h3>Romar</h3>
+
+<p>在开始做新的推荐引擎之后，我们的思路就是找一个开源实现。很快就锁定了 <a href="https://mahout.apache.org/">Mahout</a>，原因有以下几点:</p>
+
+<ol>
+<li>Apache 基金，项目的更新和质量有保证</li>
+<li>实现了大多数已知的推荐算法，同时考虑了机器学习的其他两个分支：聚类和分类</li>
+<li>分布式计算，为大数据而设计</li>
+</ol>
+
+
+<p>但 Mahout 只是一个类库，我一直喜欢拿 Solr 和 Lucence 的关系来类比。 Mahout 类似 Lucence 是一个底层类库，并不是上层应用和产品。
+于此同时，Mahout 版本的 &lsquo;Solr&rsquo; 还没有出现，有几款开源实现但并不理想，也不是 Apache 官方的作品。</p>
+
+<p>所以我们决定自己简单的在 Mahout 上面薄薄的搭一层 API 来提供服务，起了个名字叫 Romar。很快这个目的就实现了，项目可以在 <a href="https://github.com/anjuke/romar">GitHub</a> 上找到。</p>
+
+<p>Romar 1.0 的版本应该足以应付千万级别用户行为的协同过滤计算，所以很快在公司内部得到了快速应用。
+得益于其能够快速响应业务需求的特点，短短半年内覆盖了公司所有产品线，这也算技术推动产品的经典案例了。</p>
+
+<p>但问题随之而来。</p>
+
+<p>管理这些推荐引擎变得痛苦，越来越多的实例。它们的管理成了最大的问题，包括部署、监控、可靠性、平滑升级。</p>
+
+</div>
+
+
+    <footer>
+      <a rel="full-article" href="/blog/2014/06/08/build-a-scalable-recommendation-system/">Read on &rarr;</a>
+    </footer>
+
+
+
+    </article>
+
+  <div class="pagination">
+
+      <a class="prev" href="/posts/2">&larr; Older</a>
+
+    <a href="/blog/archives">Blog Archives</a>
+
+  </div>
+</div>
+<aside class="sidebar">
+
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+
+      <li class="post">
+        <a href="/blog/2015/06/21/dive-into-soa-architecture/">深入实践 SOA 架构</a>
+      </li>
+
+      <li class="post">
+        <a href="/blog/2015/06/14/ji-zhi-de-ping-heng/">极致的平衡</a>
+      </li>
+
+      <li class="post">
+        <a href="/blog/2014/12/24/choosing-is-an-ability/">选择是一种能力</a>
+      </li>
+
+      <li class="post">
+        <a href="/blog/2014/11/03/how-to-choose-rpc-framework/">How to Choose RPC Framework</a>
+      </li>
+
+      <li class="post">
+        <a href="/blog/2014/09/10/what-is-product-manager-exactly/">到底什么是产品经理</a>
+      </li>
+
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+
+  <a href="https://github.com/liangshan">@liangshan</a> on GitHub
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'liangshan',
+            count: 7,
+            skip_forks: false,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+<section>
+  <h1>Categories</h1>
+    <ul id="category-list"><li><a href='/blog/categories/anjuke'>anjuke (2)</a></li><li><a href='/blog/categories/ansible'>ansible (2)</a></li><li><a href='/blog/categories/best-practice'>best practice (1)</a></li><li><a href='/blog/categories/devops'>devops (1)</a></li><li><a href='/blog/categories/linux'>linux (2)</a></li><li><a href='/blog/categories/meta'>meta (2)</a></li><li><a href='/blog/categories/recommendation'>recommendation (1)</a></li><li><a href='/blog/categories/rpc'>rpc (2)</a></li><li><a href='/blog/categories/vagrant'>vagrant (1)</a></li><li><a href='/blog/categories/virtualenv'>virtualenv (1)</a></li></ul>
+</section>
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/112113128668997126531?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Liangshan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'liangshan';
+
+
+        var disqus_script = 'count.js';
+
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+<div style="display:none">
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1376902770881935" charset="utf-8"></script>
+</div>
+
+
+
+
+
+</body>
+</html>

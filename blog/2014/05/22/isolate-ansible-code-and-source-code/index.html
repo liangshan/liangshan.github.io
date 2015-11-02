@@ -1,0 +1,452 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Isolate Ansible Code and Source Code - Liangshan</title>
+  <meta name="author" content="Liangshan">
+
+  
+  <meta name="description" content="How to isolate ansible code and source code when using vagrant for develop environment.">
+  <meta name="keywords" content="ansible,vagrant,isolate,source code,虚拟环境,隔离,源代码">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://liangshan.me/blog/2014/05/22/isolate-ansible-code-and-source-code">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Liangshan" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script> 
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='//fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-50920618-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body    class="collapse-sidebar sidebar-footer" >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Liangshan</a></h1>
+  
+    <h2>Inner peace.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:liangshan.me" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a target="_blank" href="/about.html">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Isolate Ansible Code and Source Code</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-05-22T16:56:16+08:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2014</span></span> <span class='time'>4:56 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>我们经常要开发一些「系统」，这些「系统」具备以下特点：</p>
+
+<ul>
+<li>用到很多系统软件。比如 ngnix, compass, ruby, mongodb 等等；</li>
+<li>项目本身有很多组件组成。比如 web 程序，job 系统和对应的消息队列；</li>
+</ul>
+
+
+<p>那么在开发这类系统时就会遇到一些问题：</p>
+
+<ul>
+<li>开发环境和线上环境不等价。平台可能不同，软件版本可能不同；</li>
+<li>开发环境配置复杂，任意环节出错就会影响整个系统的启动；</li>
+</ul>
+
+
+<p>为了解决这些问题，我们将整个环境安装在虚拟机内，这在安居客被认为是一种最佳实践，成功的应用在很多系统的开发当中。
+而开发环境，生产环境的部署则交给 ansible 来完成。那么我们的项目目录看起来是这样:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'> .                  # root  
+</span><span class='line'> |-- .provisioning/ # ansible 脚本目录
+</span><span class='line'> |-- src/           # 源代码目录
+</span><span class='line'> |-- Vagrantfile    # vagrant 启动脚本</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样有一个好处，虚拟机启动之后，源代码对应 <code>/vagrant</code> 这个共享目录，修改源代码会同时在虚拟机内生效。
+但这样 ansible 或是其他一些 CM(Configure Management) 工具的代码和源代码就会混在一个仓库内。</p>
+
+<p>本文就介绍一种简单的方法可以将 DevOps 的代码与源代码隔离，并达到相同的效果。</p>
+
+<!-- more -->
+
+
+<p>首先我们需要准备两个仓库，一个源代码仓库我们暂且叫做 <code>src</code>，另一个仓库 <code>src-ansible</code> 放 ansible 脚本。</p>
+
+<h2>src-ansible</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'> .
+</span><span class='line'> |-- host_vars/
+</span><span class='line'> |-- roles/
+</span><span class='line'> |-- playbook.xml
+</span><span class='line'> |-- host.vagrant
+</span><span class='line'> |-- .Vagrantfile</span></code></pre></td></tr></table></div></figure>
+
+
+<p>其他都是常规的 ansible 脚本，唯独 <code>.Vagrantfile</code> 比较特殊。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># -*- mode: ruby -*-</span>
+</span><span class='line'><span class="c1"># vi: set ft=ruby :</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span> <span class="o">=</span> <span class="s2">&quot;trusty32&quot;</span>
+</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box_url</span> <span class="o">=</span> <span class="s2">&quot;http://vagrant.corp.anjuke.com/boxes/trusty32.box&quot;</span>
+</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span> <span class="ss">:private_network</span><span class="p">,</span> <span class="ss">ip</span><span class="p">:</span> <span class="s2">&quot;192.168.222.22&quot;</span>
+</span><span class='line'>  <span class="c1"># config.vm.network &quot;public_network&quot;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span> <span class="ss">:ansible</span> <span class="k">do</span> <span class="o">|</span><span class="n">ansible</span><span class="o">|</span>
+</span><span class='line'>    <span class="n">ansible</span><span class="o">.</span><span class="n">playbook</span> <span class="o">=</span> <span class="s1">&#39;.provisioning/playbook.yml&#39;</span>
+</span><span class='line'>    <span class="n">ansible</span><span class="o">.</span><span class="n">inventory_path</span> <span class="o">=</span> <span class="s1">&#39;.provisioning/hosts.vagrant&#39;</span>
+</span><span class='line'>    <span class="n">ansible</span><span class="o">.</span><span class="n">host_key_checking</span> <span class="o">=</span> <span class="kp">false</span>
+</span><span class='line'>    <span class="n">ansible</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="s1">&#39;vvvv&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>你会发现这里面用到的 <code>playbook</code> 和 <code>inventory</code> 路径都不存在，文件名也以 <code>.</code> 开头。其实这个文件就是给源代码仓库用的，而不能在这里直接使用。</p>
+
+<p>这里借鉴了 Ruby On Rails 的一个重要思想「约定大于配置」。比如这里约定了源代码仓库的 ansible 脚本放在 <code>.provisioning</code> 这个目录。</p>
+
+<h2>src</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='text'><span class='line'> .
+</span><span class='line'> |-- src/
+</span><span class='line'> |-- Makefile
+</span><span class='line'> |-- .gitignore
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>.gitgnore</code> 添加以下内容：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='text'><span class='line'>.vagrant/
+</span><span class='line'>.provisioning/
+</span><span class='line'>Vagrantfile
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>make</code> 其实就是执行一些 shell 命令，如果翻译成 shell 应该类似下面的脚本。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>mkdir .provisioning
+</span><span class='line'><span class="nb">cd</span> .provisioning
+</span><span class='line'>git init
+</span><span class='line'>git remote add origin git@gitserver.com:username/src-ansible.git
+</span><span class='line'>git pull origin master
+</span><span class='line'>cp .Vagrantfile ../Vagrantfile
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>于此对应，再写一个 <code>make</code> 的 <code>target</code> 用于更新 ansible 脚本。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">cd</span> .provisioning
+</span><span class='line'>git pull origin master
+</span><span class='line'>cp .Vagrantfile ../Vagrantfile
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>完成了这些步骤，就可以直接在源代码仓库使用 vagrant 的命令来安装、更新虚拟机。但又可以将这些脚本与源代码隔离开来。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Liangshan</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2014-05-22T16:56:16+08:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2014</span></span> <span class='time'>4:56 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ansible/'>ansible</a>, <a class='category' href='/blog/categories/devops/'>devops</a>, <a class='category' href='/blog/categories/vagrant/'>vagrant</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <div class="jiathis_style_24x24" style="width: 100px; text-indent: 0px; margin: 0px; padding: 0px; border-style: none; float: none; line-height: normal; font-size: 1px; vertical-align: baseline; display: inline-block;  background: transparent;">
+    <a class="jiathis_button_weixin"></a>
+    <a class="jiathis_button_tsina"></a>
+  </div>
+  
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://liangshan.me/blog/2014/05/22/isolate-ansible-code-and-source-code/" data-via="LisumL" data-counturl="http://liangshan.me/blog/2014/05/22/isolate-ansible-code-and-source-code/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/05/22/the-twelve-factor-app/" title="Previous Post: The Twelve-Factor App">&laquo; The Twelve-Factor App</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/05/27/why-i-hate-broadcasting-at-company/" title="Next Post: 我为什么如此反感在公司放广播">我为什么如此反感在公司放广播 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/06/21/dive-into-soa-architecture/">深入实践 SOA 架构</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/06/14/ji-zhi-de-ping-heng/">极致的平衡</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/12/24/choosing-is-an-ability/">选择是一种能力</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/03/how-to-choose-rpc-framework/">How to Choose RPC Framework</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/10/what-is-product-manager-exactly/">到底什么是产品经理</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/liangshan">@liangshan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'liangshan',
+            count: 7,
+            skip_forks: false,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+<section>
+  <h1>Categories</h1>
+    <ul id="category-list"><li><a href='/blog/categories/anjuke'>anjuke (2)</a></li><li><a href='/blog/categories/ansible'>ansible (2)</a></li><li><a href='/blog/categories/best-practice'>best practice (1)</a></li><li><a href='/blog/categories/devops'>devops (1)</a></li><li><a href='/blog/categories/linux'>linux (2)</a></li><li><a href='/blog/categories/meta'>meta (2)</a></li><li><a href='/blog/categories/recommendation'>recommendation (1)</a></li><li><a href='/blog/categories/rpc'>rpc (2)</a></li><li><a href='/blog/categories/vagrant'>vagrant (1)</a></li><li><a href='/blog/categories/virtualenv'>virtualenv (1)</a></li></ul>
+</section>
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/112113128668997126531?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Liangshan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'liangshan';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://liangshan.me/blog/2014/05/22/isolate-ansible-code-and-source-code/';
+        var disqus_url = 'http://liangshan.me/blog/2014/05/22/isolate-ansible-code-and-source-code/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+<div style="display:none">
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1376902770881935" charset="utf-8"></script>
+</div>
+
+
+
+
+
+</body>
+</html>
