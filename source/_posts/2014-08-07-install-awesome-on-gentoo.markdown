@@ -21,7 +21,7 @@ X 分为 server 和 client, 但这里的 server 和 client 和我直觉上的理
 
 再说 awesome，首先要装较新版本的 awesome，这时候安装使用下面的命令：
 
-```bash
+```
 $ ACCEPT_KEYWORDS="~*" emerge x11-wm/awesome
 ```
 

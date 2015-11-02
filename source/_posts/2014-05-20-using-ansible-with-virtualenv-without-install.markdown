@@ -54,7 +54,7 @@ $ .virtualenv/bin/python setup.py develop
 
 但我们还希望将 ansible 命令加在系统的 PATH 里，这就需要一些小技巧。简单来说需要自己准备一个脚本，脚本的内容如下:
 
-```bash
+```
 $ touch ~/bin/_ansible_wrapper
 $ vim ~/bin/_ansible_wrapper
 

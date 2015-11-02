@@ -22,7 +22,7 @@ description: How to isolate ansible code and source code when using vagrant for 
 而开发环境，生产环境的部署则交给 ansible 来完成。那么我们的项目目录看起来是这样:
 
 ```
- .                  # root  
+ .                  # root
  |-- .provisioning/ # ansible 脚本目录
  |-- src/           # 源代码目录
  |-- Vagrantfile    # vagrant 启动脚本
@@ -92,7 +92,7 @@ Vagrantfile
 
 `make` 其实就是执行一些 shell 命令，如果翻译成 shell 应该类似下面的脚本。
 
-```bash
+```
 mkdir .provisioning
 cd .provisioning
 git init
@@ -103,7 +103,7 @@ cp .Vagrantfile ../Vagrantfile
 
 于此对应，再写一个 `make` 的 `target` 用于更新 ansible 脚本。
 
-```bash
+```
 cd .provisioning
 git pull origin master
 cp .Vagrantfile ../Vagrantfile

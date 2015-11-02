@@ -29,7 +29,8 @@ description: 将 octopress 的文章分享至微信和微博分享的详细做�
 
 在 `__config.yml` 中添加 jiathis 的相关配置，`$uid` 替换为真正的 `userid`，`userid` 可以从 jiathis 的示例代码中获取。
 
-```yaml __config.yml
+```yaml
+## __config.yml
 ## 下面的内容添加至文件尾部
 
 # Jiathis
@@ -45,7 +46,8 @@ jiathis 给的代码带一个「+」号还有分享数字，样式很不河蟹�
 
 {% raw %}
 
-```html+jinja source/_include/post/sharing
+```html+jinja
+  # source/_include/post/sharing
   <!-- 添加到相应的位置，twitter google+ 前后皆可 -->
   {% if site.jiathis_share %}
   <div class="jiathis_style_24x24" style="text-indent: 0px; margin: 0px; padding: 0px; border-style: none; float: none; line-height: normal; font-size: 1px; vertical-align: baseline; display: inline-block;  background: transparent;">
@@ -55,7 +57,8 @@ jiathis 给的代码带一个「+」号还有分享数字，样式很不河蟹�
   {% endif %}
 ```
 
-```html+jinja source/_includes/after_footer.html
+```html+jinja
+# source/_includes/after_footer.html
 <!-- 只加第 5 行 -->
 {% include disqus.html %}
 {% include facebook_like.html %}
@@ -65,12 +68,15 @@ jiathis 给的代码带一个「+」号还有分享数字，样式很不河蟹�
 {% include custom/after_footer.html %}
 ```
 
-```bash 添加一个文件
+```
+# 添加一个文件
 $ touch source/_includes/jiathis_share.html
 $ vi source/_includes/jiathis_share.html
 ```
 
-```html+jinja 该文件的内容
+```html+jinja
+
+# 该文件的内容
 
 {% if site.jiathis_share %}
 <div style="display:none">
