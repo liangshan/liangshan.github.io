@@ -9,7 +9,7 @@
   <meta name="author" content="Liangshan">
 
   
-  <meta name="description" content="自从决定 换个姿势写博客 之后，发现可写的内容越来越少了。 这次讲一个鸡汤故事。 故事要从我刚加入安居客说起，那时候刚刚加入一个相对有规模的团队，对身边的一切都充满着好奇，也折腾点东西。其实现在看来都是一些小儿科的东西，甚至有些是在重复造轮子，质量也不怎么样。但是凭着一股热情，还是打动了团队领导， &hellip;">
+  <meta name="description" content="现在很多应用都运行于多个平台之上，所以通用的做法是写出一套公共的 API 给各个应用统一调用。 比如移动版本的网页，一次典型的请求是这样的： 移动版本的服务端请求公共 API 拿到数据，然后在服务端或是客户端渲染 HTML 5 页面。 用户的登录信息通过 API 验证后，存储在本地的 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,60 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/04/12/api-first-design/">API-First vs. API-Friendly</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-04-12T15:32:52+08:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>3:32 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>现在很多应用都运行于多个平台之上，所以通用的做法是写出一套公共的 API 给各个应用统一调用。</p>
+
+<p>比如移动版本的网页，一次典型的请求是这样的：</p>
+
+<blockquote><p>移动版本的服务端请求公共 API 拿到数据，然后在服务端或是客户端渲染 HTML 5 页面。</p>
+
+<p>用户的登录信息通过 API 验证后，存储在本地的 Session 里。</p></blockquote>
+
+<p>这种架构的网页，我称之为 API-Friendly，因为这里面有明显的重复劳动：</p>
+
+<ul>
+<li>包含了 2 个后端，一个是网页的后端，一个是前者的后端 —— 公共 API</li>
+<li>有两层验证体系，一个是传统的用户名-密码体系，一个是使用签名和加密的 API 验证体系</li>
+</ul>
+
+
+<p>而我所说的 API-First 设计，就是在任何情况下都以调用 API 为第一目标的设计。</p>
+
+<p>还是以上述移动版本网页为例：</p>
+
+<p>移动版本的页面是纯静态页面，Javascript 直接请求公共 API，拿到数据后由客户端渲染页面（AngularJS 或者 ReactJS 这种技术）。
+这样做可以避免构建一个仅仅进行信息转发的后端，另外一个很大的好处是整个网站的所有页面都可以直接使用 CDN 缓存，也可以单独部署。</p>
+
+<p>移动版本的验证，第一次使用用户名密码登录，登录后返回一个 token。之后的每次请求都带着 token 访问 API 进行身份验证，客户端只存储 token，token 过期后需要重新登录。这样将前端页面直接当作 API 的使用者，每次请求都重新验证身份。这样其实也就没有传统意义上的登录和登出了。整个网页是<code>无状态</code>的，也不需要构建 2 套不同的认证体系。</p>
+
+<p>这样通过 API-First 的设计，就能够构建出现代的移动应用。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -482,46 +536,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/07/02/seven-year-itch/">七年之痒</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-07-02T15:34:35+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>2</span><span class='date-suffix'>nd</span>, <span class='date-year'>2014</span></span> <span class='time'>3:34 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote><p>“七年之痒”是个舶来词，人的细胞七年会完成一次整体的新陈代谢，可能七年后你就不爱这个人了。</p></blockquote>
-
-<p>我跟老婆不知不觉认识已经有七年了。</p>
-
-<p>但今天说的跟老婆没什么关系。</p>
-
-<p>因为再往前就是工作的第七个年头。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/07/02/seven-year-itch/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; Older</a>
@@ -537,6 +551,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2016/04/12/api-first-design/">API-First vs. API-Friendly</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2016/01/25/do-a-little-more/">多做一点点</a>
       </li>
     
@@ -550,10 +568,6 @@
     
       <li class="post">
         <a href="/blog/2014/12/24/choosing-is-an-ability/">选择是一种能力</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/11/03/how-to-choose-rpc-framework/">How to Choose RPC Framework</a>
       </li>
     
   </ul>
