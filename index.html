@@ -9,7 +9,8 @@
   <meta name="author" content="Liangshan">
 
   
-  <meta name="description" content="现在很多应用都运行于多个平台之上，所以通用的做法是写出一套公共的 API 给各个应用统一调用。 比如移动版本的网页，一次典型的请求是这样的： 移动版本的服务端请求公共 API 拿到数据，然后在服务端或是客户端渲染 HTML 5 页面。 用户的登录信息通过 API 验证后，存储在本地的 &hellip;">
+  <meta name="description" content="前段时间在做我们内部一个业务的性能优化，过程里有些感想，这里记录一下。 略去具体的技术手段，我想到的其实超出了性能优化的范畴。 首先，优化上线之后引起了 2 个 bug，一个是重构之后某个代码分支没有测试到，另外一个是某处改动同时被其他页面引用，所以影响了该页面。
+这印证了我一直以来的想法， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +80,50 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/07/18/beyond-tuning-performance/">网站性能优化之外</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-07-18T16:36:21+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>4:36 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>前段时间在做我们内部一个业务的性能优化，过程里有些感想，这里记录一下。</p>
+
+<p>略去具体的技术手段，我想到的其实超出了性能优化的范畴。</p>
+
+<p>首先，优化上线之后引起了 2 个 bug，一个是重构之后某个代码分支没有测试到，另外一个是某处改动同时被其他页面引用，所以影响了该页面。
+这印证了我一直以来的想法，写测试代码看似花了额外的时间，其实节省的都是将来修改 bug 的时间。如果没有这些测试代码，怎么有自信去不停的改进？</p>
+
+<p>其次，在整个调优的过程中，我一直在想如果这些代码经过充分的讨论以及 Review，可能就不会被带到线上。因为一些是明显的慢查询，以及一些相关设计上的缺陷。所以 Code Review 看起来同样花了额外的时间，其实节省了将来重构的时间。</p>
+
+<p>其实这两件事还可以结合起来看，没有 review 没有测试代码，或许在暗示工程师可以写烂代码，反正只要项目上线之前测试工程师能通过就可以了。</p>
+
+<p>团队最怕的就是「内耗」，在这次优化过程中，我花了大概一个礼拜的时间。首先把性能数据可视化，以便能直观的看到优化效果，然后了解业务、分析代码，最后动手优化，前后改进了 3 个版本。我认为这已经是某种程度的内耗，因为原本可以做更有意义的事，但花了一个星期来做一些经过工程方法可以避免的事情。</p>
+
+<p>另外想到的一个问题是，我们总是要平衡设计和施工速度。现在互联网公司的趋势是强调施工速度，而刻意避免过度设计。我也反对过度设计，但这并不等于什么都不管先实现再说。反对过度设计并不能成为自己写烂代码的借口。作为一个设计者，要知道哪些东西是「覆水难收」，哪些东西要留足可扩展性。而几乎任何时候，保持低耦合都是很重要的原则。</p>
+
+<p>最后我想说的是，重视招聘和工程师文化的建设，或许这才是解决问题的根本。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -490,52 +535,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/08/06/install-gentoo-from-systemrescuecd/">使用 SystemRescueCD 安装 Gentoo</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-08-06T17:50:10+08:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>6</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>5:50 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>在使用 Ubuntu 有 3 年之后，第一次有了换个发行版的想法。
-其实我觉得做任何事情都要循序渐进，在合适的时候做合适的事情才能事半功倍。</p>
-
-<p>3 年前选择从 Ubuntu 入手应该是不错的选择，现在想换一个更自由的发行版也是水到渠成。选来选去，选了 gentoo，主要是在浏览的过程中以下几点吸引了我:</p>
-
-<ol>
-<li>自由度高，一切从头开始</li>
-<li>升级频繁</li>
-<li>很先进的包管理工具</li>
-</ol>
-
-
-<p>其实大多数时候我不是一个爱折腾的人，所以这次抓住了一闪而过想折腾的机会，第一天下午就开始动手了。第一个动作就是买一个 U 盘，是的，要准备一个 U 盘。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/08/06/install-gentoo-from-systemrescuecd/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; Older</a>
@@ -551,6 +550,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2016/07/18/beyond-tuning-performance/">网站性能优化之外</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2016/04/12/api-first-design/">API-First vs. API-Friendly</a>
       </li>
     
@@ -564,10 +567,6 @@
     
       <li class="post">
         <a href="/blog/2015/06/14/ji-zhi-de-ping-heng/">极致的平衡</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/12/24/choosing-is-an-ability/">选择是一种能力</a>
       </li>
     
   </ul>

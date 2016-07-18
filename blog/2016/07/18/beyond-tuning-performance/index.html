@@ -5,12 +5,13 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>How to Choose RPC Framework - Liangshan</title>
+  <title>网站性能优化之外 - Liangshan</title>
   <meta name="author" content="Liangshan">
 
   
-  <meta name="description" content="Why we need RPC, and discuss how to choose by comparing Apache Thrift and ZeroRPC.">
-  <meta name="keywords" content="rpc, thrift, zerorpc">
+  <meta name="description" content="前段时间在做我们内部一个业务的性能优化，过程里有些感想，这里记录一下。 略去具体的技术手段，我想到的其实超出了性能优化的范畴。 首先，优化上线之后引起了 2 个 bug，一个是重构之后某个代码分支没有测试到，另外一个是某处改动同时被其他页面引用，所以影响了该页面。
+这印证了我一直以来的想法， &hellip;">
+  
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -18,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://liangshan.me/blog/2014/11/03/how-to-choose-rpc-framework">
+  <link rel="canonical" href="http://liangshan.me/blog/2016/07/18/beyond-tuning-performance">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Liangshan" type="application/atom+xml">
@@ -82,7 +83,7 @@
   
   <header>
     
-      <h1 class="entry-title">How to Choose RPC Framework</h1>
+      <h1 class="entry-title">网站性能优化之外</h1>
     
     
       <p class="meta">
@@ -91,39 +92,29 @@
 
 
 
-<time class='entry-date' datetime='2014-11-03T15:16:21+08:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>3</span><span class='date-suffix'>rd</span>, <span class='date-year'>2014</span></span> <span class='time'>3:16 pm</span></time>
+<time class='entry-date' datetime='2016-07-18T16:36:21+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>4:36 pm</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>RPC 是 remote procedure call 的缩写，意指调用远程进程的方法。这里的远程需要广义的理解，有时为了协议的统一即使调用本地进程也叫做 RPC，所以 RPC 可简单理解为进程间通信。</p>
+<div class="entry-content"><p>前段时间在做我们内部一个业务的性能优化，过程里有些感想，这里记录一下。</p>
 
-<p>在选择 RPC 框架之前，要搞清楚为什么需要 RPC？ RPC 主要是为了解决服务化架构中客户端与服务端以及服务之间通讯的问题。在最早接触 RPC 的时候，我一直有一个疑问： RESTful API 不就搞定了么？为什么需要 RPC？直到深入实践了 RPC，我自己总结了 RPC 与 RESTful API 最大的几个不同。</p>
+<p>略去具体的技术手段，我想到的其实超出了性能优化的范畴。</p>
 
-<!-- more -->
+<p>首先，优化上线之后引起了 2 个 bug，一个是重构之后某个代码分支没有测试到，另外一个是某处改动同时被其他页面引用，所以影响了该页面。
+这印证了我一直以来的想法，写测试代码看似花了额外的时间，其实节省的都是将来修改 bug 的时间。如果没有这些测试代码，怎么有自信去不停的改进？</p>
 
+<p>其次，在整个调优的过程中，我一直在想如果这些代码经过充分的讨论以及 Review，可能就不会被带到线上。因为一些是明显的慢查询，以及一些相关设计上的缺陷。所以 Code Review 看起来同样花了额外的时间，其实节省了将来重构的时间。</p>
 
-<p>首先，RESTful API 经常纠结的问题就是，到底在什么样的资源粒度上开放接口？到底需要哪些接口？而在 RPC 中这个问题被很大程度上淡化了，因为 RPC 使用起来几乎和本地方法没有太多区别。</p>
+<p>其实这两件事还可以结合起来看，没有 review 没有测试代码，或许在暗示工程师可以写烂代码，反正只要项目上线之前测试工程师能通过就可以了。</p>
 
-<p>其次，RESTful API 在应用层使用 HTTP 协议，这使得传输数据受到限制，实践中早些年流行过 xml，现在 JSON 应该是标准做法了。但这些在大量读写时，都会消耗较大的流量，构造这些结构必然消耗额外的带宽。而 RPC 的协议都是由各框架自己定义的，目前还没有形成标准，以 Apache Thrift （以下简称 Thrift）为例，使用二进制的编码大大降低了数据大小。</p>
+<p>团队最怕的就是「内耗」，在这次优化过程中，我花了大概一个礼拜的时间。首先把性能数据可视化，以便能直观的看到优化效果，然后了解业务、分析代码，最后动手优化，前后改进了 3 个版本。我认为这已经是某种程度的内耗，因为原本可以做更有意义的事，但花了一个星期来做一些经过工程方法可以避免的事情。</p>
 
-<p>最后，也是我认为最重要的区别， RPC 可以实现异步请求，而受限于 HTTP 协议的 RESTful API 则无法实现这个功能。而异步请求让整个请求过程变得非阻塞，比如在一个 PHP 进程中将互不依赖的几个数据请求变成异步执行，这样执行时间取决于最慢的请求而不是它们相加。</p>
+<p>另外想到的一个问题是，我们总是要平衡设计和施工速度。现在互联网公司的趋势是强调施工速度，而刻意避免过度设计。我也反对过度设计，但这并不等于什么都不管先实现再说。反对过度设计并不能成为自己写烂代码的借口。作为一个设计者，要知道哪些东西是「覆水难收」，哪些东西要留足可扩展性。而几乎任何时候，保持低耦合都是很重要的原则。</p>
 
-<p>基于以上 3 点，我们非常确定需要选择一个 RPC 框架，比较流行的有 Thrift, Google Protocol Buffer, Avro。我将它们归为一类，并以 Thrift 为代表。但我倾向于另外一个选择：基于 ZeroMQ 和 Msgpack 的 ZeroRPC。下面以 Thrift 和 ZeroRPC 的对比来解释我的选择，这些对比并不涉及易用性或者安全性，仅仅从核心的信息传递角度来比较。</p>
-
-<p>在 RPC 框架中，最重要的 3 个核心组件： transport，protocol，encoding。</p>
-
-<p>Transport，即传输方式。Thrift 使用 socket，而 ZeroRPC 使用 ZeroMQ —— 一个丰富扩展过的 socket 类库。在传输方式的灵活性上，ZeroRPC 明显胜过一筹。</p>
-
-<p>Protocol，即通讯协议。Thrift 使用自己定义的 Tprotocol，协议并不复杂，以 byte 长度来规定消息格式。比如前 4 个 byte 来表示状态码。而基于 ZeroMQ 的扩展， ZeroRPC 可以使用消息帧（Frames）来构建更加灵活的通讯协议。</p>
-
-<p>Encoding，即序列化或简单理解为数据压缩。Thrift 的文档中并没有透露过多关于序列化算法的细节，而 ZeroRPC 使用 Msgpack 作为序列化/反序列化的工具。 Msgpack 本身是一个优秀的开源项目，功能更加强大。</p>
-
-<p>除了以上 3 个维度，我认为 ZeroRPC 还有另外一个明显的优势，ZeroRPC 是由 2 款开源软件组合而成，这意味着可以灵活的替换为其他类似的组件。比如 nanomsg 来替代 ZeroMQ，只要 SDK 封装的足够抽象，可以无缝的切换类库。</p>
-
-<p>说了这么多，其实 ZeroRPC 最大的优势就是 ZeroMQ，给 socket 加上了更加丰富的可能性。但 ZeroRPC 没有提供 PHP 的客户端，我可能需要根据它的协议来自己构建一个。</p>
+<p>最后我想说的是，重视招聘和工程师文化的建设，或许这才是解决问题的根本。</p>
 </div>
 
 
@@ -139,14 +130,8 @@
 
 
 
-<time class='entry-date' datetime='2014-11-03T15:16:21+08:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>3</span><span class='date-suffix'>rd</span>, <span class='date-year'>2014</span></span> <span class='time'>3:16 pm</span></time>
+<time class='entry-date' datetime='2016-07-18T16:36:21+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>4:36 pm</span></time>
       
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/rpc/'>rpc</a>
-  
-</span>
 
 
     </p>
@@ -159,7 +144,7 @@
   </div>
   
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://liangshan.me/blog/2014/11/03/how-to-choose-rpc-framework/" data-via="LisumL" data-counturl="http://liangshan.me/blog/2014/11/03/how-to-choose-rpc-framework/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://liangshan.me/blog/2016/07/18/beyond-tuning-performance/" data-via="LisumL" data-counturl="http://liangshan.me/blog/2016/07/18/beyond-tuning-performance/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -170,10 +155,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/09/10/what-is-product-manager-exactly/" title="Previous Post: 到底什么是产品经理">&laquo; 到底什么是产品经理</a>
+        <a class="basic-alignment left" href="/blog/2016/04/12/api-first-design/" title="Previous Post: API-First vs. API-Friendly">&laquo; API-First vs. API-Friendly</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/12/24/choosing-is-an-ability/" title="Next Post: 选择是一种能力">选择是一种能力 &raquo;</a>
       
     </p>
   </footer>
@@ -280,8 +263,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://liangshan.me/blog/2014/11/03/how-to-choose-rpc-framework/';
-        var disqus_url = 'http://liangshan.me/blog/2014/11/03/how-to-choose-rpc-framework/';
+        var disqus_identifier = 'http://liangshan.me/blog/2016/07/18/beyond-tuning-performance/';
+        var disqus_url = 'http://liangshan.me/blog/2016/07/18/beyond-tuning-performance/';
         var disqus_script = 'embed.js';
       
     (function () {
