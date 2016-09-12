@@ -1,0 +1,335 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>记一次性能调优 - Liangshan</title>
+  <meta name="author" content="Liangshan">
+
+  
+  <meta name="description" content="继上次做性能优化之后，再次针对我们刚刚全新升级的 app 做了一轮性能调优，而这个过程又引起了我一些思考，这里做一个记录。 根据多年的经验，性能问题一般都是由后端服务引起，API 服务器忙都是受后端服务的拖累所表现出来的现象。所以一入手就是监控各个后端服务的运行情况，初步定位瓶颈在数据库上。 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://liangshan.me/blog/2016/09/12/the-law-of-leaky-abstractions">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Liangshan" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script> 
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='//fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-50920618-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body    class="collapse-sidebar sidebar-footer" >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Liangshan</a></h1>
+  
+    <h2>Inner peace.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:liangshan.me" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a target="_blank" href="/about.html">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">记一次性能调优</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-09-12T14:35:18+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>2:35 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>继上次做性能优化之后，再次针对我们刚刚全新升级的 app 做了一轮性能调优，而这个过程又引起了我一些思考，这里做一个记录。</p>
+
+<p>根据多年的经验，性能问题一般都是由后端服务引起，API 服务器忙都是受后端服务的拖累所表现出来的现象。所以一入手就是监控各个后端服务的运行情况，初步定位瓶颈在数据库上。第一步就是趁着业务上将来要做全文检索，使用搜索引擎代替数据库作为列表的数据源。这个优化上线之后，高峰时数据库压力有了明显改善。然而这个改善并没有表现在前端页面的速度监控上，几乎所有页面都非常统一的在某些时间点会有长至几秒钟的响应时间，发生的时间间隔没有明显规律，大概几分钟一次，每次持续十几秒钟，并且这些异常并不跟我们的业务高峰有重合。</p>
+
+<p>当时的猜测有 2 个，一个是仍然有什么慢查询影响了整个数据库的性能，从而影响了整站的性能。另外一个是某台机器有问题，所以所有落在那台机器上的请求都会变慢。要验证第二点是非常简单的，我单独拿了一台机器去独立运行最简单的一个业务，结果显示并没有什么变化。</p>
+
+<p>再次确认 API 机器没有资源瓶颈的前提下，决定在代码里埋点统计执行时间，发现了一些执行很慢的代码块，慢的时间和那些异常时间也吻合，只是执行时长对不上。刚才提到异常时刻的响应时间以秒计算，这些慢查询最慢也就是几百毫秒，不在一个数量级。第一感觉就是也许这些慢查询累加起来就会将危害放大。总之优化这些地方最起码不是错误的，于是着手把这些找到的点都修正掉了。</p>
+
+<p>然而那些监控图表上的毛刺像一根根的针一样依然存在，并且由于做了几轮优化，高峰和低谷的对比更加明显，这些图看起来就更诡异。</p>
+
+<!-- more -->
+
+
+<p>针对每个页面都有同样表现这个特点，我想到了会不会是代码的中间层有问题。框架总会提供一些方案来给开发人员在执行业务代码之前统一做一些事情，比如权限检查、登录检查等等。如果是这里有问题，可以解释为什么所有页面都受影响。同样做埋点和统计，发现了某个中间层代码存在的慢查询，这次异常的时间和时长都对应的上。于是很高兴的做了优化，然后上线。</p>
+
+<p>结果仍然没有什么改变，最不可思议的是异常代码块似乎会「转移」，现在转移到一个最简单的主键查询上。</p>
+
+<p>当时刚好是午饭时间，带着郁闷的心情去吃了寿司，边吃饭边思考，这些所有看到的现象是不是都仅仅是现象，而不是根本原因？为什么出现在中间层？为什么会转移？突然我意识到或许是建立连接很慢，哪里第一次建立连接哪里就慢，之前优化中增加了缓存所以慢的代码发生了「转移」。</p>
+
+<p>有些假设你第一次想到的时候就知道是对的，就像你上学时候做出的物理题结果一看就知道对错，正确的东西带有一种独特的气息。</p>
+
+<p>下午回去就做了一个实验，在应用程序刚开始运行的时候就执行一段数据库查询。结果印证了我的假设，异常代码块「转移」到了新加的实验代码上。那么在建立连接的时候到底发生了什么呢？于是在生产环境抓包，在本地来做分析。通过比对正常时间和异常时间 TCP 包的内容，发现每次异常期间，就会有大量的 <code>use db</code> 语句卡住。说实话刚刚确认这一点的时候我觉得非常惊讶，因为从来没有想过这个会有问题。为了避免是某种语言或者特定框架的问题，我单独写了一个 shell 脚本做测试，结果显示和线上代码反应的结果一致。</p>
+
+<p>我们使用的是阿里云服务，联系了他们的技术支持，虽然仍然不知道什么导致了 <code>use db</code> 的问题，但最终通过切换实例的可用区解决了现象，应用程序终于可以平稳运行。</p>
+
+<p>在这个曲折的过程中，我想说的是，解决不了问题的时候，吃顿好的还是非常有用的。</p>
+
+<p>好吧，我认为在特定的时刻允许工程师直接到线上调试是非常重要的，设想如果每次想验证想法都要等上线，整个调试过程的连续性和有效性都无法得到保证。但是我依然坚持线上调试需要至少两个人以结对编程的方式进行。</p>
+
+<p>后来，我把这个事情和之前的同事分享。他提到一个词，也是这篇文章的英文标题：抽象泄漏。有兴趣可以去看他 <a href="http://shzhangji.com/blog/2013/12/17/the-law-of-leaky-abstractions/">翻译的原文</a>，这里只做摘录，其中的观点非常有趣。</p>
+
+<blockquote><p>这就是我所说的“抽象泄漏”。TCP协议试图提供一个完整的抽象，将底层不可靠的数据传输包装起来，但是，底层的传输有时也会发生问题，即便是TCP协议也无法解决，这时你会发现，它也不是万能的。TCP协议就是“抽象泄漏定律”的示例之一，其实，几乎所有的抽象都是泄漏的。这种泄漏有时很小，有时会很严重。</p>
+
+<p>由于抽象定律的存在，每当有人说自己发现了一款新的代码生成工具，能够大大提高我们的编程效率时，你会听很多人说“先学习手工编写，再去用工具生成”。代码生成工具是一种抽象，同样也会泄漏，唯一的解决方法是学习它的实现原理，即它抽象了什么。所以说抽象只是用于提高我们的工作效率的，而不会节省我们的学习时间。</p>
+
+<p>这就形成了一个悖论：当我们拥有越来越高级的开发工具，越来越好的“抽象”，要成为一个高水平的程序员反而越来越困难了。</p></blockquote>
+
+<p>具体到我们这个案例里面，至少有 2 处抽象泄漏。首先，数据库连接层将如何连接数据库抽象出来，将登录数据库和切换数据库的行为隐藏起来，对于程序员来说，只需要初始化一个数据库连接对象就会做掉这 2 件事情，所以一开始我会误以为是数据库连接问题，而其实是切换数据库时才会有问题。其次，更要命的抽象泄漏就是云服务，云服务带来很多便利，然而一旦服务出了问题，就非常难以定位和解决，且不说定位就花了一周时间，单单从确认是阿里云的问题开始到最终解决就花了 4 天时间，而这个就是「抽象泄漏」一文中很重要的观点：</p>
+
+<blockquote><p>十年前，我们会想象未来能够出现各种新式的编程范型，简化我们的工作。的确，这些年我们创造的各类抽象使得开发复杂的大型软件变得比十五年前要简单得多，就像GUI和网络编程。现代的面向对象编程语言让我们的工作变得高效快速。但突然有一天，这种抽象泄漏出一个问题，解决它需要耗费两星期。</p></blockquote>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Liangshan</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2016-09-12T14:35:18+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>2:35 pm</span></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <div class="jiathis_style_24x24" style="width: 100px; text-indent: 0px; margin: 0px; padding: 0px; border-style: none; float: none; line-height: normal; font-size: 1px; vertical-align: baseline; display: inline-block;  background: transparent;">
+    <a class="jiathis_button_weixin"></a>
+    <a class="jiathis_button_tsina"></a>
+  </div>
+  
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://liangshan.me/blog/2016/09/12/the-law-of-leaky-abstractions/" data-via="LisumL" data-counturl="http://liangshan.me/blog/2016/09/12/the-law-of-leaky-abstractions/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2016/07/18/beyond-tuning-performance/" title="Previous Post: 网站性能优化之外">&laquo; 网站性能优化之外</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/09/12/the-law-of-leaky-abstractions/">记一次性能调优</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/07/18/beyond-tuning-performance/">网站性能优化之外</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/04/12/api-first-design/">API-First vs. API-Friendly</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/01/25/do-a-little-more/">多做一点点</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/06/21/dive-into-soa-architecture/">深入实践 SOA 架构</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/liangshan">@liangshan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'liangshan',
+            count: 7,
+            skip_forks: false,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+<section>
+  <h1>Categories</h1>
+    <ul id="category-list"><li><a href='/blog/categories/anjuke'>anjuke (2)</a></li><li><a href='/blog/categories/ansible'>ansible (2)</a></li><li><a href='/blog/categories/best-practice'>best practice (1)</a></li><li><a href='/blog/categories/devops'>devops (1)</a></li><li><a href='/blog/categories/linux'>linux (2)</a></li><li><a href='/blog/categories/meta'>meta (2)</a></li><li><a href='/blog/categories/recommendation'>recommendation (1)</a></li><li><a href='/blog/categories/rpc'>rpc (2)</a></li><li><a href='/blog/categories/vagrant'>vagrant (1)</a></li><li><a href='/blog/categories/virtualenv'>virtualenv (1)</a></li></ul>
+</section>
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/112113128668997126531?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - Liangshan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'liangshan';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://liangshan.me/blog/2016/09/12/the-law-of-leaky-abstractions/';
+        var disqus_url = 'http://liangshan.me/blog/2016/09/12/the-law-of-leaky-abstractions/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+<div style="display:none">
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1376902770881935" charset="utf-8"></script>
+</div>
+
+
+
+
+
+</body>
+</html>

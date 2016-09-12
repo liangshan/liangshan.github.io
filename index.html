@@ -9,8 +9,7 @@
   <meta name="author" content="Liangshan">
 
   
-  <meta name="description" content="前段时间在做我们内部一个业务的性能优化，过程里有些感想，这里记录一下。 略去具体的技术手段，我想到的其实超出了性能优化的范畴。 首先，优化上线之后引起了 2 个 bug，一个是重构之后某个代码分支没有测试到，另外一个是某处改动同时被其他页面引用，所以影响了该页面。
-这印证了我一直以来的想法， &hellip;">
+  <meta name="description" content="继上次做性能优化之后，再次针对我们刚刚全新升级的 app 做了一轮性能调优，而这个过程又引起了我一些思考，这里做一个记录。 根据多年的经验，性能问题一般都是由后端服务引起，API 服务器忙都是受后端服务的拖累所表现出来的现象。所以一入手就是监控各个后端服务的运行情况，初步定位瓶颈在数据库上。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +79,48 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/09/12/the-law-of-leaky-abstractions/">记一次性能调优</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-09-12T14:35:18+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>2:35 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>继上次做性能优化之后，再次针对我们刚刚全新升级的 app 做了一轮性能调优，而这个过程又引起了我一些思考，这里做一个记录。</p>
+
+<p>根据多年的经验，性能问题一般都是由后端服务引起，API 服务器忙都是受后端服务的拖累所表现出来的现象。所以一入手就是监控各个后端服务的运行情况，初步定位瓶颈在数据库上。第一步就是趁着业务上将来要做全文检索，使用搜索引擎代替数据库作为列表的数据源。这个优化上线之后，高峰时数据库压力有了明显改善。然而这个改善并没有表现在前端页面的速度监控上，几乎所有页面都非常统一的在某些时间点会有长至几秒钟的响应时间，发生的时间间隔没有明显规律，大概几分钟一次，每次持续十几秒钟，并且这些异常并不跟我们的业务高峰有重合。</p>
+
+<p>当时的猜测有 2 个，一个是仍然有什么慢查询影响了整个数据库的性能，从而影响了整站的性能。另外一个是某台机器有问题，所以所有落在那台机器上的请求都会变慢。要验证第二点是非常简单的，我单独拿了一台机器去独立运行最简单的一个业务，结果显示并没有什么变化。</p>
+
+<p>再次确认 API 机器没有资源瓶颈的前提下，决定在代码里埋点统计执行时间，发现了一些执行很慢的代码块，慢的时间和那些异常时间也吻合，只是执行时长对不上。刚才提到异常时刻的响应时间以秒计算，这些慢查询最慢也就是几百毫秒，不在一个数量级。第一感觉就是也许这些慢查询累加起来就会将危害放大。总之优化这些地方最起码不是错误的，于是着手把这些找到的点都修正掉了。</p>
+
+<p>然而那些监控图表上的毛刺像一根根的针一样依然存在，并且由于做了几轮优化，高峰和低谷的对比更加明显，这些图看起来就更诡异。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2016/09/12/the-law-of-leaky-abstractions/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -500,41 +541,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/08/07/install-awesome-on-gentoo/">在 Gentoo 上安装 Awesome</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-08-07T14:06:30+08:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>2:06 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>都装 gentoo 了，趁热装桌面环境吧。linux 的视窗系统称为 X Window System。
-在开源世界里，通常是协议先行，各自实现。同样 X 只是协议，在各种实现中以 X.Org 最受欢迎，当时使用的协议为 X11，所以后来 X 也被人们称为 X11。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/08/07/install-awesome-on-gentoo/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; Older</a>
@@ -550,6 +556,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2016/09/12/the-law-of-leaky-abstractions/">记一次性能调优</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2016/07/18/beyond-tuning-performance/">网站性能优化之外</a>
       </li>
     
@@ -563,10 +573,6 @@
     
       <li class="post">
         <a href="/blog/2015/06/21/dive-into-soa-architecture/">深入实践 SOA 架构</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/06/14/ji-zhi-de-ping-heng/">极致的平衡</a>
       </li>
     
   </ul>
