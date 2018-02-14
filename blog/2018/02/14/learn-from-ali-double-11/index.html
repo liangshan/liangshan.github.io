@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>在 Gentoo 上安装 Awesome - Liangshan</title>
+  <title>认真学习阿里双11的技术 - Liangshan</title>
   <meta name="author" content="Liangshan">
 
   
-  <meta name="description" content="使用 SystemRescueCD 快速的安装 gentoo，然后安装 awesome 桌面环境。">
-  <meta name="keywords" content="linux, gentoo, x11, awesome, SystemRescueCD">
+  <meta name="description" content="难得过年没有请假，有时间整理一下前几天看了别人转发的，关于阿里双十一的一些技术总结。原文应该叫「互联网技术超级工程」，有兴趣的可以去互联网上搜索一下，应该是免费提供下载的。 那些开源软件的升级版、定制版我就直接略过了，确实是要到一定规模才会遇到的问题，现在看也看不懂。说一些我觉得有意思的地方吧。 &hellip;">
+  
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://liangshan.me/blog/2014/08/07/install-awesome-on-gentoo">
+  <link rel="canonical" href="http://liangshan.me/blog/2018/02/14/learn-from-ali-double-11">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Liangshan" type="application/atom+xml">
@@ -82,7 +82,7 @@
   
   <header>
     
-      <h1 class="entry-title">在 Gentoo 上安装 Awesome</h1>
+      <h1 class="entry-title">认真学习阿里双11的技术</h1>
     
     
       <p class="meta">
@@ -91,52 +91,49 @@
 
 
 
-<time class='entry-date' datetime='2014-08-07T14:06:30+08:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>2:06 pm</span></time>
+<time class='entry-date' datetime='2018-02-14T13:45:51+08:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>14</span><span class='date-suffix'>th</span>, <span class='date-year'>2018</span></span> <span class='time'>1:45 pm</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>都装 gentoo 了，趁热装桌面环境吧。linux 的视窗系统称为 X Window System。
-在开源世界里，通常是协议先行，各自实现。同样 X 只是协议，在各种实现中以 X.Org 最受欢迎，当时使用的协议为 X11，所以后来 X 也被人们称为 X11。</p>
+<div class="entry-content"><p>难得过年没有请假，有时间整理一下前几天看了别人转发的，关于阿里双十一的一些技术总结。原文应该叫「互联网技术超级工程」，有兴趣的可以去互联网上搜索一下，应该是免费提供下载的。</p>
 
-<!-- more -->
+<p>那些开源软件的升级版、定制版我就直接略过了，确实是要到一定规模才会遇到的问题，现在看也看不懂。说一些我觉得有意思的地方吧。</p>
 
-
-<p>X 分为 server 和 client, 但这里的 server 和 client 和我直觉上的理解有点相反。比如接收用户行为的反而是 server。另外一大特色就是 client 之间是不知道对方存在的，比如桌面上运行了 terminal 和 chrome，它们之间的位置关系互相是不清楚的。所以需要一个软件来管理 client 的位置、大小、外观，同时提供类似于桌面的环境，这个软件就叫 X window manager，我们这里选择的是 awesome。X 具体的协议要去翻协议或者看 wiki 可以了解大概。</p>
-
-<p>安装也分为 server 和 window manager 来进行。gentoo 安装每个软件基本上都会有一个 wiki 页面，照着手册来就可以了，所以建议照着 gentoo 的 wiki 来安装软件，而不是软件本身的手册。下面只讲手册上没说的内容，也就是我踩到的坑。</p>
-
-<p>先讲 X server，第一次使用的驱动是开源版本 nouveau，也是手册上推荐的版本。但 awesome 装好之后无法启动。重新改了 make.conf 把显卡模块改为 nvidia 重装 server 就成功了。不知道是某款型号的个体问题还是普遍问题，仅供参考吧。</p>
-
-<p>再说 awesome，首先要装较新版本的 awesome，这时候安装使用下面的命令：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ ACCEPT_KEYWORDS="~*" emerge x11-wm/awesome</span></code></pre></td></tr></table></div></figure>
+<!--more-->
 
 
-<p>装完之后运行 <code>startx</code> 应该有一个朴素的桌面启动了，这时候我们要花很多时间来美化它。</p>
+<p>之前在安居客我也做过搜索，优化过很长时间，方向就是语义化(semantic)。简单来说，除去文本匹配之外试图理解用户更深层的意思。比如，如果用户搜索「近期好看的电影」，机器如何理解「近期」呢？阿里的做法是通过 query 品类预测、query 改写，可以得出「近期好看的电影」和「2018年好看的电影」相似度较高。首先是品类预测，每次查询之后的点击转化都会用于学习这次查询中的词和品类之间的关系。然后再通过 DSSM 来猜测和这个 query 接近的其他 query。同样使用 DSSM 可以训练物品之间的相似度、物品标题和物品内容的匹配度(引用原文说法：「可以一定程度上遏制淘宝商品标题堆砌热门关键词的问题」。</p>
 
-<p>我是说在没有社区的情况下:D</p>
+<p>阿里有很多活动，每个活动都有很多细则，以及问答知识库。以往都是人工来生成这些问答，但其实这些答案都是从细则中来的，所以可以尝试使用机器学习来做「阅读理解」，自动从活动规则中找到用户想要的答案。这个思路很酷，具体流程：</p>
 
-<p>github 上搜索 awesome themes，结果一大把了，早有人帮大家归纳了很多漂亮的皮肤，即使没有一个喜欢的，参考配置文件总是不错的。</p>
+<p><img src="/images/custom/arch-auto-answer.png" /></p>
 
-<p>我使用的叫做 <a href="https://github.com/copycat-killer/awesome-copycats">awesome-copycats</a>，除此之外还有中文字体，输入法，终端配置等等要折腾。我把用到的配置文件都放进 <a href="https://github.com/liangshan/liangshan.gentoo">github</a> 上，省的再次折腾。这里只是需要几个备注：</p>
+<p>另外文章中多次提到了 A/B 测试的结果，大促期间确实是一个有足够数据来测试想法的好机会。</p>
 
-<ol>
-<li>这个皮肤的网络控件需要先安装 <code>iproute</code></li>
-<li>编译终端需要 <code>USE=xft</code> 才能使用 X Font Server 的字体</li>
-</ol>
+<p>最后想提一下混部技术。简单来说，业务有高峰波谷，能不能在闲时自动调度一些其他任务过来执行？</p>
 
+<blockquote><p>很多人都被车堵过，而堵车的时候，并不是所有的车道都在堵车。有一个比较
+有趣的情况，我们称之为潮汐现象，而它造成的问题是在早高峰的时候是进城方向堵
+车，而晚高峰是出城方向堵。而为了缓解这个问题，我们使用了潮汐车道的方式。
+那么同样的原理，是否如果能让这两个集群混合起来部署，让计算任务的一部分
+任务跑到在线服务的资源之上，把在线服务空闲的资源利用起来呢？答案是肯定的。</p></blockquote>
 
-<p>最后安装一下最新版的 firefox（仍然使用 <code>ACCEPT_KEYWORDS="~*"</code> 确保新版），需要提到的是 perl 的 <code>XML-Parser</code> 模块过期了，可能要先升级一下，否则编译过程会报错。</p>
+<p>需求很简单，但做起来就非常难了。有多难呢？以阿里的人力物力，做了 4 年才落地，2017年的双11有 20% 的流量跑在混部的机器上。因为这里面的基础设施太复杂，首先不同的应用需要跑在自己完全隔离的环境中，还要实现闲/忙时段的自动调度。但这样的大工程一旦启用，就会发挥巨大的价值，据发明这项技术的 Google 透露，可以节约 30% 的服务器资源。</p>
 
-<p>要注意整个过程都没有安装 DM(display manager)，还是手动的 <code>startx</code> 来启动，以后遇到问题再装吧。</p>
+<p>老实讲看完了第一个感受就是，这得有多少个工程师啊。一直以来我的想法就是人招少一点，招好一点，这样这批人无论做什么都能搞定。但看完这个介绍之后，你不得不承认在某一个领域堆砌人才确实可以把深度做的足够深。举个例子，「发红包」应该是现在促销的常规手段了，一般的做法无非就是人为定一些规则，让用户来领或者抢。但双11的红包背后居然有一整套的机器学习模型来支持：</p>
 
-<p>上个图吧（为什么有种女人写美容攻略的感觉？），其实我最早就是想弄个 awesome，没想到整了这么多。</p>
+<blockquote><ul>
+<li>消费者双 11 当天消费金额预估—根据预估的消费金额，计算消费者需要的购物津贴，确保购物津贴有稀缺感的同时，最大化的促进成交</li>
+<li>消费者优惠敏感度分析—对于不同的消费者，发放不同金额的红包，在保证使用率的同时，可以惠及更多的消费者。</li>
+<li>消费者传播力分析—在火炬红包活动中，可以给高传播用户更高获取未点亮红包的概率，以触达、传播更多的用户。</li>
+<li>消费者类目偏好分析、流失分析—用于产出需要重点关注的人群（比如“偏科”人群、流失人群、光看不买人群），可以发放特定的红包提升用户转化。</li>
+</ul>
+</blockquote>
 
-<p><img src="/images/custom/awesome.png" /></p>
+<p>佩(zhen)服(xian)。</p>
 </div>
 
 
@@ -152,14 +149,8 @@
 
 
 
-<time class='entry-date' datetime='2014-08-07T14:06:30+08:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>2:06 pm</span></time>
+<time class='entry-date' datetime='2018-02-14T13:45:51+08:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>14</span><span class='date-suffix'>th</span>, <span class='date-year'>2018</span></span> <span class='time'>1:45 pm</span></time>
       
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/linux/'>linux</a>
-  
-</span>
 
 
     </p>
@@ -172,7 +163,7 @@
   </div>
   
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://liangshan.me/blog/2014/08/07/install-awesome-on-gentoo/" data-via="LisumL" data-counturl="http://liangshan.me/blog/2014/08/07/install-awesome-on-gentoo/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://liangshan.me/blog/2018/02/14/learn-from-ali-double-11/" data-via="LisumL" data-counturl="http://liangshan.me/blog/2018/02/14/learn-from-ali-double-11/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -183,10 +174,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/08/06/install-gentoo-from-systemrescuecd/" title="Previous Post: 使用 SystemRescueCD 安装 gentoo">&laquo; 使用 SystemRescueCD 安装 gentoo</a>
+        <a class="basic-alignment left" href="/blog/2016/09/12/the-law-of-leaky-abstractions/" title="Previous Post: 记一次性能调优">&laquo; 记一次性能调优</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/09/09/huan-ge-zi-shi-xie-bo-ke/" title="Next Post: 换个姿势写博客">换个姿势写博客 &raquo;</a>
       
     </p>
   </footer>

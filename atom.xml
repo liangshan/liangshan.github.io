@@ -4,7 +4,7 @@
   <title><![CDATA[Liangshan]]></title>
   <link href="http://liangshan.me/atom.xml" rel="self"/>
   <link href="http://liangshan.me/"/>
-  <updated>2016-09-12T17:05:28+08:00</updated>
+  <updated>2018-02-14T15:14:28+08:00</updated>
   <id>http://liangshan.me/</id>
   <author>
     <name><![CDATA[Liangshan]]></name>
@@ -12,6 +12,50 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[认真学习阿里双11的技术]]></title>
+    <link href="http://liangshan.me/blog/2018/02/14/learn-from-ali-double-11/"/>
+    <updated>2018-02-14T13:45:51+08:00</updated>
+    <id>http://liangshan.me/blog/2018/02/14/learn-from-ali-double-11</id>
+    <content type="html"><![CDATA[<p>难得过年没有请假，有时间整理一下前几天看了别人转发的，关于阿里双十一的一些技术总结。原文应该叫「互联网技术超级工程」，有兴趣的可以去互联网上搜索一下，应该是免费提供下载的。</p>
+
+<p>那些开源软件的升级版、定制版我就直接略过了，确实是要到一定规模才会遇到的问题，现在看也看不懂。说一些我觉得有意思的地方吧。</p>
+
+<!--more-->
+
+
+<p>之前在安居客我也做过搜索，优化过很长时间，方向就是语义化(semantic)。简单来说，除去文本匹配之外试图理解用户更深层的意思。比如，如果用户搜索「近期好看的电影」，机器如何理解「近期」呢？阿里的做法是通过 query 品类预测、query 改写，可以得出「近期好看的电影」和「2018年好看的电影」相似度较高。首先是品类预测，每次查询之后的点击转化都会用于学习这次查询中的词和品类之间的关系。然后再通过 DSSM 来猜测和这个 query 接近的其他 query。同样使用 DSSM 可以训练物品之间的相似度、物品标题和物品内容的匹配度(引用原文说法：「可以一定程度上遏制淘宝商品标题堆砌热门关键词的问题」。</p>
+
+<p>阿里有很多活动，每个活动都有很多细则，以及问答知识库。以往都是人工来生成这些问答，但其实这些答案都是从细则中来的，所以可以尝试使用机器学习来做「阅读理解」，自动从活动规则中找到用户想要的答案。这个思路很酷，具体流程：</p>
+
+<p><img src="http://liangshan.me/images/custom/arch-auto-answer.png" /></p>
+
+<p>另外文章中多次提到了 A/B 测试的结果，大促期间确实是一个有足够数据来测试想法的好机会。</p>
+
+<p>最后想提一下混部技术。简单来说，业务有高峰波谷，能不能在闲时自动调度一些其他任务过来执行？</p>
+
+<blockquote><p>很多人都被车堵过，而堵车的时候，并不是所有的车道都在堵车。有一个比较
+有趣的情况，我们称之为潮汐现象，而它造成的问题是在早高峰的时候是进城方向堵
+车，而晚高峰是出城方向堵。而为了缓解这个问题，我们使用了潮汐车道的方式。
+那么同样的原理，是否如果能让这两个集群混合起来部署，让计算任务的一部分
+任务跑到在线服务的资源之上，把在线服务空闲的资源利用起来呢？答案是肯定的。</p></blockquote>
+
+<p>需求很简单，但做起来就非常难了。有多难呢？以阿里的人力物力，做了 4 年才落地，2017年的双11有 20% 的流量跑在混部的机器上。因为这里面的基础设施太复杂，首先不同的应用需要跑在自己完全隔离的环境中，还要实现闲/忙时段的自动调度。但这样的大工程一旦启用，就会发挥巨大的价值，据发明这项技术的 Google 透露，可以节约 30% 的服务器资源。</p>
+
+<p>老实讲看完了第一个感受就是，这得有多少个工程师啊。一直以来我的想法就是人招少一点，招好一点，这样这批人无论做什么都能搞定。但看完这个介绍之后，你不得不承认在某一个领域堆砌人才确实可以把深度做的足够深。举个例子，「发红包」应该是现在促销的常规手段了，一般的做法无非就是人为定一些规则，让用户来领或者抢。但双11的红包背后居然有一整套的机器学习模型来支持：</p>
+
+<blockquote><ul>
+<li>消费者双 11 当天消费金额预估—根据预估的消费金额，计算消费者需要的购物津贴，确保购物津贴有稀缺感的同时，最大化的促进成交</li>
+<li>消费者优惠敏感度分析—对于不同的消费者，发放不同金额的红包，在保证使用率的同时，可以惠及更多的消费者。</li>
+<li>消费者传播力分析—在火炬红包活动中，可以给高传播用户更高获取未点亮红包的概率，以触达、传播更多的用户。</li>
+<li>消费者类目偏好分析、流失分析—用于产出需要重点关注的人群（比如“偏科”人群、流失人群、光看不买人群），可以发放特定的红包提升用户转化。</li>
+</ul>
+</blockquote>
+
+<p>佩(zhen)服(xian)。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[记一次性能调优]]></title>
@@ -1415,116 +1459,6 @@ jiathis 给的代码带一个「+」号还有分享数字，样式很不河蟹�
 <p>我有幸参与了安居客的几届学生培养，作为导师代表给所有导师做了一次分享。这里贴上 slides:</p>
 
 <script async class="speakerdeck-embed" data-id="1b324900a388013120061af8c79ec55f" data-ratio="1.33333333333333" src="//speakerdeck.com/assets/embed.js"></script>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[使用 Virtualenv 绿色安装 Ansible]]></title>
-    <link href="http://liangshan.me/blog/2014/05/20/using-ansible-with-virtualenv-without-install/"/>
-    <updated>2014-05-20T14:45:59+08:00</updated>
-    <id>http://liangshan.me/blog/2014/05/20/using-ansible-with-virtualenv-without-install</id>
-    <content type="html"><![CDATA[<p><a href="http://www.ansible.com/home">Ansible</a> 是一个自动化配置管理工具 (Automate configure management)。用 python 编写，所以安装方式一般有以下几种：</p>
-
-<p><strong> <code>pip</code> 安装 </strong></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ pip install ansible</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong> MacOS 用户可以选择使用 <code>homebrew</code> 安装 </strong></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew install ansible</span></code></pre></td></tr></table></div></figure>
-
-
-<p>但这两种方法都不可避免将「污染」系统的 python 环境。所以本文主要介绍如何绿色安装 Ansible。</p>
-
-<!-- more -->
-
-
-<h3>安装 Virtualenv</h3>
-
-<p>不污染系统的关键在于虚拟化 python 的环境，所以需要准备 virtualenv。</p>
-
-<p>这里偷懒选择使用 pip 安装，如果连 virtualenv 也不想装在系统级别也是可以的，就不在这里介绍了。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ pip install virtualenv</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>下载 ansible</h3>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ git clone git@github.com:ansible/ansible.git
-</span><span class='line'>$ cd ansible</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>安装</h3>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ virtualenv .virtualenv
-</span><span class='line'>$ .virtualenv/bin/python setup.py develop</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>A little trick</h3>
-
-<p>这个时候使用 virtualenv 激活当前目录的 python 环境，其实 <code>bin/ansible</code> 就已经可以工作了。</p>
-
-<p>但我们还希望将 ansible 命令加在系统的 PATH 里，这就需要一些小技巧。简单来说需要自己准备一个脚本，脚本的内容如下:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ touch ~/bin/_ansible_wrapper
-</span><span class='line'>$ vim ~/bin/_ansible_wrapper
-</span><span class='line'>
-</span><span class='line'>#!/bin/bash
-</span><span class='line'>source "$HOME/apps/ansible/hacking/env-setup" -q
-</span><span class='line'>if [ -f "$ANSIBLE_HOME/.virtualenv/bin/activate" ] ; then
-</span><span class='line'>    source "$ANSIBLE_HOME/.virtualenv/bin/activate"
-</span><span class='line'>fi
-</span><span class='line'>PYENV_VERSION=2.7.6 exec "$ANSIBLE_HOME/bin/${0##/*/}" $@</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>$HOME/apps/ansible/hacking/env-setup</code> 是 ansible 为 hacker 准备的一个脚本，设置一些环境变量。其中 <code>$HOME/apps/ansible</code> 是 ansible 的根目录。</p>
-
-<p><code>${0##/*/}</code> 比较有趣，作用是正则匹配 <code>/*/</code> 然后把匹配到的部分从第 0 个参数（即命令本身）中删除。关于 bash 参数，更详细可以看[1]。</p>
-
-<p><code>$@</code> 则比较常见，是 bash 拿到的除命令名之外的所有参数。</p>
-
-<p>其实这个脚本就是一个 wrapper，作用如下：</p>
-
-<ol>
-<li>设置相关环境变量</li>
-<li>激活 ansible 下的 python 环境</li>
-<li>将收到的所有命令都转发给 <code>$ANSIBLE_HOME/bin</code> 下的相同命令执行</li>
-</ol>
-
-
-<p>假设 <code>$HOME/bin</code> 在 PATH 中，设置几个软链就全部搞定了。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ ln -s $HOME/bin/_ansible_wrapper $HOME/bin/ansible
-</span><span class='line'>$ ln -s $HOME/bin/_ansible_wrapper $HOME/bin/ansible-playbook
-</span><span class='line'>$ ln -s $HOME/bin/_ansible_wrapper $HOME/bin/ansible-galaxy</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>参考资料</h3>
-
-<ol>
-<li><a href="http://www.ibm.com/developerworks/opensource/library/l-bash-parameters/index.html">Linux tip: Bash parameters and parameter expansions</a></li>
-</ol>
 
 ]]></content>
   </entry>

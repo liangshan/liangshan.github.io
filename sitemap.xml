@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://liangshan.me/blog/2018/02/14/learn-from-ali-double-11/</loc>
+    <lastmod>2018-02-14T13:45:51+08:00</lastmod>
+  </url>
+  <url>
     <loc>http://liangshan.me/blog/2016/09/12/the-law-of-leaky-abstractions/</loc>
     <lastmod>2016-09-12T14:35:18+08:00</lastmod>
   </url>
@@ -85,10 +89,10 @@
     <lastmod>2014-05-12T14:17:19+08:00</lastmod>
   </url>
   <url>
-    <loc>http://liangshan.me/blog/archives/</loc>
+    <loc>http://liangshan.me/</loc>
   </url>
   <url>
-    <loc>http://liangshan.me/</loc>
+    <loc>http://liangshan.me/blog/archives/</loc>
   </url>
   <url>
     <loc>http://liangshan.me/blog/categories/meta/</loc>
@@ -119,6 +123,12 @@
   </url>
   <url>
     <loc>http://liangshan.me/blog/categories/rpc/</loc>
+  </url>
+  <url>
+    <loc>http://liangshan.me/posts/2/</loc>
+  </url>
+  <url>
+    <loc>http://liangshan.me/posts/3/</loc>
   </url>
   <url>
     <loc>http://liangshan.me/about.html</loc>
