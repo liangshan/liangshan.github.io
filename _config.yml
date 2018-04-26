@@ -71,10 +71,10 @@ github_skip_forks: false
 
 # Twitter
 twitter_user: LisumL
-twitter_tweet_button: true
+twitter_tweet_button: false
 
 # Google +1
-google_plus_one: true
+google_plus_one: false
 google_plus_one_size: medium
 
 # Google Plus Profile
