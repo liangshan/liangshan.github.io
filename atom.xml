@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Liangshan]]></title>
-  <link href="http://liangshan.me/atom.xml" rel="self"/>
-  <link href="http://liangshan.me/"/>
-  <updated>2018-05-03T11:05:16+08:00</updated>
-  <id>http://liangshan.me/</id>
+  <link href="https://liangshan.blog/atom.xml" rel="self"/>
+  <link href="https://liangshan.blog/"/>
+  <updated>2018-05-03T11:13:44+08:00</updated>
+  <id>https://liangshan.blog/</id>
   <author>
     <name><![CDATA[Liangshan]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[什么是做事专业]]></title>
-    <link href="http://liangshan.me/blog/2018/04/25/what-is-professional/"/>
+    <link href="https://liangshan.blog/blog/2018/04/25/what-is-professional/"/>
     <updated>2018-04-25T17:53:35+08:00</updated>
-    <id>http://liangshan.me/blog/2018/04/25/what-is-professional</id>
+    <id>https://liangshan.blog/blog/2018/04/25/what-is-professional</id>
     <content type="html"><![CDATA[<p>我们经常说某些人做事很专业，或者不够专业。当我们在使用专业这个词的时候，到底指的是什么？什么事情会让你觉得对方很专业？什么事情恰恰相反呢？</p>
 
 <p>本文探讨的是我认为一个软件工程师如何做是专业的，而不是如何成为一名某个领域的专家。其他行业的应该也大体相通。</p>
@@ -77,9 +77,9 @@
   
   <entry>
     <title type="html"><![CDATA[认真学习阿里双11的技术]]></title>
-    <link href="http://liangshan.me/blog/2018/02/14/learn-from-ali-double-11/"/>
+    <link href="https://liangshan.blog/blog/2018/02/14/learn-from-ali-double-11/"/>
     <updated>2018-02-14T13:45:51+08:00</updated>
-    <id>http://liangshan.me/blog/2018/02/14/learn-from-ali-double-11</id>
+    <id>https://liangshan.blog/blog/2018/02/14/learn-from-ali-double-11</id>
     <content type="html"><![CDATA[<p>难得过年没有请假，有时间整理一下前几天看了别人转发的，关于阿里双十一的一些技术总结。原文应该叫「互联网技术超级工程」，有兴趣的可以去互联网上搜索一下，应该是免费提供下载的。</p>
 
 <p>那些开源软件的升级版、定制版我就直接略过了，确实是要到一定规模才会遇到的问题，现在看也看不懂。说一些我觉得有意思的地方吧。</p>
@@ -91,7 +91,7 @@
 
 <p>阿里有很多活动，每个活动都有很多细则，以及问答知识库。以往都是人工来生成这些问答，但其实这些答案都是从细则中来的，所以可以尝试使用机器学习来做「阅读理解」，自动从活动规则中找到用户想要的答案。这个思路很酷，具体流程：</p>
 
-<p><img src="http://liangshan.me/images/custom/arch-auto-answer.png" /></p>
+<p><img src="https://liangshan.blog/images/custom/arch-auto-answer.png" /></p>
 
 <p>另外文章中多次提到了 A/B 测试的结果，大促期间确实是一个有足够数据来测试想法的好机会。</p>
 
@@ -121,9 +121,9 @@
   
   <entry>
     <title type="html"><![CDATA[记一次性能调优]]></title>
-    <link href="http://liangshan.me/blog/2016/09/12/the-law-of-leaky-abstractions/"/>
+    <link href="https://liangshan.blog/blog/2016/09/12/the-law-of-leaky-abstractions/"/>
     <updated>2016-09-12T14:35:18+08:00</updated>
-    <id>http://liangshan.me/blog/2016/09/12/the-law-of-leaky-abstractions</id>
+    <id>https://liangshan.blog/blog/2016/09/12/the-law-of-leaky-abstractions</id>
     <content type="html"><![CDATA[<p>继上次做性能优化之后，再次针对我们刚刚全新升级的 app 做了一轮性能调优，而这个过程又引起了我一些思考，这里做一个记录。</p>
 
 <p>根据多年的经验，性能问题一般都是由后端服务引起，API 服务器忙都是受后端服务的拖累所表现出来的现象。所以一入手就是监控各个后端服务的运行情况，初步定位瓶颈在数据库上。第一步就是趁着业务上将来要做全文检索，使用搜索引擎代替数据库作为列表的数据源。这个优化上线之后，高峰时数据库压力有了明显改善。然而这个改善并没有表现在前端页面的速度监控上，几乎所有页面都非常统一的在某些时间点会有长至几秒钟的响应时间，发生的时间间隔没有明显规律，大概几分钟一次，每次持续十几秒钟，并且这些异常并不跟我们的业务高峰有重合。</p>
@@ -169,9 +169,9 @@
   
   <entry>
     <title type="html"><![CDATA[网站性能优化之外]]></title>
-    <link href="http://liangshan.me/blog/2016/07/18/beyond-tuning-performance/"/>
+    <link href="https://liangshan.blog/blog/2016/07/18/beyond-tuning-performance/"/>
     <updated>2016-07-18T16:36:21+08:00</updated>
-    <id>http://liangshan.me/blog/2016/07/18/beyond-tuning-performance</id>
+    <id>https://liangshan.blog/blog/2016/07/18/beyond-tuning-performance</id>
     <content type="html"><![CDATA[<p>前段时间在做我们内部一个业务的性能优化，过程里有些感想，这里记录一下。</p>
 
 <p>略去具体的技术手段，我想到的其实超出了性能优化的范畴。</p>
@@ -193,10 +193,10 @@
   
   <entry>
     <title type="html"><![CDATA[多做一点点]]></title>
-    <link href="http://liangshan.me/blog/2016/01/25/do-a-little-more/"/>
+    <link href="https://liangshan.blog/blog/2016/01/25/do-a-little-more/"/>
     <updated>2016-01-25T13:53:59+08:00</updated>
-    <id>http://liangshan.me/blog/2016/01/25/do-a-little-more</id>
-    <content type="html"><![CDATA[<p>自从决定 <a href="http://liangshan.me/blog/2014/09/09/huan-ge-zi-shi-xie-bo-ke/">换个姿势写博客</a> 之后，发现可写的内容越来越少了。</p>
+    <id>https://liangshan.blog/blog/2016/01/25/do-a-little-more</id>
+    <content type="html"><![CDATA[<p>自从决定 <a href="https://liangshan.blog/blog/2014/09/09/huan-ge-zi-shi-xie-bo-ke/">换个姿势写博客</a> 之后，发现可写的内容越来越少了。</p>
 
 <p>这次讲一个鸡汤故事。</p>
 
@@ -222,10 +222,10 @@
   
   <entry>
     <title type="html"><![CDATA[深入实践 SOA 架构]]></title>
-    <link href="http://liangshan.me/blog/2015/06/21/dive-into-soa-architecture/"/>
+    <link href="https://liangshan.blog/blog/2015/06/21/dive-into-soa-architecture/"/>
     <updated>2015-06-21T22:16:05+08:00</updated>
-    <id>http://liangshan.me/blog/2015/06/21/dive-into-soa-architecture</id>
-    <content type="html"><![CDATA[<p>之前介绍了<a href="http://liangshan.me/blog/2014/11/03/how-to-choose-rpc-framework/">如何选择 RPC 框架</a>，选择 RPC 框架是实施 SOA 的重要一步，但也仅仅是第一步。今天来讨论具体实施 RPC 过程中，遇到的一些细节。</p>
+    <id>https://liangshan.blog/blog/2015/06/21/dive-into-soa-architecture</id>
+    <content type="html"><![CDATA[<p>之前介绍了<a href="https://liangshan.blog/blog/2014/11/03/how-to-choose-rpc-framework/">如何选择 RPC 框架</a>，选择 RPC 框架是实施 SOA 的重要一步，但也仅仅是第一步。今天来讨论具体实施 RPC 过程中，遇到的一些细节。</p>
 
 <p>写下第一个真正的 RPC 服务，首先遇到的问题就是服务划分，或者叫服务的分层。当然最简单的就是不分层，把所有的接口都写在一起，即当服务启动的时候所有的接口都被载入内存从而被访问。现如今软件架构的趋势是使用分布式的独立的微型服务（Micro Service）搭积木，SOA 正是实现这一构想的途径之一，但如果不给服务做划分显然和初衷背道而驰。我们最终选定的划分方式是按照业务（Domain）首先划分出基础服务，我们称之为 LEVEL-1，跨基础服务的接口称之为 LEVEL-2，一些与商业无关的，更为通用的模块称之为 LEVEL-0。</p>
 
@@ -257,9 +257,9 @@
   
   <entry>
     <title type="html"><![CDATA[选择是一种能力]]></title>
-    <link href="http://liangshan.me/blog/2014/12/24/choosing-is-an-ability/"/>
+    <link href="https://liangshan.blog/blog/2014/12/24/choosing-is-an-ability/"/>
     <updated>2014-12-24T16:28:05+08:00</updated>
-    <id>http://liangshan.me/blog/2014/12/24/choosing-is-an-ability</id>
+    <id>https://liangshan.blog/blog/2014/12/24/choosing-is-an-ability</id>
     <content type="html"><![CDATA[<p>今年从不同的几个人嘴里都说出了一句话：『有时候选择比能力更重要』。第一次听见这句话，感觉说对了一半：想要有很多选择，首先需要有很强的能力才行，另外选择的过程本身就是一种能力的体现。这 2 个月的经历更让我坚信了这一点。</p>
 
 <p>10 月份开始动了想换工作的念头，先说说为什么想换工作。其实我之前的工作可能在一些人看来是非常完美的，甚至是很多工程师的理想环境：公司的纯技术部门，简直是技术部的特种部队，可以按照自己的想法来实践方案，受到很多工程师和领导的尊重。</p>
@@ -294,9 +294,9 @@
   
   <entry>
     <title type="html"><![CDATA[How to Choose RPC Framework]]></title>
-    <link href="http://liangshan.me/blog/2014/11/03/how-to-choose-rpc-framework/"/>
+    <link href="https://liangshan.blog/blog/2014/11/03/how-to-choose-rpc-framework/"/>
     <updated>2014-11-03T15:16:21+08:00</updated>
-    <id>http://liangshan.me/blog/2014/11/03/how-to-choose-rpc-framework</id>
+    <id>https://liangshan.blog/blog/2014/11/03/how-to-choose-rpc-framework</id>
     <content type="html"><![CDATA[<p>RPC 是 remote procedure call 的缩写，意指调用远程进程的方法。这里的远程需要广义的理解，有时为了协议的统一即使调用本地进程也叫做 RPC，所以 RPC 可简单理解为进程间通信。</p>
 
 <p>在选择 RPC 框架之前，要搞清楚为什么需要 RPC？ RPC 主要是为了解决服务化架构中客户端与服务端以及服务之间通讯的问题。在最早接触 RPC 的时候，我一直有一个疑问： RESTful API 不就搞定了么？为什么需要 RPC？直到深入实践了 RPC，我自己总结了 RPC 与 RESTful API 最大的几个不同。</p>
@@ -328,9 +328,9 @@
   
   <entry>
     <title type="html"><![CDATA[到底什么是产品经理]]></title>
-    <link href="http://liangshan.me/blog/2014/09/10/what-is-product-manager-exactly/"/>
+    <link href="https://liangshan.blog/blog/2014/09/10/what-is-product-manager-exactly/"/>
     <updated>2014-09-10T14:13:28+08:00</updated>
-    <id>http://liangshan.me/blog/2014/09/10/what-is-product-manager-exactly</id>
+    <id>https://liangshan.blog/blog/2014/09/10/what-is-product-manager-exactly</id>
     <content type="html"><![CDATA[<p>不知道有多少人和我一样，即使在互联网公司工作了很多年，还是没搞清楚「产品经理」到底是什么样的一个职位。我甚至特意看过很多关于产品经理的文章，仍然没有搞清楚这个问题。而在工程师的圈子里，弥漫着对产品经理的各种，恩，各种情绪。上篇文章说了，我要用自己的大脑思考取得结论，到底什么是产品经理？</p>
 
 <!-- more -->
@@ -415,9 +415,9 @@
   
   <entry>
     <title type="html"><![CDATA[换个姿势写博客]]></title>
-    <link href="http://liangshan.me/blog/2014/09/09/huan-ge-zi-shi-xie-bo-ke/"/>
+    <link href="https://liangshan.blog/blog/2014/09/09/huan-ge-zi-shi-xie-bo-ke/"/>
     <updated>2014-09-09T15:39:18+08:00</updated>
-    <id>http://liangshan.me/blog/2014/09/09/huan-ge-zi-shi-xie-bo-ke</id>
+    <id>https://liangshan.blog/blog/2014/09/09/huan-ge-zi-shi-xie-bo-ke</id>
     <content type="html"><![CDATA[<p>之前一直看 Hack News，最近开始看国内版本——Startup News。
 结果里面看到王垠的那篇征集女粉丝的博文，后来他删了又写了篇撤回征集女粉丝，现在第二篇也已经删掉了。</p>
 
@@ -444,9 +444,9 @@
   
   <entry>
     <title type="html"><![CDATA[在 Gentoo 上安装 Awesome]]></title>
-    <link href="http://liangshan.me/blog/2014/08/07/install-awesome-on-gentoo/"/>
+    <link href="https://liangshan.blog/blog/2014/08/07/install-awesome-on-gentoo/"/>
     <updated>2014-08-07T14:06:30+08:00</updated>
-    <id>http://liangshan.me/blog/2014/08/07/install-awesome-on-gentoo</id>
+    <id>https://liangshan.blog/blog/2014/08/07/install-awesome-on-gentoo</id>
     <content type="html"><![CDATA[<p>都装 gentoo 了，趁热装桌面环境吧。linux 的视窗系统称为 X Window System。
 在开源世界里，通常是协议先行，各自实现。同样 X 只是协议，在各种实现中以 X.Org 最受欢迎，当时使用的协议为 X11，所以后来 X 也被人们称为 X11。</p>
 
@@ -485,15 +485,15 @@
 
 <p>上个图吧（为什么有种女人写美容攻略的感觉？），其实我最早就是想弄个 awesome，没想到整了这么多。</p>
 
-<p><img src="http://liangshan.me/images/custom/awesome.png" /></p>
+<p><img src="https://liangshan.blog/images/custom/awesome.png" /></p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[使用 SystemRescueCD 安装 Gentoo]]></title>
-    <link href="http://liangshan.me/blog/2014/08/06/install-gentoo-from-systemrescuecd/"/>
+    <link href="https://liangshan.blog/blog/2014/08/06/install-gentoo-from-systemrescuecd/"/>
     <updated>2014-08-06T17:50:10+08:00</updated>
-    <id>http://liangshan.me/blog/2014/08/06/install-gentoo-from-systemrescuecd</id>
+    <id>https://liangshan.blog/blog/2014/08/06/install-gentoo-from-systemrescuecd</id>
     <content type="html"><![CDATA[<p>在使用 Ubuntu 有 3 年之后，第一次有了换个发行版的想法。
 其实我觉得做任何事情都要循序渐进，在合适的时候做合适的事情才能事半功倍。</p>
 
@@ -553,9 +553,9 @@
   
   <entry>
     <title type="html"><![CDATA[七年之痒]]></title>
-    <link href="http://liangshan.me/blog/2014/07/02/seven-year-itch/"/>
+    <link href="https://liangshan.blog/blog/2014/07/02/seven-year-itch/"/>
     <updated>2014-07-02T15:34:35+08:00</updated>
-    <id>http://liangshan.me/blog/2014/07/02/seven-year-itch</id>
+    <id>https://liangshan.blog/blog/2014/07/02/seven-year-itch</id>
     <content type="html"><![CDATA[<blockquote><p>“七年之痒”是个舶来词，人的细胞七年会完成一次整体的新陈代谢，可能七年后你就不爱这个人了。</p></blockquote>
 
 <p>我跟老婆不知不觉认识已经有七年了。</p>
@@ -617,9 +617,9 @@
   
   <entry>
     <title type="html"><![CDATA[Build a Scalable Recommendation System]]></title>
-    <link href="http://liangshan.me/blog/2014/06/08/build-a-scalable-recommendation-system/"/>
+    <link href="https://liangshan.blog/blog/2014/06/08/build-a-scalable-recommendation-system/"/>
     <updated>2014-06-08T20:06:19+08:00</updated>
-    <id>http://liangshan.me/blog/2014/06/08/build-a-scalable-recommendation-system</id>
+    <id>https://liangshan.blog/blog/2014/06/08/build-a-scalable-recommendation-system</id>
     <content type="html"><![CDATA[<p>从接触推荐系统以来，断断续续的已经有一年半的时间了。
 今天想单纯从工程角度来总结一下我得到的经验，不涉及推荐的数学算法和理论。
 第一是公司还没有到必须扩展现有的推荐算法的地步，第二是本人自知没有足够能力来改进现有的推荐算法。</p>
@@ -733,7 +733,7 @@
 
 <p>设想中的架构应该类似于这样:</p>
 
-<p><img src="http://liangshan.me/images/custom/rec-arch.png" /></p>
+<p><img src="https://liangshan.blog/images/custom/rec-arch.png" /></p>
 
 <h3>Platform</h3>
 
@@ -792,9 +792,9 @@
   
   <entry>
     <title type="html"><![CDATA[如何将 Octopress 的文章分享至微信和微博]]></title>
-    <link href="http://liangshan.me/blog/2014/05/28/how-to-share-octopress-pages-to-weixin-and-weibo/"/>
+    <link href="https://liangshan.blog/blog/2014/05/28/how-to-share-octopress-pages-to-weixin-and-weibo/"/>
     <updated>2014-05-28T12:54:14+08:00</updated>
-    <id>http://liangshan.me/blog/2014/05/28/how-to-share-octopress-pages-to-weixin-and-weibo</id>
+    <id>https://liangshan.blog/blog/2014/05/28/how-to-share-octopress-pages-to-weixin-and-weibo</id>
     <content type="html"><![CDATA[<p>昨天想把自己的文章分享到微信，没有仔细思考选了一种很土的办法。就是直接在微信的内容里输入地址，容易出错不说，效率也很低下。
 今天再回头思考这个问题，想到可以像 twitter 和 google+ 一样做一个分享按钮。Octopress 自己是不带国内社交网站分享的，要稍微做点功课。</p>
 
@@ -914,9 +914,9 @@ jiathis 给的代码带一个「+」号还有分享数字，样式很不河蟹�
   
   <entry>
     <title type="html"><![CDATA[我为什么如此反感在公司放广播]]></title>
-    <link href="http://liangshan.me/blog/2014/05/27/why-i-hate-broadcasting-at-company/"/>
+    <link href="https://liangshan.blog/blog/2014/05/27/why-i-hate-broadcasting-at-company/"/>
     <updated>2014-05-27T17:27:33+08:00</updated>
-    <id>http://liangshan.me/blog/2014/05/27/why-i-hate-broadcasting-at-company</id>
+    <id>https://liangshan.blog/blog/2014/05/27/why-i-hate-broadcasting-at-company</id>
     <content type="html"><![CDATA[<p>最近公司决定在早中晚全公司范围内播放广播。早晚内容是「广告」和「司歌」，中午是罗振宇的「罗辑思维」片段。</p>
 
 <p>对此我在微信上表达了强烈的愤怒，措辞很激进。坦白来讲，我倒是希望有人传话给决策者，让他们知道我的愤怒，不是我不想混了，因为我相信我有足够的理由和众多的支持者，只是大家都不敢出声罢了。</p>
@@ -955,9 +955,9 @@ jiathis 给的代码带一个「+」号还有分享数字，样式很不河蟹�
   
   <entry>
     <title type="html"><![CDATA[Isolate Ansible Code and Source Code]]></title>
-    <link href="http://liangshan.me/blog/2014/05/22/isolate-ansible-code-and-source-code/"/>
+    <link href="https://liangshan.blog/blog/2014/05/22/isolate-ansible-code-and-source-code/"/>
     <updated>2014-05-22T16:56:16+08:00</updated>
-    <id>http://liangshan.me/blog/2014/05/22/isolate-ansible-code-and-source-code</id>
+    <id>https://liangshan.blog/blog/2014/05/22/isolate-ansible-code-and-source-code</id>
     <content type="html"><![CDATA[<p>我们经常要开发一些「系统」，这些「系统」具备以下特点：</p>
 
 <ul>
@@ -1112,9 +1112,9 @@ jiathis 给的代码带一个「+」号还有分享数字，样式很不河蟹�
   
   <entry>
     <title type="html"><![CDATA[The Twelve-Factor App]]></title>
-    <link href="http://liangshan.me/blog/2014/05/22/the-twelve-factor-app/"/>
+    <link href="https://liangshan.blog/blog/2014/05/22/the-twelve-factor-app/"/>
     <updated>2014-05-22T16:37:03+08:00</updated>
-    <id>http://liangshan.me/blog/2014/05/22/the-twelve-factor-app</id>
+    <id>https://liangshan.blog/blog/2014/05/22/the-twelve-factor-app</id>
     <content type="html"><![CDATA[<p>前些年翻译的 <a href="http://12factor.net/">12-factor</a>。一直放在公司内部的博客上，现在复制一份过来。</p>
 
 <hr />
@@ -1450,9 +1450,9 @@ jiathis 给的代码带一个「+」号还有分享数字，样式很不河蟹�
   
   <entry>
     <title type="html"><![CDATA[安居客导师指南]]></title>
-    <link href="http://liangshan.me/blog/2014/05/22/how-to-teach-people-at-anjuke/"/>
+    <link href="https://liangshan.blog/blog/2014/05/22/how-to-teach-people-at-anjuke/"/>
     <updated>2014-05-22T11:23:34+08:00</updated>
-    <id>http://liangshan.me/blog/2014/05/22/how-to-teach-people-at-anjuke</id>
+    <id>https://liangshan.blog/blog/2014/05/22/how-to-teach-people-at-anjuke</id>
     <content type="html"><![CDATA[<p>安居客近年来非常重视校招，尤其是研发方向。实际操作下来，感觉校招还是不错的选择，这次我主要站在公司的角度来说。</p>
 
 <!-- more -->
@@ -1472,9 +1472,9 @@ jiathis 给的代码带一个「+」号还有分享数字，样式很不河蟹�
   
   <entry>
     <title type="html"><![CDATA[使用 Virtualenv 绿色安装 Ansible]]></title>
-    <link href="http://liangshan.me/blog/2014/05/20/using-ansible-with-virtualenv-without-install/"/>
+    <link href="https://liangshan.blog/blog/2014/05/20/using-ansible-with-virtualenv-without-install/"/>
     <updated>2014-05-20T14:45:59+08:00</updated>
-    <id>http://liangshan.me/blog/2014/05/20/using-ansible-with-virtualenv-without-install</id>
+    <id>https://liangshan.blog/blog/2014/05/20/using-ansible-with-virtualenv-without-install</id>
     <content type="html"><![CDATA[<p><a href="http://www.ansible.com/home">Ansible</a> 是一个自动化配置管理工具 (Automate configure management)。用 python 编写，所以安装方式一般有以下几种：</p>
 
 <p><strong> <code>pip</code> 安装 </strong></p>

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Recommendation | Liangshan]]></title>
-  <link href="http://liangshan.me/blog/categories/recommendation/atom.xml" rel="self"/>
-  <link href="http://liangshan.me/"/>
-  <updated>2018-05-03T11:05:16+08:00</updated>
-  <id>http://liangshan.me/</id>
+  <link href="https://liangshan.blog/blog/categories/recommendation/atom.xml" rel="self"/>
+  <link href="https://liangshan.blog/"/>
+  <updated>2018-05-03T11:13:44+08:00</updated>
+  <id>https://liangshan.blog/</id>
   <author>
     <name><![CDATA[Liangshan]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Build a Scalable Recommendation System]]></title>
-    <link href="http://liangshan.me/blog/2014/06/08/build-a-scalable-recommendation-system/"/>
+    <link href="https://liangshan.blog/blog/2014/06/08/build-a-scalable-recommendation-system/"/>
     <updated>2014-06-08T20:06:19+08:00</updated>
-    <id>http://liangshan.me/blog/2014/06/08/build-a-scalable-recommendation-system</id>
+    <id>https://liangshan.blog/blog/2014/06/08/build-a-scalable-recommendation-system</id>
     <content type="html"><![CDATA[<p>从接触推荐系统以来，断断续续的已经有一年半的时间了。
 今天想单纯从工程角度来总结一下我得到的经验，不涉及推荐的数学算法和理论。
 第一是公司还没有到必须扩展现有的推荐算法的地步，第二是本人自知没有足够能力来改进现有的推荐算法。</p>

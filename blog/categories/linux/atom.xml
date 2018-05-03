@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Linux | Liangshan]]></title>
-  <link href="http://liangshan.me/blog/categories/linux/atom.xml" rel="self"/>
-  <link href="http://liangshan.me/"/>
-  <updated>2018-05-03T11:05:16+08:00</updated>
-  <id>http://liangshan.me/</id>
+  <link href="https://liangshan.blog/blog/categories/linux/atom.xml" rel="self"/>
+  <link href="https://liangshan.blog/"/>
+  <updated>2018-05-03T11:13:44+08:00</updated>
+  <id>https://liangshan.blog/</id>
   <author>
     <name><![CDATA[Liangshan]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[在 Gentoo 上安装 Awesome]]></title>
-    <link href="http://liangshan.me/blog/2014/08/07/install-awesome-on-gentoo/"/>
+    <link href="https://liangshan.blog/blog/2014/08/07/install-awesome-on-gentoo/"/>
     <updated>2014-08-07T14:06:30+08:00</updated>
-    <id>http://liangshan.me/blog/2014/08/07/install-awesome-on-gentoo</id>
+    <id>https://liangshan.blog/blog/2014/08/07/install-awesome-on-gentoo</id>
     <content type="html"><![CDATA[<p>都装 gentoo 了，趁热装桌面环境吧。linux 的视窗系统称为 X Window System。
 在开源世界里，通常是协议先行，各自实现。同样 X 只是协议，在各种实现中以 X.Org 最受欢迎，当时使用的协议为 X11，所以后来 X 也被人们称为 X11。</p>
 
@@ -61,9 +61,9 @@
   
   <entry>
     <title type="html"><![CDATA[使用 SystemRescueCD 安装 Gentoo]]></title>
-    <link href="http://liangshan.me/blog/2014/08/06/install-gentoo-from-systemrescuecd/"/>
+    <link href="https://liangshan.blog/blog/2014/08/06/install-gentoo-from-systemrescuecd/"/>
     <updated>2014-08-06T17:50:10+08:00</updated>
-    <id>http://liangshan.me/blog/2014/08/06/install-gentoo-from-systemrescuecd</id>
+    <id>https://liangshan.blog/blog/2014/08/06/install-gentoo-from-systemrescuecd</id>
     <content type="html"><![CDATA[<p>在使用 Ubuntu 有 3 年之后，第一次有了换个发行版的想法。
 其实我觉得做任何事情都要循序渐进，在合适的时候做合适的事情才能事半功倍。</p>
 

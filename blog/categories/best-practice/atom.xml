@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Best Practice | Liangshan]]></title>
-  <link href="http://liangshan.me/blog/categories/best-practice/atom.xml" rel="self"/>
-  <link href="http://liangshan.me/"/>
-  <updated>2018-05-03T11:05:16+08:00</updated>
-  <id>http://liangshan.me/</id>
+  <link href="https://liangshan.blog/blog/categories/best-practice/atom.xml" rel="self"/>
+  <link href="https://liangshan.blog/"/>
+  <updated>2018-05-03T11:13:44+08:00</updated>
+  <id>https://liangshan.blog/</id>
   <author>
     <name><![CDATA[Liangshan]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[The Twelve-Factor App]]></title>
-    <link href="http://liangshan.me/blog/2014/05/22/the-twelve-factor-app/"/>
+    <link href="https://liangshan.blog/blog/2014/05/22/the-twelve-factor-app/"/>
     <updated>2014-05-22T16:37:03+08:00</updated>
-    <id>http://liangshan.me/blog/2014/05/22/the-twelve-factor-app</id>
+    <id>https://liangshan.blog/blog/2014/05/22/the-twelve-factor-app</id>
     <content type="html"><![CDATA[<p>前些年翻译的 <a href="http://12factor.net/">12-factor</a>。一直放在公司内部的博客上，现在复制一份过来。</p>
 
 <hr />

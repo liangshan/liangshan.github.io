@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Meta | Liangshan]]></title>
-  <link href="http://liangshan.me/blog/categories/meta/atom.xml" rel="self"/>
-  <link href="http://liangshan.me/"/>
-  <updated>2018-05-03T11:05:16+08:00</updated>
-  <id>http://liangshan.me/</id>
+  <link href="https://liangshan.blog/blog/categories/meta/atom.xml" rel="self"/>
+  <link href="https://liangshan.blog/"/>
+  <updated>2018-05-03T11:13:44+08:00</updated>
+  <id>https://liangshan.blog/</id>
   <author>
     <name><![CDATA[Liangshan]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[如何将 Octopress 的文章分享至微信和微博]]></title>
-    <link href="http://liangshan.me/blog/2014/05/28/how-to-share-octopress-pages-to-weixin-and-weibo/"/>
+    <link href="https://liangshan.blog/blog/2014/05/28/how-to-share-octopress-pages-to-weixin-and-weibo/"/>
     <updated>2014-05-28T12:54:14+08:00</updated>
-    <id>http://liangshan.me/blog/2014/05/28/how-to-share-octopress-pages-to-weixin-and-weibo</id>
+    <id>https://liangshan.blog/blog/2014/05/28/how-to-share-octopress-pages-to-weixin-and-weibo</id>
     <content type="html"><![CDATA[<p>昨天想把自己的文章分享到微信，没有仔细思考选了一种很土的办法。就是直接在微信的内容里输入地址，容易出错不说，效率也很低下。
 今天再回头思考这个问题，想到可以像 twitter 和 google+ 一样做一个分享按钮。Octopress 自己是不带国内社交网站分享的，要稍微做点功课。</p>
 
@@ -109,9 +109,9 @@ $ vi source/_includes/jiathis_share.html
   
   <entry>
     <title type="html"><![CDATA[使用 Octopress 在 GitHub Pages 上快速搭建自定义域名Blog]]></title>
-    <link href="http://liangshan.me/blog/2014/05/12/build-custom-domain-blog-with-octopress-and-github-pages/"/>
+    <link href="https://liangshan.blog/blog/2014/05/12/build-custom-domain-blog-with-octopress-and-github-pages/"/>
     <updated>2014-05-12T14:17:19+08:00</updated>
-    <id>http://liangshan.me/blog/2014/05/12/build-custom-domain-blog-with-octopress-and-github-pages</id>
+    <id>https://liangshan.blog/blog/2014/05/12/build-custom-domain-blog-with-octopress-and-github-pages</id>
     <content type="html"><![CDATA[<p>一直没有搭博客，因为一直感觉自己不是一个标准的技术人，主要是不够狂热。但受身边人熏陶，偶尔还是想写点东西。
 尤其是看中 <code>liangshan.me</code> 这个域名，买下之后觉得闲着也是浪费，所以有了利用 GitHub Pages 来搭一下的想法。</p>
 

@@ -1,127 +1,133 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>http://liangshan.me/blog/2018/04/25/what-is-professional/</loc>
+    <loc>https://liangshan.blog/blog/2018/04/25/what-is-professional/</loc>
     <lastmod>2018-04-25T17:53:35+08:00</lastmod>
   </url>
   <url>
-    <loc>http://liangshan.me/blog/2018/02/14/learn-from-ali-double-11/</loc>
+    <loc>https://liangshan.blog/blog/2018/02/14/learn-from-ali-double-11/</loc>
     <lastmod>2018-02-14T13:45:51+08:00</lastmod>
   </url>
   <url>
-    <loc>http://liangshan.me/blog/2016/09/12/the-law-of-leaky-abstractions/</loc>
+    <loc>https://liangshan.blog/blog/2016/09/12/the-law-of-leaky-abstractions/</loc>
     <lastmod>2016-09-12T14:35:18+08:00</lastmod>
   </url>
   <url>
-    <loc>http://liangshan.me/blog/2016/07/18/beyond-tuning-performance/</loc>
+    <loc>https://liangshan.blog/blog/2016/07/18/beyond-tuning-performance/</loc>
     <lastmod>2016-07-18T16:36:21+08:00</lastmod>
   </url>
   <url>
-    <loc>http://liangshan.me/blog/2016/01/25/do-a-little-more/</loc>
+    <loc>https://liangshan.blog/blog/2016/01/25/do-a-little-more/</loc>
     <lastmod>2016-01-25T13:53:59+08:00</lastmod>
   </url>
   <url>
-    <loc>http://liangshan.me/blog/2015/06/21/dive-into-soa-architecture/</loc>
+    <loc>https://liangshan.blog/blog/2015/06/21/dive-into-soa-architecture/</loc>
     <lastmod>2015-06-21T22:16:05+08:00</lastmod>
   </url>
   <url>
-    <loc>http://liangshan.me/blog/2014/12/24/choosing-is-an-ability/</loc>
+    <loc>https://liangshan.blog/blog/2014/12/24/choosing-is-an-ability/</loc>
     <lastmod>2014-12-24T16:28:05+08:00</lastmod>
   </url>
   <url>
-    <loc>http://liangshan.me/blog/2014/11/03/how-to-choose-rpc-framework/</loc>
+    <loc>https://liangshan.blog/blog/2014/11/03/how-to-choose-rpc-framework/</loc>
     <lastmod>2014-11-03T15:16:21+08:00</lastmod>
   </url>
   <url>
-    <loc>http://liangshan.me/blog/2014/09/10/what-is-product-manager-exactly/</loc>
+    <loc>https://liangshan.blog/blog/2014/09/10/what-is-product-manager-exactly/</loc>
     <lastmod>2014-09-10T14:13:28+08:00</lastmod>
   </url>
   <url>
-    <loc>http://liangshan.me/blog/2014/09/09/huan-ge-zi-shi-xie-bo-ke/</loc>
+    <loc>https://liangshan.blog/blog/2014/09/09/huan-ge-zi-shi-xie-bo-ke/</loc>
     <lastmod>2014-09-09T15:39:18+08:00</lastmod>
   </url>
   <url>
-    <loc>http://liangshan.me/blog/2014/08/07/install-awesome-on-gentoo/</loc>
+    <loc>https://liangshan.blog/blog/2014/08/07/install-awesome-on-gentoo/</loc>
     <lastmod>2014-08-07T14:06:30+08:00</lastmod>
   </url>
   <url>
-    <loc>http://liangshan.me/blog/2014/08/06/install-gentoo-from-systemrescuecd/</loc>
+    <loc>https://liangshan.blog/blog/2014/08/06/install-gentoo-from-systemrescuecd/</loc>
     <lastmod>2014-08-06T17:50:10+08:00</lastmod>
   </url>
   <url>
-    <loc>http://liangshan.me/blog/2014/07/02/seven-year-itch/</loc>
+    <loc>https://liangshan.blog/blog/2014/07/02/seven-year-itch/</loc>
     <lastmod>2014-07-02T15:34:35+08:00</lastmod>
   </url>
   <url>
-    <loc>http://liangshan.me/blog/2014/06/08/build-a-scalable-recommendation-system/</loc>
+    <loc>https://liangshan.blog/blog/2014/06/08/build-a-scalable-recommendation-system/</loc>
     <lastmod>2014-06-08T20:06:19+08:00</lastmod>
   </url>
   <url>
-    <loc>http://liangshan.me/blog/2014/05/28/how-to-share-octopress-pages-to-weixin-and-weibo/</loc>
+    <loc>https://liangshan.blog/blog/2014/05/28/how-to-share-octopress-pages-to-weixin-and-weibo/</loc>
     <lastmod>2014-05-28T12:54:14+08:00</lastmod>
   </url>
   <url>
-    <loc>http://liangshan.me/blog/2014/05/27/why-i-hate-broadcasting-at-company/</loc>
+    <loc>https://liangshan.blog/blog/2014/05/27/why-i-hate-broadcasting-at-company/</loc>
     <lastmod>2014-05-27T17:27:33+08:00</lastmod>
   </url>
   <url>
-    <loc>http://liangshan.me/blog/2014/05/22/isolate-ansible-code-and-source-code/</loc>
+    <loc>https://liangshan.blog/blog/2014/05/22/isolate-ansible-code-and-source-code/</loc>
     <lastmod>2014-05-22T16:56:16+08:00</lastmod>
   </url>
   <url>
-    <loc>http://liangshan.me/blog/2014/05/22/the-twelve-factor-app/</loc>
+    <loc>https://liangshan.blog/blog/2014/05/22/the-twelve-factor-app/</loc>
     <lastmod>2014-05-22T16:37:03+08:00</lastmod>
   </url>
   <url>
-    <loc>http://liangshan.me/blog/2014/05/22/how-to-teach-people-at-anjuke/</loc>
+    <loc>https://liangshan.blog/blog/2014/05/22/how-to-teach-people-at-anjuke/</loc>
     <lastmod>2014-05-22T11:23:34+08:00</lastmod>
   </url>
   <url>
-    <loc>http://liangshan.me/blog/2014/05/20/using-ansible-with-virtualenv-without-install/</loc>
+    <loc>https://liangshan.blog/blog/2014/05/20/using-ansible-with-virtualenv-without-install/</loc>
     <lastmod>2014-05-20T14:45:59+08:00</lastmod>
   </url>
   <url>
-    <loc>http://liangshan.me/blog/2014/05/12/build-custom-domain-blog-with-octopress-and-github-pages/</loc>
+    <loc>https://liangshan.blog/blog/2014/05/12/build-custom-domain-blog-with-octopress-and-github-pages/</loc>
     <lastmod>2014-05-12T14:17:19+08:00</lastmod>
   </url>
   <url>
-    <loc>http://liangshan.me/</loc>
+    <loc>https://liangshan.blog/</loc>
   </url>
   <url>
-    <loc>http://liangshan.me/blog/archives/</loc>
+    <loc>https://liangshan.blog/blog/archives/</loc>
   </url>
   <url>
-    <loc>http://liangshan.me/blog/categories/meta/</loc>
+    <loc>https://liangshan.blog/blog/categories/meta/</loc>
   </url>
   <url>
-    <loc>http://liangshan.me/blog/categories/ansible/</loc>
+    <loc>https://liangshan.blog/blog/categories/ansible/</loc>
   </url>
   <url>
-    <loc>http://liangshan.me/blog/categories/virtualenv/</loc>
+    <loc>https://liangshan.blog/blog/categories/virtualenv/</loc>
   </url>
   <url>
-    <loc>http://liangshan.me/blog/categories/anjuke/</loc>
+    <loc>https://liangshan.blog/blog/categories/anjuke/</loc>
   </url>
   <url>
-    <loc>http://liangshan.me/blog/categories/best-practice/</loc>
+    <loc>https://liangshan.blog/blog/categories/best-practice/</loc>
   </url>
   <url>
-    <loc>http://liangshan.me/blog/categories/vagrant/</loc>
+    <loc>https://liangshan.blog/blog/categories/vagrant/</loc>
   </url>
   <url>
-    <loc>http://liangshan.me/blog/categories/devops/</loc>
+    <loc>https://liangshan.blog/blog/categories/devops/</loc>
   </url>
   <url>
-    <loc>http://liangshan.me/blog/categories/recommendation/</loc>
+    <loc>https://liangshan.blog/blog/categories/recommendation/</loc>
   </url>
   <url>
-    <loc>http://liangshan.me/blog/categories/linux/</loc>
+    <loc>https://liangshan.blog/blog/categories/linux/</loc>
   </url>
   <url>
-    <loc>http://liangshan.me/blog/categories/rpc/</loc>
+    <loc>https://liangshan.blog/blog/categories/rpc/</loc>
   </url>
   <url>
-    <loc>http://liangshan.me/about.html</loc>
-    <lastmod>2018-05-03T10:01:05+08:00</lastmod>
+    <loc>https://liangshan.blog/posts/2/</loc>
+  </url>
+  <url>
+    <loc>https://liangshan.blog/posts/3/</loc>
+  </url>
+  <url>
+    <loc>https://liangshan.blog/about.html</loc>
+    <lastmod>2018-05-03T11:10:41+08:00</lastmod>
   </url>
 </urlset>

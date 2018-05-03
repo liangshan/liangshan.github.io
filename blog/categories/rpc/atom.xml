@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Rpc | Liangshan]]></title>
-  <link href="http://liangshan.me/blog/categories/rpc/atom.xml" rel="self"/>
-  <link href="http://liangshan.me/"/>
-  <updated>2018-05-03T11:05:16+08:00</updated>
-  <id>http://liangshan.me/</id>
+  <link href="https://liangshan.blog/blog/categories/rpc/atom.xml" rel="self"/>
+  <link href="https://liangshan.blog/"/>
+  <updated>2018-05-03T11:13:44+08:00</updated>
+  <id>https://liangshan.blog/</id>
   <author>
     <name><![CDATA[Liangshan]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[深入实践 SOA 架构]]></title>
-    <link href="http://liangshan.me/blog/2015/06/21/dive-into-soa-architecture/"/>
+    <link href="https://liangshan.blog/blog/2015/06/21/dive-into-soa-architecture/"/>
     <updated>2015-06-21T22:16:05+08:00</updated>
-    <id>http://liangshan.me/blog/2015/06/21/dive-into-soa-architecture</id>
+    <id>https://liangshan.blog/blog/2015/06/21/dive-into-soa-architecture</id>
     <content type="html"><![CDATA[<p>之前介绍了<a href="/blog/2014/11/03/how-to-choose-rpc-framework/">如何选择 RPC 框架</a>，选择 RPC 框架是实施 SOA 的重要一步，但也仅仅是第一步。今天来讨论具体实施 RPC 过程中，遇到的一些细节。</p>
 
 <p>写下第一个真正的 RPC 服务，首先遇到的问题就是服务划分，或者叫服务的分层。当然最简单的就是不分层，把所有的接口都写在一起，即当服务启动的时候所有的接口都被载入内存从而被访问。现如今软件架构的趋势是使用分布式的独立的微型服务（Micro Service）搭积木，SOA 正是实现这一构想的途径之一，但如果不给服务做划分显然和初衷背道而驰。我们最终选定的划分方式是按照业务（Domain）首先划分出基础服务，我们称之为 LEVEL-1，跨基础服务的接口称之为 LEVEL-2，一些与商业无关的，更为通用的模块称之为 LEVEL-0。</p>
@@ -50,9 +50,9 @@
   
   <entry>
     <title type="html"><![CDATA[How to Choose RPC Framework]]></title>
-    <link href="http://liangshan.me/blog/2014/11/03/how-to-choose-rpc-framework/"/>
+    <link href="https://liangshan.blog/blog/2014/11/03/how-to-choose-rpc-framework/"/>
     <updated>2014-11-03T15:16:21+08:00</updated>
-    <id>http://liangshan.me/blog/2014/11/03/how-to-choose-rpc-framework</id>
+    <id>https://liangshan.blog/blog/2014/11/03/how-to-choose-rpc-framework</id>
     <content type="html"><![CDATA[<p>RPC 是 remote procedure call 的缩写，意指调用远程进程的方法。这里的远程需要广义的理解，有时为了协议的统一即使调用本地进程也叫做 RPC，所以 RPC 可简单理解为进程间通信。</p>
 
 <p>在选择 RPC 框架之前，要搞清楚为什么需要 RPC？ RPC 主要是为了解决服务化架构中客户端与服务端以及服务之间通讯的问题。在最早接触 RPC 的时候，我一直有一个疑问： RESTful API 不就搞定了么？为什么需要 RPC？直到深入实践了 RPC，我自己总结了 RPC 与 RESTful API 最大的几个不同。</p>
