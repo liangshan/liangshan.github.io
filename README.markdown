@@ -1,6 +1,6 @@
-# liangshan.me
+# liangshan.blog
 
-Source code of http://liangshan.me.
+Source code of https://liangshan.blog.
 
 ## Environments & Dependences
 
@@ -23,4 +23,3 @@ $ rake genarate
 $ rake preview
 $ rake deploy
 ```
-

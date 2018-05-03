@@ -6,7 +6,7 @@ comments: true
 categories:
 ---
 
-自从决定 [换个姿势写博客](http://liangshan.me/blog/2014/09/09/huan-ge-zi-shi-xie-bo-ke/) 之后，发现可写的内容越来越少了。
+自从决定 [换个姿势写博客](https://liangshan.blog/blog/2014/09/09/huan-ge-zi-shi-xie-bo-ke/) 之后，发现可写的内容越来越少了。
 
 这次讲一个鸡汤故事。
 
