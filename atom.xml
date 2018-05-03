@@ -4,7 +4,7 @@
   <title><![CDATA[Liangshan]]></title>
   <link href="http://liangshan.me/atom.xml" rel="self"/>
   <link href="http://liangshan.me/"/>
-  <updated>2018-05-03T10:39:43+08:00</updated>
+  <updated>2018-05-03T11:05:16+08:00</updated>
   <id>http://liangshan.me/</id>
   <author>
     <name><![CDATA[Liangshan]]></name>
@@ -192,40 +192,6 @@
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[API-First vs. API-Friendly]]></title>
-    <link href="http://liangshan.me/blog/2016/04/12/api-first-design/"/>
-    <updated>2016-04-12T15:32:52+08:00</updated>
-    <id>http://liangshan.me/blog/2016/04/12/api-first-design</id>
-    <content type="html"><![CDATA[<p>现在很多应用都运行于多个平台之上，所以通用的做法是写出一套公共的 API 给各个应用统一调用。</p>
-
-<p>比如移动版本的网页，一次典型的请求是这样的：</p>
-
-<blockquote><p>移动版本的服务端请求公共 API 拿到数据，然后在服务端或是客户端渲染 HTML 5 页面。</p>
-
-<p>用户的登录信息通过 API 验证后，存储在本地的 Session 里。</p></blockquote>
-
-<p>这种架构的网页，我称之为 API-Friendly，因为这里面有明显的重复劳动：</p>
-
-<ul>
-<li>包含了 2 个后端，一个是网页的后端，一个是前者的后端 —— 公共 API</li>
-<li>有两层验证体系，一个是传统的用户名-密码体系，一个是使用签名和加密的 API 验证体系</li>
-</ul>
-
-
-<p>而我所说的 API-First 设计，就是在任何情况下都以调用 API 为第一目标的设计。</p>
-
-<p>还是以上述移动版本网页为例：</p>
-
-<p>移动版本的页面是纯静态页面，Javascript 直接请求公共 API，拿到数据后由客户端渲染页面（AngularJS 或者 ReactJS 这种技术）。
-这样做可以避免构建一个仅仅进行信息转发的后端，另外一个很大的好处是整个网站的所有页面都可以直接使用 CDN 缓存，也可以单独部署。</p>
-
-<p>移动版本的验证，第一次使用用户名密码登录，登录后返回一个 token。之后的每次请求都带着 token 访问 API 进行身份验证，客户端只存储 token，token 过期后需要重新登录。这样将前端页面直接当作 API 的使用者，每次请求都重新验证身份。这样其实也就没有传统意义上的登录和登出了。整个网页是<code>无状态</code>的，也不需要构建 2 套不同的认证体系。</p>
-
-<p>这样通过 API-First 的设计，就能够构建出现代的移动应用。</p>
-]]></content>
-  </entry>
-  
-  <entry>
     <title type="html"><![CDATA[多做一点点]]></title>
     <link href="http://liangshan.me/blog/2016/01/25/do-a-little-more/"/>
     <updated>2016-01-25T13:53:59+08:00</updated>
@@ -286,27 +252,6 @@
 为了解决以上的问题，利用 Ansible 给每个开发环境的虚拟机都部署了一个专门用来做集成测试的数据库，以及集成测试专用的配置文件（主要是数据库连接）。另外给集成测试的命令加了一些 wrapper ：重置数据库、导入准备好的测试数据（为了保持数据之间的关联，我直接从线上 dump 下一小部分）、切换至测试专用配置文件（包括客户端和服务端）、执行集成测试、切换回正常配置文件。</p>
 
 <p>至此，在 SOA 实践中遇到的一些问题都得到了比较好的解决。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[极致的平衡]]></title>
-    <link href="http://liangshan.me/blog/2015/06/14/ji-zhi-de-ping-heng/"/>
-    <updated>2015-06-14T22:17:45+08:00</updated>
-    <id>http://liangshan.me/blog/2015/06/14/ji-zhi-de-ping-heng</id>
-    <content type="html"><![CDATA[<p>我们经常说「要追求极致」，每每谈到这个话题，乔布斯就会成为永恒的范例：他是如何苛刻的追求极致的产品体验，以及如何受到养父关于「别人看不到的地方也要追求完美」的影响。</p>
-
-<p>而实际生活中，我们又常常不得不平衡。平衡家庭与工作、工作中的效率与质量、管理中的育人与做事等等。在科学界，平衡更是无处不在，正极与负极、正数与负数、作用力与反作用力等等，可以说我们的世界更倾向于建立在平衡之中。</p>
-
-<p>有一个问题一直在困扰我，到底应该追求「平衡」还是「极致」？或许一个显而易见的答案是「看情况」，那么到底什么情况下应该追求「平衡」，而什么情况下应该追求「极致」？</p>
-
-<p>最近好像突然想通了，不知道是不是看了权利的游戏跟着编剧一起打开了脑洞呢:D</p>
-
-<p>问题的关键在于，我忽略了「平衡」也可以追求「极致」，那么最终来说还是应该追求「极致」了。</p>
-
-<p>比如烹饪一个菜肴，这时候其实你要追求的就是「极致的平衡」，各种食材的味道与口感完美融合，其中的任何一味差了一丝一毫便会影响口感，菜肴本身是平衡的，而你找到这个平衡的过程又是极致的。</p>
-
-<p>其实非常的简单，如果你抛开所谓极致和平衡的观点，重新审视疑惑，会问题的本质在于，你不是在纠结到底应该极致还是平衡，而是在纠结怎么才能把事做好。从这个角度出发，所有疑惑都会迎刃而解了，因为根本无所谓极致和平衡，这两者只是达到目的过程中，不同阶段需要的不同心态而已。这里需要注意的是，很多人对极致和平衡的理解都有偏差，极致绝不是极端，而平衡也绝不是妥协。</p>
 ]]></content>
   </entry>
   
@@ -1500,6 +1445,138 @@ jiathis 给的代码带一个「+」号还有分享数字，样式很不河蟹�
 <p>所有进程类型应该使用同样的 <a href="#dependencies">依赖隔离</a> 技术。例如，如果 Ruby 的 web 进程使用了命令 <code>bundle exec thin start</code>，那么数据库移植应使用 <code>bundle exec rake db:migrate</code>。同样的，如果一个 Python 程序使用了 Virtualenv，则需要在运行 Tornado Web 服务器和任何<code>manage.py</code> 管理进程时引入 <code>bin/python</code> 。</p>
 
 <p>12-Factor 尤其青睐那些提供了 REPL shell 的语言，因为那会让运行一次性脚本变得简单。在本地部署中，开发人员直接在命令行使用 shell 命令调用一次性管理进程。在线上部署中，开发人员依旧可以使用ssh或是运行环境提供的其他机制来运行这样的进程。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[安居客导师指南]]></title>
+    <link href="http://liangshan.me/blog/2014/05/22/how-to-teach-people-at-anjuke/"/>
+    <updated>2014-05-22T11:23:34+08:00</updated>
+    <id>http://liangshan.me/blog/2014/05/22/how-to-teach-people-at-anjuke</id>
+    <content type="html"><![CDATA[<p>安居客近年来非常重视校招，尤其是研发方向。实际操作下来，感觉校招还是不错的选择，这次我主要站在公司的角度来说。</p>
+
+<!-- more -->
+
+
+<p>公司应该是看中应届毕业生便宜、够用、潜力。这里要说一个现象，大多数很优秀的应届生都选择去了大公司，类似 BAT，薪水高、品牌响这倒也无可厚非。所以这里讨论的是我接触到的学生们，并非是说公司的招到的学生不好，只是学生之间是有差距的这也是事实。</p>
+
+<p>当然招校招生也存在几个风险，其中最大的风险无非就是学生也只是把公司当跳板。对于这个我的观点比较简单，说明公司的吸引力不够，这个不怪学生。
+对此安居客的对策是为学生安排专人辅导，我们内部称为「导师」，或者是 buddy。这里导师的作用除了辅导之外，其实很大程度上是为了留住学生，所以导师的选择和导师的付出其实和最后学生的发展有着比较密切的关系。</p>
+
+<p>我有幸参与了安居客的几届学生培养，作为导师代表给所有导师做了一次分享。这里贴上 slides:</p>
+
+<script async class="speakerdeck-embed" data-id="1b324900a388013120061af8c79ec55f" data-ratio="1.33333333333333" src="//speakerdeck.com/assets/embed.js"></script>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[使用 Virtualenv 绿色安装 Ansible]]></title>
+    <link href="http://liangshan.me/blog/2014/05/20/using-ansible-with-virtualenv-without-install/"/>
+    <updated>2014-05-20T14:45:59+08:00</updated>
+    <id>http://liangshan.me/blog/2014/05/20/using-ansible-with-virtualenv-without-install</id>
+    <content type="html"><![CDATA[<p><a href="http://www.ansible.com/home">Ansible</a> 是一个自动化配置管理工具 (Automate configure management)。用 python 编写，所以安装方式一般有以下几种：</p>
+
+<p><strong> <code>pip</code> 安装 </strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ pip install ansible</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong> MacOS 用户可以选择使用 <code>homebrew</code> 安装 </strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew install ansible</span></code></pre></td></tr></table></div></figure>
+
+
+<p>但这两种方法都不可避免将「污染」系统的 python 环境。所以本文主要介绍如何绿色安装 Ansible。</p>
+
+<!-- more -->
+
+
+<h3>安装 Virtualenv</h3>
+
+<p>不污染系统的关键在于虚拟化 python 的环境，所以需要准备 virtualenv。</p>
+
+<p>这里偷懒选择使用 pip 安装，如果连 virtualenv 也不想装在系统级别也是可以的，就不在这里介绍了。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ pip install virtualenv</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>下载 ansible</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git clone git@github.com:ansible/ansible.git
+</span><span class='line'>$ cd ansible</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>安装</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ virtualenv .virtualenv
+</span><span class='line'>$ .virtualenv/bin/python setup.py develop</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>A little trick</h3>
+
+<p>这个时候使用 virtualenv 激活当前目录的 python 环境，其实 <code>bin/ansible</code> 就已经可以工作了。</p>
+
+<p>但我们还希望将 ansible 命令加在系统的 PATH 里，这就需要一些小技巧。简单来说需要自己准备一个脚本，脚本的内容如下:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ touch ~/bin/_ansible_wrapper
+</span><span class='line'>$ vim ~/bin/_ansible_wrapper
+</span><span class='line'>
+</span><span class='line'>#!/bin/bash
+</span><span class='line'>source "$HOME/apps/ansible/hacking/env-setup" -q
+</span><span class='line'>if [ -f "$ANSIBLE_HOME/.virtualenv/bin/activate" ] ; then
+</span><span class='line'>    source "$ANSIBLE_HOME/.virtualenv/bin/activate"
+</span><span class='line'>fi
+</span><span class='line'>PYENV_VERSION=2.7.6 exec "$ANSIBLE_HOME/bin/${0##/*/}" $@</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>$HOME/apps/ansible/hacking/env-setup</code> 是 ansible 为 hacker 准备的一个脚本，设置一些环境变量。其中 <code>$HOME/apps/ansible</code> 是 ansible 的根目录。</p>
+
+<p><code>${0##/*/}</code> 比较有趣，作用是正则匹配 <code>/*/</code> 然后把匹配到的部分从第 0 个参数（即命令本身）中删除。关于 bash 参数，更详细可以看[1]。</p>
+
+<p><code>$@</code> 则比较常见，是 bash 拿到的除命令名之外的所有参数。</p>
+
+<p>其实这个脚本就是一个 wrapper，作用如下：</p>
+
+<ol>
+<li>设置相关环境变量</li>
+<li>激活 ansible 下的 python 环境</li>
+<li>将收到的所有命令都转发给 <code>$ANSIBLE_HOME/bin</code> 下的相同命令执行</li>
+</ol>
+
+
+<p>假设 <code>$HOME/bin</code> 在 PATH 中，设置几个软链就全部搞定了。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ ln -s $HOME/bin/_ansible_wrapper $HOME/bin/ansible
+</span><span class='line'>$ ln -s $HOME/bin/_ansible_wrapper $HOME/bin/ansible-playbook
+</span><span class='line'>$ ln -s $HOME/bin/_ansible_wrapper $HOME/bin/ansible-galaxy</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>参考资料</h3>
+
+<ol>
+<li><a href="http://www.ibm.com/developerworks/opensource/library/l-bash-parameters/index.html">Linux tip: Bash parameters and parameter expansions</a></li>
+</ol>
+
 ]]></content>
   </entry>
   
