@@ -79,11 +79,11 @@ categories: [best practice, translation]
 **为什么幂等性对于构建一个支付系统如此重要呢？** 最重要的是：避免重复扣费和重复退款。前面提到了我们的消息系统确保消息至少被投递一次，可以想象所有消息都有可能被投递多次而系统就必须确保幂等性。我们最终选择了使用版本控制和乐观锁来解决这个问题，这个幂等性的系统则使用拥有强一致性的持久化存储作为数据源。
 
 ## Sharding 和 Quorum
-分布式系统通常会存储巨量的数据，超过了单个节点的能力范围。所以如何在一组机器上存储一批数据呢？最常用的做法就是 [sharding](https://en.wikipedia.org/wiki/Shard_(database_architecture))。数据基于某种哈希算法被水平的拆分。尽管大部分分布式系统的 sharding 策略都在底层，但 sharding 是一个学起来很有趣的领域，尤其是 [resharding](https://medium.com/@jeeyoungk/how-sharding-works-b4dec46b3f6)。Foursquare 曾经在 2010 年由于一个 sharding 的边界问题导致了 17 个小时的宕机，之后有一篇[很棒的文章](http://highscalability.com/blog/2010/10/15/troubles-with-sharding-what-can-we-learn-from-the-foursquare.html)分享了问题的根本原因。
+分布式系统通常会存储巨量的数据，超过了单个节点的能力范围。所以如何在一组机器上存储一批数据呢？最常用的做法就是 [sharding](https://en.wikipedia.org/wiki/Shard_\(database_architecture\))。数据基于某种哈希算法被水平的拆分。尽管大部分分布式系统的 sharding 策略都在底层，但 sharding 是一个学起来很有趣的领域，尤其是 [resharding](https://medium.com/@jeeyoungk/how-sharding-works-b4dec46b3f6)。Foursquare 曾经在 2010 年由于一个 sharding 的边界问题导致了 17 个小时的宕机，之后有一篇[很棒的文章](http://highscalability.com/blog/2010/10/15/troubles-with-sharding-what-can-we-learn-from-the-foursquare.html)分享了问题的根本原因。
 
 许多分布式系统在多个节点上存储数据或进行计算。为了保证操作的一致性，一个基于投票的方案被发明，简言之必须有一定数量的节点都得到相同的结果操作才算成功。这个方案就是 quorum。
 
-**为什么 sharding 和 quorum 对于构建一个支付系统如此重要呢？** 这其实是分布式系统非常基础的两个概念。我个人在我们设置 Cassandra 复制策略的时候第一次遇到它们。Cassandra (或是其他分布式系统) 使用 quorum 和本地的 quorum 来确保集群的一致性。一个有趣的现象是，当我们开会的时候，一旦会议室有足够的人就有人会问：“可以开始了吗？我们有 quorum 机制吗？”（译者注，意思是并非所有人都在，大部分在也可以保证会议效果，和 quorum 一样 :D）
+**为什么 sharding 和 quorum 对于构建一个支付系统如此重要呢？** 这其实是分布式系统非常基础的两个概念。我个人在我们设置 Cassandra 复制策略的时候第一次遇到它们。Cassandra (或是其他分布式系统) 使用 [quorum](https://docs.datastax.com/en/archived/cassandra/3.x/cassandra/dml/dmlConfigConsistency.html#dmlConfigConsistency__about-the-quorum-level) 和本地的 quorum 来确保集群的一致性。一个有趣的现象是，当我们开会的时候，一旦会议室有足够的人就有人会问：“可以开始了吗？我们有 quorum 机制吗？”（译者注，意思是并非所有人都在，大部分在也可以保证会议效果，和 quorum 一样 :D）
 
 ## Actor Model
 通常我们使用的一些编程词汇，诸如变量、接口、方法调用等等，都基于单台主机的系统（译者注，我觉得这里想表达的应该是单个进程内部，和后面的做对比）。当讨论分布式系统时，我们需要另外一种方式来表达。一种通用的描述这类系统的模型叫 [actor model](https://en.wikipedia.org/wiki/Actor_model)，我们使用这个模型来描述系统间的通信。这个模型非常流行，是因为它和我们实际生活中的心智模型相匹配，比如人在一个组织中如何互相交流。而另外一个流行的模型叫做 [CSP](https://en.wikipedia.org/wiki/Communicating_sequential_processes) —— communicating sequential processes。
