@@ -4,7 +4,7 @@
   <title><![CDATA[Liangshan]]></title>
   <link href="https://liangshan.blog/atom.xml" rel="self"/>
   <link href="https://liangshan.blog/"/>
-  <updated>2018-05-09T14:44:18+08:00</updated>
+  <updated>2018-05-09T15:15:20+08:00</updated>
   <id>https://liangshan.blog/</id>
   <author>
     <name><![CDATA[Liangshan]]></name>
@@ -103,11 +103,11 @@
 
 <h2>Sharding 和 Quorum</h2>
 
-<p>分布式系统通常会存储巨量的数据，超过了单个节点的能力范围。所以如何在一组机器上存储一批数据呢？最常用的做法就是 <a href="https://en.wikipedia.org/wiki/Shard_(database_architecture">sharding</a>)。数据基于某种哈希算法被水平的拆分。尽管大部分分布式系统的 sharding 策略都在底层，但 sharding 是一个学起来很有趣的领域，尤其是 <a href="https://medium.com/@jeeyoungk/how-sharding-works-b4dec46b3f6">resharding</a>。Foursquare 曾经在 2010 年由于一个 sharding 的边界问题导致了 17 个小时的宕机，之后有一篇<a href="http://highscalability.com/blog/2010/10/15/troubles-with-sharding-what-can-we-learn-from-the-foursquare.html">很棒的文章</a>分享了问题的根本原因。</p>
+<p>分布式系统通常会存储巨量的数据，超过了单个节点的能力范围。所以如何在一组机器上存储一批数据呢？最常用的做法就是 <a href="https://en.wikipedia.org/wiki/Shard_(database_architecture)">sharding</a>。数据基于某种哈希算法被水平的拆分。尽管大部分分布式系统的 sharding 策略都在底层，但 sharding 是一个学起来很有趣的领域，尤其是 <a href="https://medium.com/@jeeyoungk/how-sharding-works-b4dec46b3f6">resharding</a>。Foursquare 曾经在 2010 年由于一个 sharding 的边界问题导致了 17 个小时的宕机，之后有一篇<a href="http://highscalability.com/blog/2010/10/15/troubles-with-sharding-what-can-we-learn-from-the-foursquare.html">很棒的文章</a>分享了问题的根本原因。</p>
 
 <p>许多分布式系统在多个节点上存储数据或进行计算。为了保证操作的一致性，一个基于投票的方案被发明，简言之必须有一定数量的节点都得到相同的结果操作才算成功。这个方案就是 quorum。</p>
 
-<p><strong>为什么 sharding 和 quorum 对于构建一个支付系统如此重要呢？</strong> 这其实是分布式系统非常基础的两个概念。我个人在我们设置 Cassandra 复制策略的时候第一次遇到它们。Cassandra (或是其他分布式系统) 使用 quorum 和本地的 quorum 来确保集群的一致性。一个有趣的现象是，当我们开会的时候，一旦会议室有足够的人就有人会问：“可以开始了吗？我们有 quorum 机制吗？”（译者注，意思是并非所有人都在，大部分在也可以保证会议效果，和 quorum 一样 :D）</p>
+<p><strong>为什么 sharding 和 quorum 对于构建一个支付系统如此重要呢？</strong> 这其实是分布式系统非常基础的两个概念。我个人在我们设置 Cassandra 复制策略的时候第一次遇到它们。Cassandra (或是其他分布式系统) 使用 <a href="https://docs.datastax.com/en/archived/cassandra/3.x/cassandra/dml/dmlConfigConsistency.html#dmlConfigConsistency__about-the-quorum-level">quorum</a> 和本地的 quorum 来确保集群的一致性。一个有趣的现象是，当我们开会的时候，一旦会议室有足够的人就有人会问：“可以开始了吗？我们有 quorum 机制吗？”（译者注，意思是并非所有人都在，大部分在也可以保证会议效果，和 quorum 一样 :D）</p>
 
 <h2>Actor Model</h2>
 
