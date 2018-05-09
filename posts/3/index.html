@@ -9,9 +9,9 @@
   <meta name="author" content="Liangshan">
 
   
-  <meta name="description" content="一直没有搭博客，因为一直感觉自己不是一个标准的技术人，主要是不够狂热。但受身边人熏陶，偶尔还是想写点东西。
-尤其是看中 liangshan.me 这个域名，买下之后觉得闲着也是浪费，所以有了利用 GitHub Pages 来搭一下的想法。 预备 你需要具备一些 Git 的常识
-你需要一张 Visa &hellip;">
+  <meta name="description" content="Ansible 是一个自动化配置管理工具 (Automate configure management)。用 python 编写，所以安装方式一般有以下几种： pip 安装 1
+$ pip install ansible MacOS 用户可以选择使用 homebrew 安装 1
+$ brew &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -87,6 +87,54 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/05/20/using-ansible-with-virtualenv-without-install/">使用 Virtualenv 绿色安装 Ansible</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-05-20T14:45:59+08:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>20</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>2:45 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://www.ansible.com/home">Ansible</a> 是一个自动化配置管理工具 (Automate configure management)。用 python 编写，所以安装方式一般有以下几种：</p>
+
+<p><strong> <code>pip</code> 安装 </strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ pip install ansible</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong> MacOS 用户可以选择使用 <code>homebrew</code> 安装 </strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew install ansible</span></code></pre></td></tr></table></div></figure>
+
+
+<p>但这两种方法都不可避免将「污染」系统的 python 环境。所以本文主要介绍如何绿色安装 Ansible。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/05/20/using-ansible-with-virtualenv-without-install/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2014/05/12/build-custom-domain-blog-with-octopress-and-github-pages/">使用 Octopress 在 GitHub Pages 上快速搭建自定义域名Blog</a></h1>
     
     
@@ -153,6 +201,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2018/05/04/distributed-architecture-concepts/">分布式系统架构概述（译）</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2018/04/25/what-is-professional/">什么是做事专业</a>
       </li>
     
@@ -166,10 +218,6 @@
     
       <li class="post">
         <a href="/blog/2016/07/18/beyond-tuning-performance/">网站性能优化之外</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2016/01/25/do-a-little-more/">多做一点点</a>
       </li>
     
   </ul>
@@ -206,7 +254,7 @@
 
 <section>
   <h1>Categories</h1>
-    <ul id="category-list"><li><a href='/blog/categories/anjuke'>anjuke (2)</a></li><li><a href='/blog/categories/ansible'>ansible (2)</a></li><li><a href='/blog/categories/best-practice'>best practice (1)</a></li><li><a href='/blog/categories/devops'>devops (1)</a></li><li><a href='/blog/categories/linux'>linux (2)</a></li><li><a href='/blog/categories/meta'>meta (2)</a></li><li><a href='/blog/categories/recommendation'>recommendation (1)</a></li><li><a href='/blog/categories/rpc'>rpc (2)</a></li><li><a href='/blog/categories/vagrant'>vagrant (1)</a></li><li><a href='/blog/categories/virtualenv'>virtualenv (1)</a></li></ul>
+    <ul id="category-list"><li><a href='/blog/categories/anjuke'>anjuke (2)</a></li><li><a href='/blog/categories/ansible'>ansible (2)</a></li><li><a href='/blog/categories/best-practice'>best practice (2)</a></li><li><a href='/blog/categories/devops'>devops (1)</a></li><li><a href='/blog/categories/linux'>linux (2)</a></li><li><a href='/blog/categories/meta'>meta (2)</a></li><li><a href='/blog/categories/recommendation'>recommendation (1)</a></li><li><a href='/blog/categories/rpc'>rpc (2)</a></li><li><a href='/blog/categories/translation'>translation (2)</a></li><li><a href='/blog/categories/vagrant'>vagrant (1)</a></li><li><a href='/blog/categories/virtualenv'>virtualenv (1)</a></li></ul>
 </section>
 
 <section class="googleplus">

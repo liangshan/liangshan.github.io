@@ -1,108 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
 
-<!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  <title>The Twelve-Factor App - Liangshan</title>
-  <meta name="author" content="Liangshan">
-
-  
-  <meta name="description" content="12 factor 的中文翻译">
-  <meta name="keywords" content="12 factor,twelve factor,heroku,best practice,翻译">
-
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  
-  <link rel="canonical" href="https://liangshan.blog/blog/2014/05/22/the-twelve-factor-app">
-  <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/atom.xml" rel="alternate" title="Liangshan" type="application/atom+xml">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script> 
-  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href='//fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
-
-  
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-50920618-1']);
-    _gaq.push(['_trackPageview']);
-
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
-
-
-</head>
-
-<body    class="collapse-sidebar sidebar-footer" >
-  <header role="banner"><hgroup>
-  <h1><a href="/">Liangshan</a></h1>
-  
-    <h2>Inner peace.</h2>
-  
-</hgroup>
-
-</header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="https://www.google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="q" value="site:liangshan.blog" />
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
-  <li><a href="/">Blog</a></li>
-  <li><a href="/blog/archives">Archives</a></li>
-  <li><a target="_blank" href="/about.html">About</a></li>
-</ul>
-
-</nav>
-  <div id="main">
-    <div id="content">
-      <div>
-<article class="hentry" role="article">
-  
-  <header>
+  <title><![CDATA[Category: Translation | Liangshan]]></title>
+  <link href="https://liangshan.blog/blog/categories/translation/atom.xml" rel="self"/>
+  <link href="https://liangshan.blog/"/>
+  <updated>2018-05-09T14:44:18+08:00</updated>
+  <id>https://liangshan.blog/</id>
+  <author>
+    <name><![CDATA[Liangshan]]></name>
     
-      <h1 class="entry-title">The Twelve-Factor App</h1>
-    
-    
-      <p class="meta">
-        
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[分布式系统架构概述（译）]]></title>
+    <link href="https://liangshan.blog/blog/2018/05/04/distributed-architecture-concepts/"/>
+    <updated>2018-05-04T11:58:05+08:00</updated>
+    <id>https://liangshan.blog/blog/2018/05/04/distributed-architecture-concepts</id>
+    <content type="html"><![CDATA[<p>我其实很少翻译东西，首先是因为英文和中文水平都有限，很难做到信达雅，其次一般的文章自己看过就结束了，很少有要翻译的冲动。这次要翻译的是一篇概括性很强的文章，讲的是分布式系统中需要了解的基础概念，值得保存下来经常回顾。</p>
 
+<p>有趣的是，这篇文章在 <a href="https://news.ycombinator.com/item?id=16852295">hacker news</a> 和 <a href="https://www.reddit.com/r/programming/comments/8cxz7q/distributed_architecture_concepts_i_learned_while/">reddit</a> 上得到了基本相反的评价。我个人还是很认可这种概括性的文章的。就好像大学的课程大纲，有很强的指导作用。</p>
 
-
-<time class='entry-date' datetime='2014-05-22T16:37:03+08:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2014</span></span> <span class='time'>4:37 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-<div class="entry-content"><p>前些年翻译的 <a href="http://12factor.net/">12-factor</a>。一直放在公司内部的博客上，现在复制一份过来。</p>
+<p>以下是正文的译文，原文请戳<a href="http://blog.pragmaticengineer.com/distributed-architecture-concepts-i-have-learned-while-building-payments-systems/">这里</a>。</p>
 
 <hr />
 
-<p><img class="right" src="http://0.gravatar.com/avatar/7cdf5b1c46308979e3bf81390b0c8639"></p>
+<p>两年前我做为移动开发工程师加入了 Uber，之前有一些后端开发的经验。我参与实现了 app 的支付模块——这个模块目前正在重写。之后，我开始进入工程管理领域，领导一个团队。这个团队负责很多和支付相关的后端系统，这意味着我更多的接触了后端开发的东西。</p>
+
+<p>在 Uber 工作之前，我几乎没有分布式系统经验。我的教育背景是传统的计算机科学学位，之后做了十年全栈开发。虽然我之前略知一二，但我对分布式概念（如一致性，可用性或幂等性）没有太多的理解或欣赏。</p>
+
+<p>在这篇文章中，我总结了一些构建大规模、高可用的分布式系统时需要了解的基本概念。这个系统就是 Uber 的支付系统，一个负载高达每秒数千次请求的系统，即使部分系统出现故障，关键支付功能也需要正常工作。 这是一个完整的清单吗？ 也许不是。 但如果我早点知道这些的话，会让我的生活变得更轻松。 因此，让我们深入了解 SLA、一致性、数据持久性、消息持久性、幂等性以及我在工作中需要学习的其他一些内容。</p>
+
+<!--more-->
+
+
+<h2>SLA</h2>
+
+<p>对于那些每天处理数百万次事务的大型系统来说，出错几乎是无法避免的。我发现在深入计划一个系统之前，最重要的事情是先定义这个系统如何算「健康」。尽量用一些可衡量的指标来表示「健康」。通用方法是用 <a href="https://en.wikipedia.org/wiki/Service-level_agreement">SLA</a> 来衡量，即 service level agreements。我见过的最通用的 SLA 是：</p>
+
+<ul>
+<li><strong>可用性（Availability）</strong>：服务正常运行时间的百分比。显而易见的是应该努力让系统的可用性达到 100%，但做到这个目标不仅很难而且很贵。甚至像 VISA、Gmail、互联网供应商这样的大型且重要的系统都无法做到 100% 的可用性。历年来，他们总是会有那么几秒钟、几分钟、或者几小时不可用。对于大多数系统来说，4 个 9 的可用性（即 99.99%，换言之<a href="https://uptime.is/">每年不超过 50 分钟</a>不可用时间）即可被称为高可用。仅仅是达到这一水平通常已经意味着大量的工作要做了。</li>
+<li><strong>准确性（Accuracy）</strong>：系统允许一些数据的丢失或不准确吗？如果允许，可以接受多大比例呢？对于我负责的支付系统来说，准确性的要求是 100%，意味着任何数据都不允许丢失。</li>
+<li><strong>容量（Capacity）</strong>：系统预期可以承受多大的负载？这个指标通常使用 QPS(requests per second) 来表达。</li>
+<li><strong>延迟（Latency）</strong>：系统应该在多久之后返回结果？95% 以及 <a href="https://www.quora.com/What-is-p99-latency">99%</a> 用户请求的响应时间是多少？系统通常会有一些噪音数据，所以取 95% 和 99% 请求的延迟时间是现实世界中的可行做法。</li>
+</ul>
+
+
+<p><strong>为什么 SLA 对于构建一个大型支付系统如此重要呢？</strong> 我们在构建将要替换当前系统的新系统。为了确保我们所做是正确的，即我们认为新系统是「更好」的，所以我们使用 SLA 来定义指标。其中可用性是我们优先级最高的要求。一旦确定了标准，我们就可以在架构过程中权衡选择来达到它。</p>
+
+<h2>水平扩展（Horizontal scaling） Vs 垂直扩展（Vertical scaling）</h2>
+
+<p>假如一个由新系统支撑的业务持续在增长，那么系统负载也在增加。到了某个节点，现有的设施已经无法支撑更多负载和容量。两种通常会考虑的扩展策略就是水平扩展和垂直扩展。</p>
+
+<p>水平扩展就是通过加机器（或节点）来提升容量。水平扩展是目前分布式系统最流行的扩展方式，尤其是现如今对于集群来说，增加一台机器（或虚拟机）仅仅只是点一个按钮那么简单。</p>
+
+<p>垂直扩展基本上就是「买一台更大更好的机器」，也就是更多核、更多进程、更多内存。对于分布式系统来说，垂直扩展通常没那么常见，因为垂直扩展往往要花费更多钱。但也有些大型网站，比如 Stack Overflow 就有过<a href="https://www.slideshare.net/InfoQ/scaling-stack-overflow-keeping-it-vertical-by-obsessing-over-performance">成功垂直扩展</a>来满足需求的案例。</p>
+
+<p><strong>为什么扩展的策略对于构建一个大型支付系统如此重要呢？</strong> 我们早期就确定了支付系统应该是水平扩展的。虽然垂直扩展在某些场景下可行，但就目前市面上昂贵的单台大型主机负载能力而言，我们对它是否能承受目前支付系统的流量持悲观态度，更不用说将来。另外，我们团队有些工程师有大型支付系统工作的经验，当初他们想要使用能买到的最贵的主机来垂直扩展，然而失败了。（译者注：后面这些话好像并没有回答前面的问题）</p>
+
+<h2>一致性（Consistency）</h2>
+
+<p>可用性对于任何系统都是重要的。分布式系统往往构建于一批可用性相对较差的主机上。假设我们的目标是构建 99.999% 的可用性（即每年 5 分钟不可用），而我们使用的机器，平均只有 99.9% 的可用性（每年 8 小时不可用）。那么达到目标可用性的一种直接的方式就是使用一组这样的主机来组成集群。即便是某些节点不可用，其他的会保持可用来达到更高的可用性。</p>
+
+<p>一致性是高可用系统的关键指标。如果系统的所有节点在同一时间返回相同的数据，则认为这个系统是一致的。回到刚才的话题，由于我们使用了一组机器来组成高可用集群，确保系统保持一致就至关重要了。为了确保每个节点都返回相同的信息，它们之间需要消息通信。但是，消息传递可能会失败、会丢失，有些节点甚至不可用。</p>
+
+<p>一致性是一个我花了最多时间去理解和欣赏的概念。有很多一致性的模型，分布式系统中最流行的<a href="https://en.wikipedia.org/wiki/Consistency_model">几种模型</a>是<a href="https://en.wikipedia.org/wiki/Consistency_model">强一致性（strong consistency）</a>，<a href="https://www.cl.cam.ac.uk/teaching/0910/ConcDistS/11a-cons-tx.pdf">弱一致性（weak consistency）</a>和<a href="http://sergeiturukin.com/2017/06/29/eventual-consistency.html">最终一致性（eventual consistency）</a>。Hackernoon 的这篇<a href="https://hackernoon.com/eventual-vs-strong-consistency-in-distributed-databases-282fdad37cf7">强一致 vs 最终一致</a>给出了很好的可行的权衡建议。通常来讲，一致性越弱，系统越快，但拿不到最新数据的可能性也会越高。</p>
+
+<p><strong>为什么一致性对于构建一个大型支付系统如此重要呢？</strong> 系统中的数据要保持一致。但要多一致呢？对于系统的某些组件来说，只有强一致能满足要求。比如，确认一个支付是否已经初始化的数据需要确保强一致性。其他一些组件，也就是那些不太重要的组件，最终一致性是可以考虑的选择。一个很好的例子是近期交易列表，就可以使用最终一致性策略来实现（这意味着最新的交易未必立刻出现在列表里，但换来了更低的延迟和更小的资源消耗）。</p>
+
+<h2>数据耐久性（Data Durability）</h2>
+
+<p><a href="https://en.wikipedia.org/wiki/Durability_(database_systems)">耐久性</a>意味着数据一旦被成功存储就可以一直继续使用。即使系统中的节点下线，崩溃或数据损坏也是如此。</p>
+
+<p>不同的分布式数据库拥有不同级别的耐久性。有些系统支持机器/节点级别的耐久性，有些做到了集群级别而有些系统的耐久性并没有开箱即用。某种形式的数据复制是较为通用的提高耐久性的做法，因为把同一份数据存储在不同的节点上，即使有节点下线，数据仍然可以被访问。<a href="https://drivescale.com/2017/03/whatever-happened-durability/">这篇文章</a>很好的解释了为什么分布式系统做到耐久性是很大的挑战。</p>
+
+<p><img width="800px" src="/images/custom/data-durability.png" /></p>
+
+<p><strong>为什么数据耐久性对于构建一个支付系统如此重要呢？</strong> 这个系统的大部分组件而言，如此重要的数据是不允许丢失的。分布式的数据存储需要支持集群级别的数据耐久性，即使实例会崩溃，完成了的交易仍然还在。现如今大部分分布式数据存储服务，诸如 Cassandra、MongoDB、HDFS 或是 Dynamodb 全都支持不同级别的耐久性，并且通过配置都可以支持集群级别的耐久性。</p>
+
+<h2>消息的持久化（Persistence）和耐久性（Durability）</h2>
+
+<p>分布式系统中的节点进行计算、存储和相互发送消息。发送消息的一个关键性指标是消息送达的可靠性。对于重要的系统而言，常常不允许任何消息的丢失。</p>
+
+<p>对于分布式系统而言，消息通讯通常由分布式消息服务完成，比如 RabbitMQ、Kafka。这些消息服务能支持（或配置后支持）不同级别的消息送达可靠性。</p>
+
+<p>消息持久化的意思是当消息服务的节点发生了错误，已经发送的消息仍然会在错误解决之后被处理。消息耐久性则通常用在消息队列这一层。如果一个消息队列声明了耐久性，那么即使队列在消息发送之后掉线，仍然会在重新上线之后收到这条消息。<a href="https://developers.redhat.com/blog/2016/08/10/persistence-vs-durability-in-messaging/">这里</a>有一篇很好的文章是关于这个话题。</p>
+
+<p><img width="800px" src="/images/custom/msg-durability.png" /></p>
+
+<p><strong>为什么消息的持久化和耐久性对于构建一个支付系统如此重要呢？</strong> 我们有太多重要的消息经不起丢失，比如乘客刚刚初始化了行程的消息。也就是说我们的消息系统是不允许丢消息的，每条消息都会被投递一次。但是，每条消息精确投递一次和至少投递一次是截然不同的复杂度。我们最终决定了实现一个耐久的消息系统，每条消息至少被投递一次，在底层选择了一个消息总线（最终我们选择了 Kafka）。</p>
+
+<h2>幂等性（Idempotency）</h2>
+
+<p>分布式系统偶尔会出错，比如连接会断开或是请求会超时。客户端经常需要重试这些请求。一个幂等的系统保证了无论同一个请求被执行了多少次，而最终只生效一次（这里特指写入操作，译者注）。一个很好的例子就是支付系统。如果一个客户端请求付钱，操作成功之后由于请求超时客户端重新发起了这个请求，这时幂等的系统不会重复扣费。对于没有考虑幂等的系统，会重复扣费。</p>
+
+<p>出于幂等的考量，分布式系统会引入某种形式的分布式锁策略。这是最早被引入分布式系统的概念之一。假设我们打算引入乐观锁（optimistic locking）来解决并发更新的问题。而为了实现乐观锁，又要求系统的强一致性，因为这样才能在操作时使用某种版本控制来检查是否有另外的操作在进行中。</p>
+
+<p>取决于系统层面的约束和操作的类型，有很多实现幂等性的方式。设计如何实现幂等性是一个不错的挑战，Ben Nadel <a href="https://www.bennadel.com/blog/3390-considering-strategies-for-idempotency-without-distributed-locking-with-ben-darfler.htm">写了</a>他用过的不同策略，包括分布式锁和数据库约束。在设计分布式系统时，幂等性是最容易被忽略的部分之一，我的团队就因为没有确保某些关键操作正确的幂等性而付出过惨痛教训。</p>
+
+<p><strong>为什么幂等性对于构建一个支付系统如此重要呢？</strong> 最重要的是：避免重复扣费和重复退款。前面提到了我们的消息系统确保消息至少被投递一次，可以想象所有消息都有可能被投递多次而系统就必须确保幂等性。我们最终选择了使用版本控制和乐观锁来解决这个问题，这个幂等性的系统则使用拥有强一致性的持久化存储作为数据源。</p>
+
+<h2>Sharding 和 Quorum</h2>
+
+<p>分布式系统通常会存储巨量的数据，超过了单个节点的能力范围。所以如何在一组机器上存储一批数据呢？最常用的做法就是 <a href="https://en.wikipedia.org/wiki/Shard_(database_architecture">sharding</a>)。数据基于某种哈希算法被水平的拆分。尽管大部分分布式系统的 sharding 策略都在底层，但 sharding 是一个学起来很有趣的领域，尤其是 <a href="https://medium.com/@jeeyoungk/how-sharding-works-b4dec46b3f6">resharding</a>。Foursquare 曾经在 2010 年由于一个 sharding 的边界问题导致了 17 个小时的宕机，之后有一篇<a href="http://highscalability.com/blog/2010/10/15/troubles-with-sharding-what-can-we-learn-from-the-foursquare.html">很棒的文章</a>分享了问题的根本原因。</p>
+
+<p>许多分布式系统在多个节点上存储数据或进行计算。为了保证操作的一致性，一个基于投票的方案被发明，简言之必须有一定数量的节点都得到相同的结果操作才算成功。这个方案就是 quorum。</p>
+
+<p><strong>为什么 sharding 和 quorum 对于构建一个支付系统如此重要呢？</strong> 这其实是分布式系统非常基础的两个概念。我个人在我们设置 Cassandra 复制策略的时候第一次遇到它们。Cassandra (或是其他分布式系统) 使用 quorum 和本地的 quorum 来确保集群的一致性。一个有趣的现象是，当我们开会的时候，一旦会议室有足够的人就有人会问：“可以开始了吗？我们有 quorum 机制吗？”（译者注，意思是并非所有人都在，大部分在也可以保证会议效果，和 quorum 一样 :D）</p>
+
+<h2>Actor Model</h2>
+
+<p>通常我们使用的一些编程词汇，诸如变量、接口、方法调用等等，都基于单台主机的系统（译者注，我觉得这里想表达的应该是单个进程内部，和后面的做对比）。当讨论分布式系统时，我们需要另外一种方式来表达。一种通用的描述这类系统的模型叫 <a href="https://en.wikipedia.org/wiki/Actor_model">actor model</a>，我们使用这个模型来描述系统间的通信。这个模型非常流行，是因为它和我们实际生活中的心智模型相匹配，比如人在一个组织中如何互相交流。而另外一个流行的模型叫做 <a href="https://en.wikipedia.org/wiki/Communicating_sequential_processes">CSP</a> —— communicating sequential processes。</p>
+
+<p>Actor model 基于 actor 如何相互发送信息和做出反应。每个 actor 被定义了有限的一系列行为——创造其他 actor，发送消息或是决定下一步的动作。只需要一些简单的规则，就可以很好的描述一个复杂的分布式系统，甚至在一个 actor 崩溃之后还能自我修复。我推荐 Brian Storti 的这篇 <a href="https://www.brianstorti.com/the-actor-model/">The actor model in 10 minutes</a> 作为简介。许多编程语言都实现了 actor model 的<a href="https://en.wikipedia.org/wiki/Actor_model#Actor_libraries_and_frameworks">类库或框架</a>，我们在 Uber 的一些项目中就使用了 <a href="https://doc.akka.io/docs/akka/2.4/intro/what-is-akka.html">Akka 工具包</a>。</p>
+
+<p><strong>为什么 actor model 对于构建一个支付系统如此重要呢？</strong> 我们有很多工程师参与构建这个系统，其中很多人都有分布式系统的开发经验。我们决定遵循一种现行标准，而不是自己造轮子。</p>
+
+<h2>Reactive 架构</h2>
+
+<p>构建大型分布式系统的时候，目标通常是有弹性的、可伸缩的、可扩展的。可以是支付系统或是其他类似的高负载系统，可以使用相同的模式来实现这些目标。业内人士已经总结并分享了相关工作的最佳实践——而 Reactive 架构是其中最流行和广泛接受的。</p>
+
+<p>想要快速了解 Reative 架构，我建议读读这篇 <a href="https://www.reactivemanifesto.org/">Reactive 宣言</a> 然后看一下这个 <a href="https://www.lightbend.com/blog/understand-reactive-architecture-design-and-programming-in-less-than-12-minutes">12 分钟的视频</a>。</p>
+
+<p><strong>为什么 Reactive 架构 对于构建一个支付系统如此重要呢？</strong> Akka，也就是之前提到过的我们用来搭建支付系统的类库，深受 Reactive 架构的影响。许多我们的工程师对这套最佳实践也非常熟悉，所以遵循这些原则——响应式的、可伸缩的、有弹性的、消息驱动的——来构建这个系统变得非常自然。能有一种模型可以用来回溯和检查事情是否进展顺利是非常有用的，将来再构建新的系统我还会使用这个模型。</p>
+
+<h2>结束语</h2>
+
+<p>我非常幸运的有机会来重建一个及其关键的大型分布式系统：支撑 Uber 的支付系统。我接触到了许多之前不太熟悉的分布式的相关概念。所以我稍作总结，希望能对其他刚刚接触或者继续学习分布式系统的人有帮助。</p>
+
+<p>这篇文章非常集中在如何设计一个系统的架构。还有很多事情可以讲，比如开发、部署、迁移以及如何可靠的运维这些系统。但这些话题需要其他的文章来描述。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[The Twelve-Factor App]]></title>
+    <link href="https://liangshan.blog/blog/2014/05/22/the-twelve-factor-app/"/>
+    <updated>2014-05-22T16:37:03+08:00</updated>
+    <id>https://liangshan.blog/blog/2014/05/22/the-twelve-factor-app</id>
+    <content type="html"><![CDATA[<p>前些年翻译的 <a href="http://12factor.net/">12-factor</a>。一直放在公司内部的博客上，现在复制一份过来。</p>
+
+<hr />
+
+<p><img class="right <a" src="href="http://0.gravatar.com/avatar/7cdf5b1c46308979e3bf81390b0c8639">http://0.gravatar.com/avatar/7cdf5b1c46308979e3bf81390b0c8639</a>&#8221;></p>
 
 <p>中文翻译：<a href="https://github.com/liangshan/">梁山</a>
 英文原文：<a href="http://www.12factor.net/">Adam Wiggins</a></p>
@@ -428,153 +468,7 @@
 <p>所有进程类型应该使用同样的 <a href="#dependencies">依赖隔离</a> 技术。例如，如果 Ruby 的 web 进程使用了命令 <code>bundle exec thin start</code>，那么数据库移植应使用 <code>bundle exec rake db:migrate</code>。同样的，如果一个 Python 程序使用了 Virtualenv，则需要在运行 Tornado Web 服务器和任何<code>manage.py</code> 管理进程时引入 <code>bin/python</code> 。</p>
 
 <p>12-Factor 尤其青睐那些提供了 REPL shell 的语言，因为那会让运行一次性脚本变得简单。在本地部署中，开发人员直接在命令行使用 shell 命令调用一次性管理进程。在线上部署中，开发人员依旧可以使用ssh或是运行环境提供的其他机制来运行这样的进程。</p>
-</div>
-
-
-  <footer>
-    <p class="meta">
-      
+]]></content>
+  </entry>
   
-
-<span class="byline author vcard">Posted by <span class="fn">Liangshan</span></span>
-
-      
-
-
-
-
-<time class='entry-date' datetime='2014-05-22T16:37:03+08:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2014</span></span> <span class='time'>4:37 pm</span></time>
-      
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/best-practice/'>best practice</a>, <a class='category' href='/blog/categories/translation/'>translation</a>
-  
-</span>
-
-
-    </p>
-    
-      <div class="sharing">
-  
-  
-  
-  
-</div>
-
-    
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2014/05/22/how-to-teach-people-at-anjuke/" title="Previous Post: 安居客导师指南">&laquo; 安居客导师指南</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2014/05/22/isolate-ansible-code-and-source-code/" title="Next Post: isolate ansible code and source code">isolate ansible code and source code &raquo;</a>
-      
-    </p>
-  </footer>
-</article>
-
-</div>
-
-<aside class="sidebar">
-  
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
-    
-      <li class="post">
-        <a href="/blog/2018/05/04/distributed-architecture-concepts/">分布式系统架构概述（译）</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2018/04/25/what-is-professional/">什么是做事专业</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2018/02/14/learn-from-ali-double-11/">认真学习阿里双11的技术</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2016/09/12/the-law-of-leaky-abstractions/">记一次性能调优</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2016/07/18/beyond-tuning-performance/">网站性能优化之外</a>
-      </li>
-    
-  </ul>
-</section>
-
-<section>
-  <h1>GitHub Repos</h1>
-  <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
-  </ul>
-  
-  <a href="https://github.com/liangshan">@liangshan</a> on GitHub
-  
-  <script type="text/javascript">
-    $(document).ready(function(){
-        if (!window.jXHR){
-            var jxhr = document.createElement('script');
-            jxhr.type = 'text/javascript';
-            jxhr.src = '/javascripts/libs/jXHR.js';
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(jxhr, s);
-        }
-
-        github.showRepos({
-            user: 'liangshan',
-            count: 7,
-            skip_forks: false,
-            target: '#gh_repos'
-        });
-    });
-  </script>
-  <script src="/javascripts/github.js" type="text/javascript"> </script>
-</section>
-
-<section>
-  <h1>Categories</h1>
-    <ul id="category-list"><li><a href='/blog/categories/anjuke'>anjuke (2)</a></li><li><a href='/blog/categories/ansible'>ansible (2)</a></li><li><a href='/blog/categories/best-practice'>best practice (2)</a></li><li><a href='/blog/categories/devops'>devops (1)</a></li><li><a href='/blog/categories/linux'>linux (2)</a></li><li><a href='/blog/categories/meta'>meta (2)</a></li><li><a href='/blog/categories/recommendation'>recommendation (1)</a></li><li><a href='/blog/categories/rpc'>rpc (2)</a></li><li><a href='/blog/categories/translation'>translation (2)</a></li><li><a href='/blog/categories/vagrant'>vagrant (1)</a></li><li><a href='/blog/categories/virtualenv'>virtualenv (1)</a></li></ul>
-</section>
-
-<section class="googleplus">
-  <h1>
-    <a href="https://plus.google.com/112113128668997126531?rel=author">
-      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
-      Google+
-    </a>
-  </h1>
-</section>
-
-
-
-  
-</aside>
-
-
-    </div>
-  </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2018 - Liangshan -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
-</p>
-
-</footer>
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-</body>
-</html>
+</feed>

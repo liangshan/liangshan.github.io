@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://liangshan.blog/blog/2018/05/04/distributed-architecture-concepts/</loc>
+    <lastmod>2018-05-04T11:58:05+08:00</lastmod>
+  </url>
+  <url>
     <loc>https://liangshan.blog/blog/2018/04/25/what-is-professional/</loc>
     <lastmod>2018-04-25T17:53:35+08:00</lastmod>
   </url>
@@ -104,6 +108,9 @@
   </url>
   <url>
     <loc>https://liangshan.blog/blog/categories/best-practice/</loc>
+  </url>
+  <url>
+    <loc>https://liangshan.blog/blog/categories/translation/</loc>
   </url>
   <url>
     <loc>https://liangshan.blog/blog/categories/vagrant/</loc>

@@ -5,12 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>网站性能优化之外 - Liangshan</title>
+  <title>Category: Translation - Liangshan</title>
   <meta name="author" content="Liangshan">
 
   
-  <meta name="description" content="前段时间在做我们内部一个业务的性能优化，过程里有些感想，这里记录一下。 略去具体的技术手段，我想到的其实超出了性能优化的范畴。 首先，优化上线之后引起了 2 个 bug，一个是重构之后某个代码分支没有测试到，另外一个是某处改动同时被其他页面引用，所以影响了该页面。
-这印证了我一直以来的想法， &hellip;">
+  <meta name="description" content="Category: translation">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="https://liangshan.blog/blog/2016/07/18/beyond-tuning-performance">
+  <link rel="canonical" href="https://liangshan.blog/blog/categories/translation">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Liangshan" type="application/atom+xml">
@@ -79,80 +78,52 @@
   <div id="main">
     <div id="content">
       <div>
-<article class="hentry" role="article">
+<article role="article">
   
   <header>
-    
-      <h1 class="entry-title">网站性能优化之外</h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2016-07-18T16:36:21+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>4:36 pm</span></time>
-        
-      </p>
+    <h1 class="entry-title">Category: Translation</h1>
     
   </header>
+  
+  <div id="blog-archives" class="category">
 
 
-<div class="entry-content"><p>前段时间在做我们内部一个业务的性能优化，过程里有些感想，这里记录一下。</p>
 
-<p>略去具体的技术手段，我想到的其实超出了性能优化的范畴。</p>
+  
+  <h2>2018</h2>
 
-<p>首先，优化上线之后引起了 2 个 bug，一个是重构之后某个代码分支没有测试到，另外一个是某处改动同时被其他页面引用，所以影响了该页面。
-这印证了我一直以来的想法，写测试代码看似花了额外的时间，其实节省的都是将来修改 bug 的时间。如果没有这些测试代码，怎么有自信去不停的改进？</p>
+<article>
+  
+<h1><a href="/blog/2018/05/04/distributed-architecture-concepts/">分布式系统架构概述（译）</a></h1>
+<time datetime="2018-05-04T11:58:05+08:00" pubdate><span class='month'>May</span> <span class='day'>04</span> <span class='year'>2018</span></time>
 
-<p>其次，在整个调优的过程中，我一直在想如果这些代码经过充分的讨论以及 Review，可能就不会被带到线上。因为一些是明显的慢查询，以及一些相关设计上的缺陷。所以 Code Review 看起来同样花了额外的时间，其实节省了将来重构的时间。</p>
+<footer>
+  <span class="categories">posted in <a class='category' href='/blog/categories/best-practice/'>best practice</a>, <a class='category' href='/blog/categories/translation/'>translation</a></span>
+</footer>
 
-<p>其实这两件事还可以结合起来看，没有 review 没有测试代码，或许在暗示工程师可以写烂代码，反正只要项目上线之前测试工程师能通过就可以了。</p>
 
-<p>团队最怕的就是「内耗」，在这次优化过程中，我花了大概一个礼拜的时间。首先把性能数据可视化，以便能直观的看到优化效果，然后了解业务、分析代码，最后动手优化，前后改进了 3 个版本。我认为这已经是某种程度的内耗，因为原本可以做更有意义的事，但花了一个星期来做一些经过工程方法可以避免的事情。</p>
+</article>
 
-<p>另外想到的一个问题是，我们总是要平衡设计和施工速度。现在互联网公司的趋势是强调施工速度，而刻意避免过度设计。我也反对过度设计，但这并不等于什么都不管先实现再说。反对过度设计并不能成为自己写烂代码的借口。作为一个设计者，要知道哪些东西是「覆水难收」，哪些东西要留足可扩展性。而几乎任何时候，保持低耦合都是很重要的原则。</p>
 
-<p>最后我想说的是，重视招聘和工程师文化的建设，或许这才是解决问题的根本。</p>
+
+  
+  <h2>2014</h2>
+
+<article>
+  
+<h1><a href="/blog/2014/05/22/the-twelve-factor-app/">The Twelve-Factor App</a></h1>
+<time datetime="2014-05-22T16:37:03+08:00" pubdate><span class='month'>May</span> <span class='day'>22</span> <span class='year'>2014</span></time>
+
+<footer>
+  <span class="categories">posted in <a class='category' href='/blog/categories/best-practice/'>best practice</a>, <a class='category' href='/blog/categories/translation/'>translation</a></span>
+</footer>
+
+
+</article>
+
 </div>
 
-
-  <footer>
-    <p class="meta">
-      
   
-
-<span class="byline author vcard">Posted by <span class="fn">Liangshan</span></span>
-
-      
-
-
-
-
-<time class='entry-date' datetime='2016-07-18T16:36:21+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>4:36 pm</span></time>
-      
-
-
-    </p>
-    
-      <div class="sharing">
-  
-  
-  
-  
-</div>
-
-    
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2016/01/25/do-a-little-more/" title="Previous Post: 多做一点点">&laquo; 多做一点点</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2016/09/12/the-law-of-leaky-abstractions/" title="Next Post: 记一次性能调优">记一次性能调优 &raquo;</a>
-      
-    </p>
-  </footer>
 </article>
 
 </div>
