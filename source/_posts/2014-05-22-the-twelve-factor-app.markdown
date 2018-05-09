@@ -3,7 +3,7 @@ layout: post
 title: "The Twelve-Factor App"
 date: 2014-05-22 16:37:03 +0800
 comments: true
-categories: [best practice]
+categories: [best practice, translation]
 keywords: 12 factor,twelve factor,heroku,best practice,翻译
 description: 12 factor 的中文翻译
 ---
@@ -14,7 +14,7 @@ description: 12 factor 的中文翻译
 
 {%img right http://0.gravatar.com/avatar/7cdf5b1c46308979e3bf81390b0c8639 %}
 
-中文翻译：[梁山](https://github.com/liangshan/)  
+中文翻译：[梁山](https://github.com/liangshan/)
 英文原文：[Adam Wiggins](http://www.12factor.net/)
 
 _[翻译问题反馈](https://github.com/liangshan/12factor/issues)_
