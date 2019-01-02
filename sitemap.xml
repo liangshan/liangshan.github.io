@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://liangshan.blog/blog/2018/12/29/my-2018/</loc>
+    <lastmod>2018-12-29T16:11:07+08:00</lastmod>
+  </url>
+  <url>
     <loc>https://liangshan.blog/blog/2018/05/04/distributed-architecture-concepts/</loc>
     <lastmod>2018-05-04T11:58:05+08:00</lastmod>
   </url>
@@ -126,6 +130,12 @@
   </url>
   <url>
     <loc>https://liangshan.blog/blog/categories/rpc/</loc>
+  </url>
+  <url>
+    <loc>https://liangshan.blog/posts/2/</loc>
+  </url>
+  <url>
+    <loc>https://liangshan.blog/posts/3/</loc>
   </url>
   <url>
     <loc>https://liangshan.blog/about.html</loc>
