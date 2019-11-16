@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>多做一点点 - Liangshan</title>
+  <title>工程师的未来 - Liangshan</title>
   <meta name="author" content="Liangshan">
 
   
-  <meta name="description" content="自从决定 换个姿势写博客 之后，发现可写的内容越来越少了。 这次讲一个鸡汤故事。 故事要从我刚加入安居客说起，那时候刚刚加入一个相对有规模的团队，对身边的一切都充满着好奇，也折腾点东西。其实现在看来都是一些小儿科的东西，甚至有些是在重复造轮子，质量也不怎么样。但是凭着一股热情，还是打动了团队领导， &hellip;">
+  <meta name="description" content="今天本来在睡午觉，突然感觉有种写东西的冲动，爬起来把最近一直在思考的事情记录一下。 如今开发软件的方式正在发生深刻的变革，回想起刚毕业的时候做软件开发工程师，和现在已经截然不同了。 最早运维工程师往往是公司里一个独立的团队，公司租用公共机房的机器，大一些的公司也会选择自建机房。上架新机器（俗称扩容 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="https://liangshan.blog/blog/2016/01/25/do-a-little-more">
+  <link rel="canonical" href="https://liangshan.blog/blog/2019/11/16/future-engineering">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Liangshan" type="application/atom+xml">
@@ -82,7 +82,7 @@
   
   <header>
     
-      <h1 class="entry-title">多做一点点</h1>
+      <h1 class="entry-title">工程师的未来</h1>
     
     
       <p class="meta">
@@ -91,34 +91,67 @@
 
 
 
-<time class='entry-date' datetime='2016-01-25T13:53:59+08:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>25</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>1:53 pm</span></time>
+<time class='entry-date' datetime='2019-11-16T14:42:15+08:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2019</span></span> <span class='time'>2:42 pm</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>自从决定 <a href="https://liangshan.blog/blog/2014/09/09/huan-ge-zi-shi-xie-bo-ke/">换个姿势写博客</a> 之后，发现可写的内容越来越少了。</p>
+<div class="entry-content"><p>今天本来在睡午觉，突然感觉有种写东西的冲动，爬起来把最近一直在思考的事情记录一下。</p>
 
-<p>这次讲一个鸡汤故事。</p>
+<p>如今开发软件的方式正在发生深刻的变革，回想起刚毕业的时候做软件开发工程师，和现在已经截然不同了。</p>
 
-<p>故事要从我刚加入安居客说起，那时候刚刚加入一个相对有规模的团队，对身边的一切都充满着好奇，也折腾点东西。其实现在看来都是一些小儿科的东西，甚至有些是在重复造轮子，质量也不怎么样。但是凭着一股热情，还是打动了团队领导，把我介绍给 <a href="https://github.com/erning">尔宁</a> 认识，跟着学点东西。大概是 2012 年的春天，尔宁说我们找个人翻译一下 <a href="http://12factor.net/">12 factors</a> 吧，要么你来搞一下，业余时间弄一下就行。</p>
+<!--more-->
 
-<p>当时还有另外一个工程师翻译的 <a href="https://github.com/anjuke/zguide-cn">ZeroMQ 文档</a> ，跟那个一比，才 12 页内容。我就说没问题。</p>
 
-<p>我忽略了一个问题，把话写的短一点更难。这 12 条原则是高度抽象的，我当时的水平其实至少有一半都看不明白，里面举例使用的工具和软件也都没用过。12 页内容，我至少翻译了 1 个月。最后经过同事帮忙校对，放到 github 上，我自认为算是完事了。</p>
+<p>最早运维工程师往往是公司里一个独立的团队，公司租用公共机房的机器，大一些的公司也会选择自建机房。上架新机器（俗称扩容）是个流程繁复的事情，从公司决定采购到物理机器到位这中间有很长的时间间隔。</p>
 
-<p>但之后我慢慢发现，工作中遇到的几乎所有问题都能在 12 factors 里面找到答案，甚至每次回顾都能理解以前不懂的部分，所谓的「温故而知新」。于是我又重新整理了一遍翻译，watch 了这个项目（之前只有 star）。</p>
+<p>在实际的业务开发过程中，开发工程师在项目结束之后需要正式的「移交」给运维工程师来处理后续的事情。然而全栈工程师的概念慢慢流行起来，推崇「You build it, you run it」。高级的工程师可以拿到线上本来只有运维才有的权限，自己写的代码自己考虑部署、监控、告警。</p>
 
-<p>不久之后收到提醒有一位日本的工程师提交了一个 PR，实现了对多语言同时在线的支持。我也依葫芦画瓢把简体中文版的提交了 PR，然后就被合并了，也就是现在看到的 <a href="http://12factor.net/zh_cn/">简体中文版</a>。顺便说一下，经过社区的贡献，现在 12 factors 有 11 种语言的版本。</p>
+<p>DevOps 也开始深入人心，运维团队中出现了很多自己开发的工具，上线系统、配置管理、监控告警平台等等。</p>
 
-<p>之后基本上每个月都会收到邮件咨询一些 12 factors 的事情，直到有一天收到一封 O&#8217;reilly 编辑发来的邮件，内容大概是说 12 factors 太抽象了，他要写一本书扩展一下，找我是让我帮忙校对内容，主要是提提意见。作为回报我可以得到任意 2 本 O&#8217;reilly 的书籍，实体书或者电子书都可以。</p>
+<p>但无论怎么变化，所有软件和硬件都还在自己的机房里，直到云服务的到来。</p>
 
-<p>以前都是 review 代码，这次有机会 review 别人写的书，另外英文原本的书至少也要 200 刀了。<del>为了这些钱</del>，我爽快的答应了。</p>
+<p>也就是我们目前所处的环境，软件和硬件都走上了云端，即使那些还在自己经营机房的大公司，本质上也是一个内部的云服务商。云服务的核心是虚拟化，任何人都可以很轻松的在几分钟之内申请到新的虚拟机器（将来可能是容器）。运维工程师进化为了可靠性工程师，以设计软件运行环境和管理软件配置为主。</p>
 
-<p>每次工作累了，就拿书稿出来看一部分，这样断断续续两个礼拜也就弄完了。很快 2 本电子书就按照我的要求被打入了我 O&#8217;reilly 的账户。</p>
+<p>说完现在，就要说未来了。</p>
 
-<p>这就是我当时只是答应多做一点点事情的结果。</p>
+<p>很久之前读过<a href="https://book.douban.com/subject/24536403/">《代码的未来》</a>，今天想讨论一下几类工程师的未来的工作方式。</p>
+
+<h3>DevOps</h3>
+
+<p>无论是自建机房还是云服务，运维工程师一直无法避免要知道「什么东西部署在什么机器」。然而 Docker 和 K8S 的出现将彻底的改变这个情况，无论多庞大的集群，交给软件自动来编排。软件的标准化、部署、迁移的方式得到了质的变化。</p>
+
+<p>运维工作需要更加深入到业务中，了解项目打包的过程，管理公司内部的镜像，提供标准化的持续集成的工具，提供各个项目的 docker 开发环境。</p>
+
+<h3>数据工程师</h3>
+
+<p>说到这个感触就更深了，因为我们数据仓库的基础设施刚刚完成从自建 CDH 到云上服务的迁移。</p>
+
+<p>一直以来，我们已经习惯了离线数据和大量计算的需求使用其他工具来完成，比如各种 ETL 工具和 Hive。然而现在的趋势是将存储和查询引擎解耦开来，无论是什么存储，都使用同一套协议（比如 MySQL）来查询。</p>
+
+<p>也就是说无论是分析师还是 ETL 工程师，只要会 SQL 语句就可以了，更重要的是代码层面完全统一。</p>
+
+<h3>开发工程师</h3>
+
+<p>开发工程师以后只关注生产业务逻辑即可，随着高级语言的发展，不需要懂底层的知识也可以开发出高效稳定的软件。</p>
+
+<p>以 Go 语言为例，代码层面交互的只有 goroutine，背后是协程还是线程还是进程，语言的底层来帮你解决。越来越多的第三方库帮你做掉了大部分的工作，工程师只需要看着文档会调用即可。</p>
+
+<p>Serverless 可能会成为主流，即写完业务逻辑不需要申请服务器，直接在云端运行。</p>
+
+<h2>总结</h2>
+
+<p>无论是哪个领域，计算机软件的生产都走向了「使用越来越简单，背后越来越复杂」的方向。</p>
+
+<p>我认为公司需要的<strong>技术专家和架构师将大幅度减少</strong>，与此同时<strong>云服务使用专家</strong>将成为新的需求。</p>
+
+<p>普通工程师也许真的可以变成简单培训即可上岗的职业，普通工程师的可替代性会进一步提高，核心技术掌握在极少数大型公司，尤其是云服务公司之中。</p>
+
+<p>开源软件将走向「社区孵化，云服务商私有化」的道路，最终开源软件将被头部云服务商垄断，然后变成 SaaS 最终成为云服务商的现金流。</p>
+
+<p>从企业家的角度来看，生产软件的成本可能会降低（尤其是人力成本）。但从工程师的角度来看，其实有点悲观的，要么努力成为顶部的技术专家，要么就会变得随时可以被代替了。</p>
 </div>
 
 
@@ -134,7 +167,7 @@
 
 
 
-<time class='entry-date' datetime='2016-01-25T13:53:59+08:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>25</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>1:53 pm</span></time>
+<time class='entry-date' datetime='2019-11-16T14:42:15+08:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2019</span></span> <span class='time'>2:42 pm</span></time>
       
 
 
@@ -150,10 +183,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2015/06/21/dive-into-soa-architecture/" title="Previous Post: 深入实践 SOA 架构">&laquo; 深入实践 SOA 架构</a>
+        <a class="basic-alignment left" href="/blog/2019/09/12/lean-scrum/" title="Previous Post: 精益敏捷开发">&laquo; 精益敏捷开发</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2016/07/18/beyond-tuning-performance/" title="Next Post: 网站性能优化之外">网站性能优化之外 &raquo;</a>
       
     </p>
   </footer>

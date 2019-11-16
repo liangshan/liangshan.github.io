@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://liangshan.blog/blog/2019/11/16/future-engineering/</loc>
+    <lastmod>2019-11-16T14:42:15+08:00</lastmod>
+  </url>
+  <url>
     <loc>https://liangshan.blog/blog/2019/09/12/lean-scrum/</loc>
     <lastmod>2019-09-12T17:15:35+08:00</lastmod>
   </url>
