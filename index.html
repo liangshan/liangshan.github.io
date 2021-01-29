@@ -9,7 +9,7 @@
   <meta name="author" content="Liangshan">
 
   
-  <meta name="description" content="今天本来在睡午觉，突然感觉有种写东西的冲动，爬起来把最近一直在思考的事情记录一下。 如今开发软件的方式正在发生深刻的变革，回想起刚毕业的时候做软件开发工程师，和现在已经截然不同了。 ">
+  <meta name="description" content="上次提到过，我不喜欢写一些时效性很强的内容（强调我不是没时间写博客）。一年多过去了，终于又看到一篇值得翻译的文章，网上能找到另外一篇现成的中文翻译，是一个简化的版本。我还是决定完整的翻译一下，不过每一条标题我认为都应该简短精炼，所以有些没有完全按照原文翻译。 这篇文章涵盖了编程的经验、 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -76,6 +76,42 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2021/01/27/my-engineering-axioms/">我的工程师公理[翻译]</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2021-01-27T18:03:59+08:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>27</span><span class='date-suffix'>th</span>, <span class='date-year'>2021</span></span> <span class='time'>6:03 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>上次提到过，我不喜欢写一些时效性很强的内容（<del>强调我不是没时间写博客</del>）。一年多过去了，终于又看到一篇值得翻译的文章，网上能找到另外一篇现成的中文翻译，是一个简化的版本。我还是决定完整的翻译一下，不过每一条标题我认为都应该简短精炼，所以有些没有完全按照原文翻译。</p>
+
+<p>这篇文章涵盖了编程的经验、对编程这份工作的理解、什么是职业态度等方面。其中的一些观点我深表赞同，有些观点超越了我认知的层级，将我带到更高的视角中。所以我个人非常推荐这篇文章。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2021/01/27/my-engineering-axioms/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -466,61 +502,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/06/21/dive-into-soa-architecture/">深入实践 SOA 架构</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-06-21T22:16:05+08:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2015</span></span> <span class='time'>10:16 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>之前介绍了<a href="/blog/2014/11/03/how-to-choose-rpc-framework/">如何选择 RPC 框架</a>，选择 RPC 框架是实施 SOA 的重要一步，但也仅仅是第一步。今天来讨论具体实施 RPC 过程中，遇到的一些细节。</p>
-
-<p>写下第一个真正的 RPC 服务，首先遇到的问题就是服务划分，或者叫服务的分层。当然最简单的就是不分层，把所有的接口都写在一起，即当服务启动的时候所有的接口都被载入内存从而被访问。现如今软件架构的趋势是使用分布式的独立的微型服务（Micro Service）搭积木，SOA 正是实现这一构想的途径之一，但如果不给服务做划分显然和初衷背道而驰。我们最终选定的划分方式是按照业务（Domain）首先划分出基础服务，我们称之为 LEVEL-1，跨基础服务的接口称之为 LEVEL-2，一些与商业无关的，更为通用的模块称之为 LEVEL-0。</p>
-
-<p>这里以淘宝为例，列举几个服务分层的例子：</p>
-
-<p>LEVEL-1：买家，卖家，账户，商品，交易</p>
-
-<p>LEVEL-2：用户购买一个商品，需要读取账户信息（余额、银行卡），需要读取商品信息（价格、运费），成功后产生一条交易记录。横跨了几乎所有 LEVEL-1 服务，显然是在 LEVEL-2 了。理论上讲 LEVEL-1 的服务各种组合都会产生一个 LEVEL-2 服务。但我的经验是，可以先把所有的 LEVEL-2 都写在一起，等到一些组合十分明确的时候再拆出去。</p>
-
-<p>LEVEL-0：国际化和本地化的一些需求（地理位置，汇率，多语言），敏感词过滤等等，这些服务的特点是都被 LEVEL-1 依赖，又和核心商业逻辑关系不大。</p>
-
-<p>同时围绕这 3 层服务，有一个原则：只能自上而下调用，不可自下而上掉用，同时不可同级应用之间调用。这里指的调用是 RPC，而不是代码上的依赖和调用。</p>
-
-<p>解决了服务划分的问题，在架构设计时同样应该考虑开发、测试、运维。先简单说开发和运维，使用 Ansible + Vagrant 可以保证开发环境的一致性，以及开发环境与生产环境的一致性。在开发环境配置阶段，会将 SOA 的客户端和服务端都部署在同一个虚拟环境里。同时在开发新项目的过程中，不可避免的需要更新数据库，我认为更新数据库的代码也应该是整个项目的一部分，即数据库的变更也应该体现在版本控制中，这个非常重要，这是最终上线前准备工作的重要一环。不同语言的 ORM 都提供了 Migration 工具，但由于 SOA 是跨平台跨语言的，所以我选择了将每一次 Migration 都转化为 SQL 文件，提交到 Ansible Playbook 的仓库，由 Ansible 在部署过程中自动生效。</p>
-
-<p>下面重点说说测试，我们没有专职的测试人员，使用 TDD + Code Review 的方式来保证软件交付的质量，基本上的要求是所有接口都应该是先写测试代码再写实现代码，Review 过程中至少 2 个 Reviewer 通过才可以合并。随着对 TDD 的理解不断加深，我目前所理解的测试代码大概分为两个层面：单元测试，集成测试。</p>
-
-<p>单元测试是指代码中原子性的方法。单元测试遇到其他系统依赖，比如发送邮件，往往需要 mock 这些方法，只是模拟这些方法在特定输入输出下的行为是否符合预期，并非真正的发出邮件。在我所设计的服务分层中，LEVEL-2 测试调用 LEVEL-1 也同样需要 mock，而不是真的启一个 LEVEL-1 的服务用来单元测试。这里需要特别指出的是，严格意义上来讲数据库也是外部依赖，但 <code>SQLite</code> 几乎都预装的前提下，我们可以模拟出一个比较真实的测试环境，所以一般来讲现在都可以真实的操作数据库而不是 mock 方法的返回值了。每次测试前创建数据表及测试数据，测试后再清除所有内容，这是单元测试的标准流程。</p>
-
-<p>集成测试是指将整个系统的各个组件真实的组建起来做统一的测试，还以发送邮件为例，集成测试就需要真正的触发发送邮件的动作。由于我们开发的是 Web 应用，所以我们选择使用 <a href="https://en.wikipedia.org/?title=Acceptance_testing">User Acceptance Testing</a> 来做集成测试。简答来说就是借助浏览器，或是可以执行 JavaScript，CSS 的服务端软件，来模拟用户行为，将网站所有功能点都使用一遍与预设的输出来对比。这里有几个问题要解决：
-第一，和单元测试一样，每次测试使用的数据要重置，要预留测试需要用到的测试数据。
-第二，与单元测试不同的是，测试数据不仅仅为特定的方法准备，而是需要完整的，足以支撑整个网站运行的数据。
-第三，由于 SOA 架构，客户端和服务端需要在测试期间连接同一个测试数据库。
-为了解决以上的问题，利用 Ansible 给每个开发环境的虚拟机都部署了一个专门用来做集成测试的数据库，以及集成测试专用的配置文件（主要是数据库连接）。另外给集成测试的命令加了一些 wrapper ：重置数据库、导入准备好的测试数据（为了保持数据之间的关联，我直接从线上 dump 下一小部分）、切换至测试专用配置文件（包括客户端和服务端）、执行集成测试、切换回正常配置文件。</p>
-
-<p>至此，在 SOA 实践中遇到的一些问题都得到了比较好的解决。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; Older</a>
@@ -536,6 +517,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2021/01/27/my-engineering-axioms/">我的工程师公理[翻译]</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2019/11/16/future-engineering/">工程师的未来</a>
       </li>
     
@@ -549,10 +534,6 @@
     
       <li class="post">
         <a href="/blog/2018/05/04/distributed-architecture-concepts/">分布式系统架构概述（译）</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2018/04/25/what-is-professional/">什么是做事专业</a>
       </li>
     
   </ul>
@@ -600,7 +581,7 @@
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2020 - Liangshan -
+  Copyright &copy; 2021 - Liangshan -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
