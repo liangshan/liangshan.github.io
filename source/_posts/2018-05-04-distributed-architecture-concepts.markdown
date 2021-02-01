@@ -9,7 +9,8 @@ categories: [best practice, translation]
 
 有趣的是，这篇文章在 [hacker news](https://news.ycombinator.com/item?id=16852295) 和 [reddit](https://www.reddit.com/r/programming/comments/8cxz7q/distributed_architecture_concepts_i_learned_while/) 上得到了基本相反的评价。我个人还是很认可这种概括性的文章的。就好像大学的课程大纲，有很强的指导作用。
 
-以下是正文的译文，原文请戳[这里](http://blog.pragmaticengineer.com/distributed-architecture-concepts-i-have-learned-while-building-payments-systems/)。
++ [原文](http://blog.pragmaticengineer.com/distributed-architecture-concepts-i-have-learned-while-building-payments-systems/)
++ [译文纠错](https://github.com/liangshan/liangshan.github.io/issues/2)
 
 -------------------------
 

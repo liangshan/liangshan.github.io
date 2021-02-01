@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "我的工程师公理[翻译]"
+title: "我的工程师公理（译）"
 date: 2021-01-27 18:03:59 +0800
 comments: true
 categories:
@@ -10,9 +10,10 @@ categories:
 
 这篇文章涵盖了编程的经验、对编程这份工作的理解、什么是职业态度等方面。其中的一些观点我深表赞同，有些观点超越了我认知的层级，将我带到更高的视角中。所以我个人非常推荐这篇文章。
 
-<!--more-->
+ + [原文 - My Engineering Axioms](https://martinrue.com/my-engineering-axioms/)
+ + [译文纠错](https://github.com/liangshan/liangshan.github.io/issues/1)
 
-[原文 - My Engineering Axioms](https://martinrue.com/my-engineering-axioms/)
+<!--more-->
 
 ---------
 
