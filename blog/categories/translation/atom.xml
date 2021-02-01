@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Translation | Liangshan]]></title>
   <link href="https://liangshan.blog/blog/categories/translation/atom.xml" rel="self"/>
   <link href="https://liangshan.blog/"/>
-  <updated>2021-01-29T18:18:37+08:00</updated>
+  <updated>2021-02-01T10:00:30+08:00</updated>
   <id>https://liangshan.blog/</id>
   <author>
     <name><![CDATA[Liangshan]]></name>
@@ -22,7 +22,11 @@
 
 <p>有趣的是，这篇文章在 <a href="https://news.ycombinator.com/item?id=16852295">hacker news</a> 和 <a href="https://www.reddit.com/r/programming/comments/8cxz7q/distributed_architecture_concepts_i_learned_while/">reddit</a> 上得到了基本相反的评价。我个人还是很认可这种概括性的文章的。就好像大学的课程大纲，有很强的指导作用。</p>
 
-<p>以下是正文的译文，原文请戳<a href="http://blog.pragmaticengineer.com/distributed-architecture-concepts-i-have-learned-while-building-payments-systems/">这里</a>。</p>
+<ul>
+<li><a href="http://blog.pragmaticengineer.com/distributed-architecture-concepts-i-have-learned-while-building-payments-systems/">原文</a></li>
+<li><a href="https://github.com/liangshan/liangshan.github.io/issues/2">译文纠错</a></li>
+</ul>
+
 
 <hr />
 
