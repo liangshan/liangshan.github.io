@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux | Liangshan]]></title>
   <link href="https://liangshan.blog/blog/categories/linux/atom.xml" rel="self"/>
   <link href="https://liangshan.blog/"/>
-  <updated>2021-02-01T10:00:30+08:00</updated>
+  <updated>2021-02-05T10:07:51+08:00</updated>
   <id>https://liangshan.blog/</id>
   <author>
     <name><![CDATA[Liangshan]]></name>
@@ -55,7 +55,7 @@
 
 <p>上个图吧（为什么有种女人写美容攻略的感觉？），其实我最早就是想弄个 awesome，没想到整了这么多。</p>
 
-<p><img src="/images/custom/awesome.png" /></p>
+<p><img src="{{ root_url }}/images/custom/awesome.png" /></p>
 ]]></content>
   </entry>
   

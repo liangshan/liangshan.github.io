@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Translation | Liangshan]]></title>
   <link href="https://liangshan.blog/blog/categories/translation/atom.xml" rel="self"/>
   <link href="https://liangshan.blog/"/>
-  <updated>2021-02-01T10:00:30+08:00</updated>
+  <updated>2021-02-05T10:07:51+08:00</updated>
   <id>https://liangshan.blog/</id>
   <author>
     <name><![CDATA[Liangshan]]></name>
@@ -79,7 +79,7 @@
 
 <p>不同的分布式数据库拥有不同级别的耐久性。有些系统支持机器/节点级别的耐久性，有些做到了集群级别而有些系统的耐久性并没有开箱即用。某种形式的数据复制是较为通用的提高耐久性的做法，因为把同一份数据存储在不同的节点上，即使有节点下线，数据仍然可以被访问。<a href="https://drivescale.com/2017/03/whatever-happened-durability/">这篇文章</a>很好的解释了为什么分布式系统做到耐久性是很大的挑战。</p>
 
-<p><img width="800px" src="/images/custom/data-durability.png" /></p>
+<p><img width="800px" src="{{ root_url }}/images/custom/data-durability.png" /></p>
 
 <p><strong>为什么数据耐久性对于构建一个支付系统如此重要呢？</strong> 这个系统的大部分组件而言，如此重要的数据是不允许丢失的。分布式的数据存储需要支持集群级别的数据耐久性，即使实例会崩溃，完成了的交易仍然还在。现如今大部分分布式数据存储服务，诸如 Cassandra、MongoDB、HDFS 或是 Dynamodb 全都支持不同级别的耐久性，并且通过配置都可以支持集群级别的耐久性。</p>
 
@@ -91,7 +91,7 @@
 
 <p>消息持久化的意思是当消息服务的节点发生了错误，已经发送的消息仍然会在错误解决之后被处理。消息耐久性则通常用在消息队列这一层。如果一个消息队列声明了耐久性，那么即使队列在消息发送之后掉线，仍然会在重新上线之后收到这条消息。<a href="https://developers.redhat.com/blog/2016/08/10/persistence-vs-durability-in-messaging/">这里</a>有一篇很好的文章是关于这个话题。</p>
 
-<p><img width="800px" src="/images/custom/msg-durability.png" /></p>
+<p><img width="800px" src="{{ root_url }}/images/custom/msg-durability.png" /></p>
 
 <p><strong>为什么消息的持久化和耐久性对于构建一个支付系统如此重要呢？</strong> 我们有太多重要的消息经不起丢失，比如乘客刚刚初始化了行程的消息。也就是说我们的消息系统是不允许丢消息的，每条消息都会被投递一次。但是，每条消息精确投递一次和至少投递一次是截然不同的复杂度。我们最终决定了实现一个耐久的消息系统，每条消息至少被投递一次，在底层选择了一个消息总线（最终我们选择了 Kafka）。</p>
 
@@ -146,7 +146,7 @@
 
 <hr />
 
-<p><img class="right <a" src="href="http://0.gravatar.com/avatar/7cdf5b1c46308979e3bf81390b0c8639">http://0.gravatar.com/avatar/7cdf5b1c46308979e3bf81390b0c8639</a>&#8221;></p>
+<p>{%img right <a href="http://0.gravatar.com/avatar/7cdf5b1c46308979e3bf81390b0c8639">http://0.gravatar.com/avatar/7cdf5b1c46308979e3bf81390b0c8639</a> %}</p>
 
 <p>中文翻译：<a href="https://github.com/liangshan/">梁山</a>
 英文原文：<a href="http://www.12factor.net/">Adam Wiggins</a></p>
